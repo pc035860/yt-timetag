@@ -1,0 +1,3 @@
+chrome.browserActions.onClicked(tab => {
+
+});

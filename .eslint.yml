@@ -1,0 +1,51 @@
+---
+  globals:
+    chrome: true
+  parser: babel-eslint
+  extends: airbnb
+  plugins:
+    - react
+  parserOptions:
+    ecmaVersion: 6
+    sourceType: module
+    ecmaFeatures:
+      jsx: true
+      experimentalObjectRestSpread: true
+      modules: true
+  rules:
+    comma-dangle:
+      - 0
+      - never
+    new-cap:
+      - 1
+      - newIsCap: true
+        capIsNew: false
+    no-use-before-define:
+      - 2
+      - nofunc
+    no-multi-spaces: 0
+    func-names: 0
+    brace-style:
+      - 2
+      - stroustrup
+    no-unused-vars:
+      - 1
+      - args: none
+        argsIgnorePattern: ^__
+        varsIgnorePattern: ^__
+    key-spacing: 0
+    no-console: 1
+    no-else-return: 0
+    react/prop-types: 1
+    react/jsx-boolean-value: 0
+    react/jsx-closing-bracket-location:
+      - 0
+      - selfClosing: props-aligned
+        nonEmpty: after-props
+    react/no-multi-comp:
+      - 1
+      - ignoreStateless: true
+  settings:
+    import/resolver:
+      webpack:
+        config: webpack-dev.config.js
