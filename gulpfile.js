@@ -8,11 +8,31 @@ var cache = require('gulp-cached');
 // var watch = require('gulp-watch');
 var rename = require('gulp-rename');
 var replace = require('gulp-replace');
+var es = require('event-stream');
 
 var myPath = {
   app: path.resolve(__dirname, 'app'),
   dev: path.resolve(__dirname, 'dev'),
-  dist: path.resolve(__dirname, 'dist'),
+  dist: path.resolve(__dirname, 'dist')
+};
+
+// env: dev, dist
+var genCopyAssets = function (env) {
+  return function () {
+    var images = gulp.src('app/images/*')
+    .pipe(cache(env + '-images'))
+    .pipe(gulp.dest(
+      path.join(myPath.dev, 'images')
+    ));
+
+    var manifest = gulp.src('app/manifest.json')
+    .pipe(cache(env + '-manifest'))
+    .pipe(gulp.dest(
+      path.join(myPath.dev)
+    ));
+
+    return es.concat(images, manifest);
+  };
 };
 
 gulp.task('clean:dev', function () {
@@ -23,11 +43,12 @@ gulp.task('clean:dist', function () {
   return gulp.src(myPath.dev).pipe(clean());
 });
 
+gulp.task('copy:dev', genCopyAssets('dev'));
 gulp.task('build:dev', function () {
   env({
     vars: {
       NODE_ENV: 'development',
-      // WEBPACK_NO_COMPRESS: 1,
+      WEBPACK_NO_COMPRESS: 1,
       WEBPACK_SOURCEMAP: 1
     }
   });
@@ -42,11 +63,11 @@ gulp.task('build:dev', function () {
   .pipe(gulp.dest(myPath.dev));
 });
 
-gulp.task('watch', function () {
+gulp.task('build:watch', function () {
   env({
     vars: {
       NODE_ENV: 'development',
-      // WEBPACK_NO_COMPRESS: 1,
+      WEBPACK_NO_COMPRESS: 1,
       WEBPACK_SOURCEMAP: 1
     }
   });
@@ -62,3 +83,12 @@ gulp.task('watch', function () {
   .pipe(webpack(webpackConfig))
   .pipe(gulp.dest(myPath.dev));
 });
+gulp.task('copy:watch', function () {
+  var watchOptions = {
+    ignoreInitial: false
+  };
+  gulp.watch(['app/images/*', 'app/manifest.json'], ['copy:dev']);
+});
+
+gulp.task('watch', ['build:watch', 'copy:watch']);
+gulp.task('dev', ['build:dev', 'copy:dev']);

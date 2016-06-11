@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var toQuery = require('./lib/toQuery');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var SOURCEMAP = process.env.WEBPACK_SOURCEMAP == 1;
 var NO_COMPRESS = process.env.WEBPACK_NO_COMPRESS == 1;
@@ -78,7 +79,10 @@ var config = {
       },
       {
         test: /\.(scss|sass)$/, exclude: /node_modules/,
-        loader: 'style?sourceMap!css?modules&sourceMap!postcss!sass?' + toQuery(params.sass)
+        loader: ExtractTextPlugin.extract(
+          'style?sourceMap',
+          'css?modules&sourceMap!postcss!sass?' + toQuery(params.sass)
+        )
       },
       {
         test: /\.jsx?$/, loader: 'babel?' + toQuery(params.babel),
@@ -103,10 +107,12 @@ var config = {
     alias: {
       '_lib': path.join(myPath.app, 'lib'),
       '_util': path.join(myPath.app, 'util'),
+      '_constants': path.join(myPath.app, 'constants'),
       '_actions': path.join(myPath.app, 'actions'),
       '_reducers': path.join(myPath.app, 'reducers'),
       '_selectors': path.join(myPath.app, 'selectors'),
       '_components': path.join(myPath.app, 'components'),
+      '_containers': path.join(myPath.app, 'containers'),
       '_app': myPath.app,
       '_images': path.join(myPath.app, 'images'),
       '_sass': path.join(myPath.app, 'sass'),
@@ -121,7 +127,8 @@ var config = {
     }),
     new webpack.ProvidePlugin({
       chrome: 'chrome'
-    })
+    }),
+    new ExtractTextPlugin(OUTPUT_FILENAME + '.css')
   ]
 };
 

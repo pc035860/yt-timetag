@@ -7,10 +7,9 @@
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
-  "default_locale": "en",
   "background": {
     "scripts": [
-      "build/background.js"
+      "background.js"
     ],
     "persistent": false
   },
@@ -22,6 +21,12 @@
     "default_title": "YouTube Time Tag"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+
+    "https://www.youtube.com/",
+    "https://youtu.be/"
+  ],
+  "web_accessible_resources": [
+  	"contentscript.js.map"
   ]
 }
