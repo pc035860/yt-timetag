@@ -40,6 +40,7 @@ var config = {
   context: myPath.app,
   entry: {
     contentscript: './contentscript.js',
+    ytapi: './ytapi.js',
 
     background: './background.js'
   },
@@ -81,7 +82,7 @@ var config = {
         test: /\.(scss|sass)$/, exclude: /node_modules/,
         loader: ExtractTextPlugin.extract(
           'style?sourceMap',
-          'css?modules&sourceMap!postcss!sass?' + toQuery(params.sass)
+          'css?modules&sourceMap&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!postcss!sass?' + toQuery(params.sass)
         )
       },
       {

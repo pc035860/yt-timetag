@@ -12,7 +12,13 @@
       jsx: true
       experimentalObjectRestSpread: true
       modules: true
+  settings:
+    import/resolver:
+      webpack:
+        config: webpack-dev.config.js
   rules:
+    no-underscore-dangle: off
+    global-require: off
     comma-dangle:
       - 0
       - never
@@ -45,7 +51,3 @@
     react/no-multi-comp:
       - 1
       - ignoreStateless: true
-  settings:
-    import/resolver:
-      webpack:
-        config: webpack-dev.config.js

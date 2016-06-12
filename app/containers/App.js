@@ -1,7 +1,9 @@
 import React from 'react';
 
+import TagList from '_components/TagList';
+
 const App = () => (
-  <div>test yeah</div>
+  <TagList />
 );
 
 export default App;

@@ -18,7 +18,7 @@ chrome.browserAction.onClicked.addListener(tab => {
       });
       chrome.tabs.insertCSS(tab.id, {
         file: 'contentscript.css',
-        runAt: 'document_start'
+        runAt: 'document_end'
       });
     });
   }
