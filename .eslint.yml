@@ -42,7 +42,7 @@
     key-spacing: 0
     no-console: 1
     no-else-return: 0
-    react/prop-types: 1
+    react/prop-types: 0
     react/jsx-boolean-value: 0
     react/jsx-closing-bracket-location:
       - 0
@@ -51,3 +51,4 @@
     react/no-multi-comp:
       - 1
       - ignoreStateless: true
+    react/jsx-first-prop-new-line: 0
