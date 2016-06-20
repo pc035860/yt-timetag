@@ -4,6 +4,8 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
+import { storeEnhancer as crState } from '_util/crState';
+
 import reducers from '../reducers';
 import logger from '../logger';
 
@@ -19,6 +21,7 @@ export default function configureStore(initialState) {
 
   const createStoreWithMiddleware = compose(
     applyMiddleware(...middleware),
+    crState(),
     window.devToolsExtension ? window.devToolsExtension() : f => f
   )(createStore);
   const store = createStoreWithMiddleware(rootReducer, initialState);

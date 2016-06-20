@@ -21,26 +21,23 @@ const TagList = ({
 
   handleTagAdd, handleTagEdit, handleTagRemove,
   handleTagActiveSet, handleTagActiveClear
-}) => {
-  console.debug('tags', tags);
-  return (
-    <div styleName="component">
-      {tags.map(tag => (
-        <Tag
-          key={tag.id}
-          tag={tag}
-          isActive={tag.id === activeTag}
-          onEdit={handleTagEdit}
-          onRemove={handleTagRemove}
-          onSetActive={handleTagActiveSet}
-          onClearActive={handleTagActiveClear} />
-      ))}
-      <div styleName="toolbar">
-        <button type="button" onClick={handleTagAdd}>+</button>
-      </div>
+}) => (
+  <div>
+    {tags.map(tag => (
+      <Tag
+        key={tag.id}
+        tag={tag}
+        isActive={tag.id === activeTag}
+        onEdit={handleTagEdit}
+        onRemove={handleTagRemove}
+        onSetActive={handleTagActiveSet}
+        onClearActive={handleTagActiveClear} />
+    ))}
+    <div styleName="toolbar">
+      <button type="button" onClick={handleTagAdd}>+</button>
     </div>
-  );
-};
+  </div>
+);
 TagList.propTypes = {
   tags: PropTypes.array,
   activeTag: PropTypes.number,

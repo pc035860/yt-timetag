@@ -14,6 +14,7 @@ import {
 } from './constants/Messages';
 
 import ytPlayer from '_util/ytPlayer';
+import { load as loadCrState } from '_util/crState';
 
 const sidebarId = 'watch7-sidebar-contents';
 const sidebarElm = document.getElementById(sidebarId);
@@ -30,32 +31,46 @@ assign(appElm, {
 });
 sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
 
-const store = configureStore();
+loadCrState().then(state_ => {
+  const state = state_;
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  appElm
-);
-
-// 回應 injection check
-chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
-  if (res === MSG_CHECK_LOADED_REQUEST) {
-    sendResponse(MSG_CHECK_LOADED_RESPONSE);
+  if (state) {
+    // ignore activeTag state
+    state.activeTag = -1;
   }
+
+  const store = state ? configureStore(state) : configureStore();
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    appElm
+  );
 });
 
-setTimeout(() => {
-  ytPlayer.on('playing', () => {
-    ytPlayer(true, 'getCurrentTime').then((t) => {
-      console.debug('playing t', t);
-    });
+
+if (!window._yttimetagLoaded) {
+  window._yttimetagLoaded = new Date();
+
+  // 回應 injection check
+  chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
+    if (res === MSG_CHECK_LOADED_REQUEST && document.getElementById('yttt-app')) {
+      sendResponse(MSG_CHECK_LOADED_RESPONSE);
+    }
   });
 
-  ytPlayer.on('paused', () => {
-    ytPlayer(true, 'getCurrentTime').then((t) => {
-      console.debug('paused t', t);
+  setTimeout(() => {
+    ytPlayer.on('playing', () => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
+        console.debug('playing t', t);
+      });
     });
-  });
-}, 500);
+
+    ytPlayer.on('paused', () => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
+        console.debug('paused t', t);
+      });
+    });
+  }, 500);
+}

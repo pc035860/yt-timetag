@@ -1,0 +1,17 @@
+.component {
+	padding-left: 10px;
+	margin-bottom: 20px;
+}
+
+.title {
+	margin: 0 0 10px;
+	font-size: 13px;
+	color: #222;
+	line-height: 1.3em;
+	width: 290px;
+	overflow: hidden;
+	white-space: nowrap;
+	word-wrap: normal;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+}

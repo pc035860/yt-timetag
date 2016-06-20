@@ -6,7 +6,7 @@ import {
 
 chrome.browserAction.onClicked.addListener(tab => {
   const parsed = urlParser.parse(tab.url);
-  if (parsed && parsed.provider === 'youtube') {
+  if (parsed && parsed.provider === 'youtube' && parsed.mediaType === 'video') {
     chrome.tabs.sendMessage(tab.id, MSG_CHECK_LOADED_REQUEST, res => {
       if (res === MSG_CHECK_LOADED_RESPONSE) {
         return;
