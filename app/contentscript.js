@@ -16,61 +16,67 @@ import {
 import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
 
-const sidebarId = 'watch7-sidebar-contents';
-const sidebarElm = document.getElementById(sidebarId);
+const appRootId = 'yttt-app';
 
-if (!sidebarElm) {
-  throw new Error('sidebar element not found');
-}
+function renderApp() {
+  const sidebarId = 'watch7-sidebar-contents';
+  const sidebarElm = document.getElementById(sidebarId);
 
-// 準備 react app root elemennt
-const appElm = document.createElement('div');
-assign(appElm, {
-  id: 'yttt-app',
-  className: 'yttt-app'
-});
-sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
-
-loadCrState().then(state_ => {
-  const state = state_;
-
-  if (state) {
-    // ignore activeTag state
-    state.activeTag = -1;
+  if (!sidebarElm) {
+    throw new Error('sidebar element not found');
   }
 
-  const store = state ? configureStore(state) : configureStore();
+  // 準備 react app root elemennt
+  const appElm = document.createElement('div');
+  assign(appElm, {
+    id: appRootId,
+    className: appRootId
+  });
+  sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
 
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    appElm
-  );
+  loadCrState().then(state_ => {
+    const state = state_;
+
+    if (state) {
+      // ignore activeTag state
+      state.activeTag = -1;
+    }
+
+    const store = state ? configureStore(state) : configureStore();
+
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      appElm
+    );
+  });
+}
+
+
+// 回應 injection check
+chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
+  if (res === MSG_CHECK_LOADED_REQUEST) {
+    sendResponse(MSG_CHECK_LOADED_RESPONSE);
+
+    if (!document.getElementById(appRootId)) {
+      renderApp();
+    }
+  }
 });
 
+renderApp();
 
-if (!window._yttimetagLoaded) {
-  window._yttimetagLoaded = new Date();
-
-  // 回應 injection check
-  chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
-    if (res === MSG_CHECK_LOADED_REQUEST && document.getElementById('yttt-app')) {
-      sendResponse(MSG_CHECK_LOADED_RESPONSE);
-    }
+setTimeout(() => {
+  ytPlayer.on('playing', () => {
+    ytPlayer(true, 'getCurrentTime').then((t) => {
+      console.debug('playing t', t);
+    });
   });
 
-  setTimeout(() => {
-    ytPlayer.on('playing', () => {
-      ytPlayer(true, 'getCurrentTime').then((t) => {
-        console.debug('playing t', t);
-      });
+  ytPlayer.on('paused', () => {
+    ytPlayer(true, 'getCurrentTime').then((t) => {
+      console.debug('paused t', t);
     });
-
-    ytPlayer.on('paused', () => {
-      ytPlayer(true, 'getCurrentTime').then((t) => {
-        console.debug('paused t', t);
-      });
-    });
-  }, 500);
-}
+  });
+}, 500);
