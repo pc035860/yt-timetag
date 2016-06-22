@@ -13,6 +13,7 @@ import * as actTag_ from '_actions/tag';
 import * as actActiveTag_ from '_actions/activeTag';
 
 import Tag from './Tag';
+import MdAdd from 'react-icons/lib/md/add';
 
 import ytPlayer from '_util/ytPlayer';
 
@@ -34,7 +35,11 @@ const TagList = ({
         onClearActive={handleTagActiveClear} />
     ))}
     <div styleName="toolbar">
-      <button type="button" onClick={handleTagAdd}>+</button>
+      <button styleName="toolbar-btn" type="button"
+        title="New Tag"
+        onClick={handleTagAdd}>
+        <MdAdd size={20} />
+      </button>
     </div>
   </div>
 );

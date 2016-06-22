@@ -4,16 +4,23 @@
 	align-items: center;
 	justify-content: flex-start;
 
-	padding: 5px 0;
+	padding: 8px 5px;
 
 	color: #333;
 	font-size: 13px;
 }
 .component-is-active {
-	background-color: fade-out(red, .8);
+	background-color: fade-out(#dbe4eb, .5);
 }
 
 
+.active-icon {
+	flex: 0 0 auto;
+	width: 24px;
+	margin-right: 5px;
+	text-align: left;
+	color: black;
+}
 .tag {
 	flex: 0 0 auto;
 
@@ -36,7 +43,9 @@
 }
 .actions-btn {
 	margin-right: 5px;
+	cursor: pointer;
 }
 .actions-btn-last {
+	composes: actions-btn;
 	margin-right: 0;
 }

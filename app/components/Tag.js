@@ -4,6 +4,11 @@ import styles from './Tag.scss';
 
 import classNames from 'classnames';
 
+import MdBookMark from 'react-icons/lib/md/bookmark';
+import MdKeyboardArrowLeft from 'react-icons/lib/md/keyboard-arrow-left';
+import MdKeyboardArrowRight from 'react-icons/lib/md/keyboard-arrow-right';
+import MdClear from 'react-icons/lib/md/clear';
+
 import noop from '_util/noop';
 import { toTag } from '_util/ytTime';
 import ytPlayer from '_util/ytPlayer';
@@ -98,19 +103,35 @@ class Tag extends Component {
           [styles['component-is-active']]: isActive
         })}
         onClick={this.handleToggleComponent}>
+        <div styleName="active-icon">
+          {isActive &&
+            <MdBookMark size={16} color="#167ac6" />
+          }
+        </div>
         <div styleName="tag">{toTag(tag.seconds)}</div>
         <div styleName="description">{tag.description}</div>
-        <div styleName="actions">
-          <button type="button"
-            styleName="actions-btn"
-            onClick={this.handleAdd5}>+5</button>
-          <button type="button"
-            styleName="actions-btn"
-            onClick={this.handleSub5}>-5</button>
-          <button type="button"
-            styleName="actions-btn"
-            onClick={this.handleRemoveClick}>X</button>
-        </div>
+        {isActive &&
+          <div styleName="actions">
+            <button type="button"
+              title="-5s"
+              styleName="actions-btn"
+              onClick={this.handleSub5}>
+              <MdKeyboardArrowLeft size={16} />
+            </button>
+            <button type="button"
+              title="+5s"
+              styleName="actions-btn"
+              onClick={this.handleAdd5}>
+              <MdKeyboardArrowRight size={16} />
+            </button>
+            <button type="button"
+              title="Remove"
+              styleName="actions-btn-last"
+              onClick={this.handleRemoveClick}>
+              <MdClear size={16} />
+            </button>
+          </div>
+        }
       </div>
     );
   }
