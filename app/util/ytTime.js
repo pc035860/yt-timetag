@@ -1,5 +1,9 @@
 import padStart from 'lodash/padStart';
 
+function pad(number) {
+  return padStart(number, 2, '0');
+}
+
 export const toTag = (seconds) => {
   let left = seconds;
   const h = (left / 3600) >>> 0;
@@ -8,10 +12,21 @@ export const toTag = (seconds) => {
   left -= m * 60;
   const s = left >>> 0;
 
-  return [h, m, s]
-  .filter(v => v)
-  .map((v, i) => (i !== 0 ? padStart(v, 2, '0') : v))
-  .join(':');
+  let output = `${pad(s)}`;
+
+  if (m || h) {
+    output = `${pad(m)}:${output}`;
+  }
+
+  if (h) {
+    output = `${h}:${output}`;
+  }
+
+  if (!m && !h) {
+    output = `00:${output}`;
+  }
+
+  return output;
 };
 
 export const toSeconds = (tagStr) => {

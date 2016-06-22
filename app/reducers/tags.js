@@ -1,6 +1,8 @@
 import { handleActions } from 'redux-actions';
 import { add, remove, edit } from '_actions/tag';
 
+import getYTVideoId from '_util/getYTVideoId';
+
 /**
  * A tag model
  *
@@ -17,12 +19,17 @@ const baseTag = {
 };
 
 const defaultState = [];
-let _tagId = 0;
+
+function createTagId() {
+  const videoId = getYTVideoId();
+  const now = +new Date();
+  return `${videoId}@${now}`;
+}
 
 export default handleActions({
   [add]: (state, action) => {
     const tag = action.payload;
-    const id = ++_tagId;
+    const id = createTagId();
     return [...state, { ...baseTag, ...tag, id }];
   },
   [remove]: (state, action) => {

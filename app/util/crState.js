@@ -1,13 +1,14 @@
-import urlParser from 'js-video-url-parser';
-
 import { local } from '_util/chromeStorage';
+import getYTVideoId from '_util/getYTVideoId';
 
-const _videoId = urlParser.parse(location.href).id;
-const _key = `${_videoId}-crState`;
+function getStorageKey() {
+  const videoId = getYTVideoId();
+  return `crState-${videoId}`;
+}
 
-export const load = () => local.get(_key);
+export const load = () => local.get(getStorageKey());
 
-export const save = state => local.set(_key, state);
+export const save = state => local.set(getStorageKey(), state);
 
 export const storeEnhancer = () =>
   next => (reducer, initialState) => {
