@@ -4,27 +4,25 @@
 	align-items: center;
 	justify-content: flex-start;
 
-	padding: 8px 5px;
+	transition: height .15s;
+
+	padding: 0 5px;
+
+	height: 20px;
 
 	color: #333;
 	font-size: 13px;
 }
 .component-is-active {
 	background-color: fade-out(#dbe4eb, .5);
+	height: 34px;
 }
 
 
-.active-icon {
-	flex: 0 0 auto;
-	width: 24px;
-	margin-right: 5px;
-	text-align: left;
-	color: black;
-}
 .tag {
 	flex: 0 0 auto;
 
-	width: 70px;
+	width: 60px;
 
 	margin-right: 15px;
 
@@ -36,6 +34,21 @@
 	flex: 1 0 auto;
 
 	min-width: 50px;
+
+	&-input {
+		width: 90%;
+		padding: 4px 6px;
+		box-sizing: border-box;
+		font-size: 13px;
+		border: 1px solid #ddd;
+
+		&:hover {
+			border-color: darken(#ddd, 8%);
+		}
+		&:focus {
+			border-color: #167ac6;
+		}
+	}
 }
 
 .actions {

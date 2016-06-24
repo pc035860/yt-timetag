@@ -4,21 +4,22 @@ import styles from './Tag.scss';
 
 import classNames from 'classnames';
 
-import MdBookMark from 'react-icons/lib/md/bookmark';
 import MdKeyboardArrowLeft from 'react-icons/lib/md/keyboard-arrow-left';
 import MdKeyboardArrowRight from 'react-icons/lib/md/keyboard-arrow-right';
 import MdClear from 'react-icons/lib/md/clear';
 
 import noop from '_util/noop';
-import { toTag } from '_util/ytTime';
 import ytPlayer from '_util/ytPlayer';
+import { emitter as keyOpsEmitter } from '_util/keyOps';
 
-console.debug('styles', styles);
+import TagLink from './TagLink';
 
 class Tag extends Component {
   static propTypes = {
+    videoId: PropTypes.string.isRequired,
+
     tag: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
       seconds: PropTypes.number.isRequired,
       description: PropTypes.string
     }).isRequired,
@@ -43,19 +44,95 @@ class Tag extends Component {
     [
       'handleToggleComponent',
       'handleRemoveClick',
-      'handleAdd5',
-      'handleSub5'
+      'handleDescriptionChange',
+      'handleDescriptionClick',
+      'handleLinkClick',
+
+      'onKeyFocusDescription',
+      'onKeyAdd5',
+      'onKeySub5',
+      'onKeyAdd1',
+      'onKeySub1'
     ].forEach(name => {
       this[name] = this[name].bind(this);
     });
+
+    this.handleAdd5 = this.createTimeDiffHandler(5).bind(this);
+    this.handleSub5 = this.createTimeDiffHandler(-5).bind(this);
+    this.handleAdd1 = this.createTimeDiffHandler(1).bind(this);
+    this.handleSub1 = this.createTimeDiffHandler(-1).bind(this);
+  }
+
+  componentDidMount() {
+    keyOpsEmitter().on('focus description', this.onKeyFocusDescription);
+    keyOpsEmitter().on('add 5', this.onKeyAdd5);
+    keyOpsEmitter().on('sub 5', this.onKeySub5);
+    keyOpsEmitter().on('add 1', this.onKeyAdd1);
+    keyOpsEmitter().on('sub 1', this.onKeySub1);
   }
 
   componentWillUpdate(nextProps, nextState) {
     if (nextProps.isActive !== this.props.isActive) {
       if (nextProps.isActive) {
-        ytPlayer('seekTo', nextProps.tag.seconds);
+        // do nothing for now
+        // ytPlayer('seekTo', nextProps.tag.seconds);
       }
     }
+  }
+
+  onKeyFocusDescription() {
+    setTimeout(() => {
+      const input = this.descriptionInput;
+
+      if (input) {
+        input.focus();
+        try {
+          input.select();
+        }
+        catch (e) {
+          /* nothing */
+        }
+      }
+    }, 10);
+  }
+
+  onKeyAdd5() {
+    if (this.props.isActive) {
+      this.handleAdd5();
+    }
+  }
+
+  onKeySub5() {
+    if (this.props.isActive) {
+      this.handleSub5();
+    }
+  }
+
+  onKeyAdd1() {
+    if (this.props.isActive) {
+      this.handleAdd1();
+    }
+  }
+
+  onKeySub1() {
+    if (this.props.isActive) {
+      this.handleSub1();
+    }
+  }
+
+  createTimeDiffHandler(secDiff) {
+    return (evt) => {
+      const { tag, onEdit, onSetActive } = this.props;
+      const seconds = tag.seconds + secDiff;
+      onEdit(tag.id, { seconds });
+
+      ytPlayer('seekTo', seconds, true);
+      onSetActive(tag.id);
+
+      if (evt) {
+        evt.stopPropagation();
+      }
+    };
   }
 
   handleToggleComponent() {
@@ -67,25 +144,9 @@ class Tag extends Component {
     }
   }
 
-  handleAdd5(evt) {
-    const { tag, onEdit, onSetActive } = this.props;
-    const seconds = tag.seconds + 5;
-    onEdit(tag.id, { seconds });
-
-    ytPlayer('seekTo', seconds, true);
-    onSetActive(tag.id);
-
-    evt.stopPropagation();
-  }
-
-  handleSub5(evt) {
-    const { tag, onEdit, onSetActive } = this.props;
-    const seconds = tag.seconds - 5;
-    onEdit(tag.id, { seconds });
-
-    ytPlayer('seekTo', seconds, true);
-    onSetActive(tag.id);
-
+  handleLinkClick(evt) {
+    ytPlayer('seekTo', this.props.tag.seconds >>> 0);
+    evt.preventDefault();
     evt.stopPropagation();
   }
 
@@ -95,21 +156,65 @@ class Tag extends Component {
     evt.stopPropagation();
   }
 
-  render() {
+  handleDescriptionChange(evt) {
+    const { tag, onEdit } = this.props;
+    const description = evt.target.value;
+    onEdit(tag.id, { description });
+  }
+
+  handleDescriptionClick(evt) {
+    evt.stopPropagation();
+  }
+
+  handleDescriptionKeyPress(evt) {
+    if (evt.charCode === 13) {
+      evt.target.blur();
+      evt.preventDefault();
+    }
+  }
+
+  renderDescription() {
     const { tag, isActive } = this.props;
+
+    if (!isActive) {
+      return tag.description;
+    }
+
+    return (
+      <input
+        ref={ref => {
+          if (ref) {
+            this.descriptionInput = ref;
+          }
+        }}
+        type="text"
+        styleName="description-input"
+        value={tag.description}
+        placeholder="tag description"
+        onChange={this.handleDescriptionChange}
+        onClick={this.handleDescriptionClick}
+        onKeyPress={this.handleDescriptionKeyPress} />
+    );
+  }
+
+  render() {
+    const { tag, isActive, videoId } = this.props;
     return (
       <div styleName="component"
         className={classNames({
           [styles['component-is-active']]: isActive
         })}
         onClick={this.handleToggleComponent}>
-        <div styleName="active-icon">
-          {isActive &&
-            <MdBookMark size={16} color="#167ac6" />
-          }
+        <div styleName="tag">
+          <TagLink
+            videoId={videoId}
+            seconds={tag.seconds}
+            onClick={this.handleLinkClick}
+            />
         </div>
-        <div styleName="tag">{toTag(tag.seconds)}</div>
-        <div styleName="description">{tag.description}</div>
+        <div styleName="description">
+          {this.renderDescription()}
+        </div>
         {isActive &&
           <div styleName="actions">
             <button type="button"

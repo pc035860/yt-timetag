@@ -15,7 +15,21 @@ export const toTag = (seconds) => {
   let output = `${pad(s)}`;
 
   if (m || h) {
-    output = `${pad(m)}:${output}`;
+    let seg;
+
+    if (!m) {
+      seg = '00';
+    }
+    else {
+      if (h) {
+        seg = pad(m);
+      }
+      else {
+        seg = m;
+      }
+    }
+
+    output = `${seg}:${output}`;
   }
 
   if (h) {

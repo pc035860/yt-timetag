@@ -2,11 +2,26 @@
 }
 
 .toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	margin-top: 10px;
 	padding: 5px;
 	text-align: right;
 	border-top: 1px solid #ddd;
 
 	&-btn {
 		cursor: pointer;
+	}
+
+	&-left {
+		flex: 0 1 auto;
+		text-align: left;
+	}
+
+	&-right {
+		flex: 0 1 auto;
+		text-align: right;
 	}
 }

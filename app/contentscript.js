@@ -15,6 +15,8 @@ import {
 
 import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
+import { bind as bindKeyOps } from '_util/keyOps';
+import getYTVideoId from '_util/getYTVideoId';
 
 const appRootId = 'yttt-app';
 
@@ -39,14 +41,16 @@ function renderApp() {
 
     if (state) {
       // ignore activeTag state
-      state.activeTag = -1;
+      state.activeTag = '';
     }
 
     const store = state ? configureStore(state) : configureStore();
 
+    bindKeyOps();
+
     ReactDOM.render(
       <Provider store={store}>
-        <App />
+        <App videoId={getYTVideoId()} />
       </Provider>,
       appElm
     );

@@ -61,6 +61,7 @@
     "classnames": "^2.2.5",
     "event-emitter": "^0.3.4",
     "js-video-url-parser": "^0.1.6",
+    "mousetrap": "^1.6.0",
     "q": "^1.4.1",
     "react": "^15.1.0",
     "react-css-modules": "^3.7.6",
