@@ -90,5 +90,5 @@ gulp.task('copy:watch', function () {
   gulp.watch(['app/images/*', 'app/manifest.json'], ['copy:dev']);
 });
 
-gulp.task('watch', ['build:watch', 'copy:watch']);
+gulp.task('watch', ['copy:watch']);
 gulp.task('dev', ['build:dev', 'copy:dev']);

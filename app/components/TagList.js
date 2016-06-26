@@ -1,10 +1,13 @@
 import React, { PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 import styles from './TagList.scss';
 
 import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
+import withState from 'recompose/withState';
+import mapProps from 'recompose/mapProps';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -20,10 +23,22 @@ import MdPrint from 'react-icons/lib/md/print';
 import ytPlayer from '_util/ytPlayer';
 import exportFromTags from '_util/exportFromTags';
 
+const transitionConfig = {
+  justCopied: {
+    transitionName: 'anim',
+    transitionAppear: true,
+    transitionAppearTimeout: 300,
+    transitionEnterTimeout: 300,
+    transitionLeaveTimeout: 300
+  }
+};
+
 const TagList = ({
   videoId, keyOpsEmitter,
 
   tags, activeTag, actTag, actActiveTag,
+
+  justCopied,
 
   handleTagAdd, handleTagEdit, handleTagRemove,
   handleTagActiveSet, handleTagActiveClear,
@@ -52,8 +67,15 @@ const TagList = ({
       </div>
       <div styleName="toolbar-right">
         <button styleName="toolbar-btn" type="button"
-          title="Output"
+          title="Copy to Clipboard"
           onClick={handleOutput}>
+          <CSSTransitionGroup {...transitionConfig.justCopied}>
+            {justCopied &&
+              <span
+                className="yttt-TagList__toolbar-btn-hint"
+                styleName="toolbar-btn-hint">Copied</span>
+            }
+          </CSSTransitionGroup>
           <MdPrint size={20} />
         </button>
       </div>
@@ -71,6 +93,23 @@ TagList.propTypes = {
   actActiveTag: PropTypes.object
 };
 
+const addCopiedHint = compose(
+  withState('justCopied', 'setJustCopied', false),
+  withState('justCopiedTimeout', 'setJustCopiedTimeout', null),
+  mapProps(({ setJustCopied, setJustCopiedTimeout, ...rest }) => ({
+    onCopySuccess: () => {
+      setJustCopied(true);
+      if (rest.justCopiedTimeout) {
+        clearTimeout(rest.justCopiedTimeout);
+      }
+      setJustCopiedTimeout(
+        setTimeout(() => setJustCopied(false), 1500)
+      );
+    },
+    ...rest
+  }))
+);
+
 const addHandlers = withHandlers({
   handleTagAdd: ({ actTag, actActiveTag }) => () => {
     ytPlayer(true, 'getCurrentTime').then(t => {
@@ -84,8 +123,9 @@ const addHandlers = withHandlers({
   handleTagEdit: ({ actTag }) => (tagId, draft) => {
     actTag.edit(tagId, draft);
   },
-  handleTagRemove: ({ actTag }) => tagId => {
+  handleTagRemove: ({ actTag, actActiveTag }) => tagId => {
     actTag.remove(tagId);
+    actActiveTag.clear();
   },
   handleTagActiveSet: ({ actActiveTag }) => tagId => {
     actActiveTag.set(tagId);
@@ -93,7 +133,7 @@ const addHandlers = withHandlers({
   handleTagActiveClear: ({ actActiveTag }) => () => {
     actActiveTag.clear();
   },
-  handleOutput: ({ tags }) => () => {
+  handleOutput: ({ tags, onCopySuccess }) => () => {
     const textarea = document.createElement('textarea');
     textarea.value = exportFromTags(tags, '｜');
 
@@ -103,7 +143,10 @@ const addHandlers = withHandlers({
     textarea.select();
 
     try {
-      document.execCommand('cut');
+      const success = document.execCommand('cut');
+      if (success) {
+        onCopySuccess();
+      }
     }
     catch (err) {
       /* do nothing */
@@ -135,7 +178,7 @@ const addLifecyle = lifecycle({
         ytPlayer('seekTo', (t >>> 0) + 5);
       });
     }.bind(this);
-    emitter.on('add 5', onKeyAdd5);
+    emitter.on('forward 5', onKeyAdd5);
 
     const onKeySub5 = function () {
       if (this.props.activeTag) {
@@ -145,12 +188,9 @@ const addLifecyle = lifecycle({
         ytPlayer('seekTo', (t >>> 0) - 5);
       });
     }.bind(this);
-    emitter.on('sub 5', onKeySub5);
+    emitter.on('backward 5', onKeySub5);
 
     const onPauseOrPlay = function () {
-      if (this.props.activeTag) {
-        return;
-      }
       ytPlayer(true, 'getPlayerState').then(state => {
         if (state === 2) {  // state: paused
           ytPlayer('playVideo');
@@ -159,7 +199,7 @@ const addLifecyle = lifecycle({
           ytPlayer('pauseVideo');
         }
       });
-    }.bind(this);
+    };
     emitter.on('pause or play', onPauseOrPlay);
   },
   componentWillUnmount() {
@@ -178,6 +218,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  addCopiedHint,
   addHandlers,
   addLifecyle
 )(CSSModules(TagList, styles));

@@ -42,22 +42,26 @@ export const bind = () => {
       if (isFocusOnVideo()) {
         return true;
       }
-      emtr().emit('sub 5');
+      emtr().emit('backward 5');
+      emtr().emit('tag sub 5');
       return false;
     },
     right: () => {
       if (isFocusOnVideo()) {
         return true;
       }
-      emtr().emit('add 5');
+      emtr().emit('forward 5');
+      emtr().emit('tag add 5');
       return false;
     },
     'alt+left': () => {
-      emtr().emit('sub 1');
+      emtr().emit('backward 1');
+      emtr().emit('tag sub 1');
       return false;
     },
     'alt+right': () => {
-      emtr().emit('add 1');
+      emtr().emit('forward 1');
+      emtr().emit('tag add 1');
       return false;
     },
     esc: () => {

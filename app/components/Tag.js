@@ -66,10 +66,10 @@ class Tag extends Component {
   componentDidMount() {
     const emitter = this.props.keyOpsEmitter;
     emitter.on('focus description', this.onKeyFocusDescription);
-    emitter.on('add 5', this.onKeyAdd5);
-    emitter.on('sub 5', this.onKeySub5);
-    emitter.on('add 1', this.onKeyAdd1);
-    emitter.on('sub 1', this.onKeySub1);
+    emitter.on('tag add 5', this.onKeyAdd5);
+    emitter.on('tag sub 5', this.onKeySub5);
+    emitter.on('tag add 1', this.onKeyAdd1);
+    emitter.on('tag sub 1', this.onKeySub1);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -84,10 +84,10 @@ class Tag extends Component {
   componentWillUnmount() {
     const emitter = this.props.keyOpsEmitter;
     emitter.off('focus description', this.onKeyFocusDescription);
-    emitter.off('add 5', this.onKeyAdd5);
-    emitter.off('sub 5', this.onKeySub5);
-    emitter.off('add 1', this.onKeyAdd1);
-    emitter.off('sub 1', this.onKeySub1);
+    emitter.off('tag add 5', this.onKeyAdd5);
+    emitter.off('tag sub 5', this.onKeySub5);
+    emitter.off('tag add 1', this.onKeyAdd1);
+    emitter.off('tag sub 1', this.onKeySub1);
   }
 
   onKeyFocusDescription() {

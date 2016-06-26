@@ -12,7 +12,16 @@
 	border-top: 1px solid #ddd;
 
 	&-btn {
+		position: relative;
 		cursor: pointer;
+
+		&-hint {
+			position: absolute;
+			right: 100%;
+			top: 3px;
+			margin-right: 5px;
+			color: #a7a7a7;
+		}
 	}
 
 	&-left {
@@ -23,5 +32,16 @@
 	&-right {
 		flex: 0 1 auto;
 		text-align: right;
+	}
+}
+
+:global {
+	.yttt-TagList__toolbar-btn-hint {
+		&.anim-enter {
+			animation: yttt-fadeIn .3s both;
+		}
+		&.anim-leave {
+			animation: yttt-fadeOut .3s both;
+		}
 	}
 }
