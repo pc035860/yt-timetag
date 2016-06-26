@@ -18,11 +18,10 @@ import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 
 import ytPlayer from '_util/ytPlayer';
-import { getEmitter } from '_util/keyOps';
 import exportFromTags from '_util/exportFromTags';
 
 const TagList = ({
-  videoId,
+  videoId, keyOpsEmitter,
 
   tags, activeTag, actTag, actActiveTag,
 
@@ -35,6 +34,7 @@ const TagList = ({
       <Tag
         key={tag.id}
         videoId={videoId}
+        keyOpsEmitter={keyOpsEmitter}
         tag={tag}
         isActive={tag.id === activeTag}
         onEdit={handleTagEdit}
@@ -62,6 +62,7 @@ const TagList = ({
 );
 TagList.propTypes = {
   videoId: PropTypes.string.isRequired,
+  keyOpsEmitter: PropTypes.object.isRequired,
 
   tags: PropTypes.array,
   activeTag: PropTypes.string,
@@ -114,7 +115,7 @@ const addHandlers = withHandlers({
 
 const addLifecyle = lifecycle({
   componentDidMount() {
-    const emitter = getEmitter(this.props.videoId);
+    const emitter = this.props.keyOpsEmitter;
 
     const onAddTag = function () {
       this.props.handleTagAdd();
@@ -162,8 +163,7 @@ const addLifecyle = lifecycle({
     emitter.on('pause or play', onPauseOrPlay);
   },
   componentWillUnmount() {
-    const emitter = getEmitter(this.props.videoId);
-    emitter.allOff();
+    // TODO: emitter.off here someday
   }
 });
 

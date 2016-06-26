@@ -15,7 +15,7 @@ import {
 
 import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
-import { bind as bindKeyOps } from '_util/keyOps';
+import { bind as bindKeyOps, getEmitter as getKeyOpsEmitter } from '_util/keyOps';
 import getYTVideoId from '_util/getYTVideoId';
 
 const appRootId = 'yttt-app';
@@ -45,12 +45,13 @@ function renderApp() {
     }
 
     const store = state ? configureStore(state) : configureStore();
-
-    bindKeyOps();
+    const videoId = getYTVideoId();
 
     ReactDOM.render(
       <Provider store={store}>
-        <App videoId={getYTVideoId()} />
+        <App
+          videoId={videoId}
+          keyOpsEmitter={getKeyOpsEmitter(videoId)} />
       </Provider>,
       appElm
     );
@@ -69,6 +70,7 @@ chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
   }
 });
 
+bindKeyOps();
 renderApp();
 
 setTimeout(() => {

@@ -10,13 +10,13 @@ import MdClear from 'react-icons/lib/md/clear';
 
 import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
-import { getEmitter } from '_util/keyOps';
 
 import TagLink from './TagLink';
 
 class Tag extends Component {
   static propTypes = {
     videoId: PropTypes.string.isRequired,
+    keyOpsEmitter: PropTypes.object.isRequired,
 
     tag: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -64,7 +64,7 @@ class Tag extends Component {
   }
 
   componentDidMount() {
-    const emitter = getEmitter(this.props.videoId);
+    const emitter = this.props.keyOpsEmitter;
     emitter.on('focus description', this.onKeyFocusDescription);
     emitter.on('add 5', this.onKeyAdd5);
     emitter.on('sub 5', this.onKeySub5);
@@ -82,7 +82,7 @@ class Tag extends Component {
   }
 
   componentWillUnmount() {
-    const emitter = getEmitter(this.props.videoId);
+    const emitter = this.props.keyOpsEmitter;
     emitter.off('focus description', this.onKeyFocusDescription);
     emitter.off('add 5', this.onKeyAdd5);
     emitter.off('sub 5', this.onKeySub5);
