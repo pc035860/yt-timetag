@@ -1,55 +1,74 @@
 import ee from 'event-emitter';
+import allOff from 'event-emitter/all-off';
 import Mousetrap from 'mousetrap';
 
 import forEach from 'lodash/forEach';
 
-const _emitter = ee({});
+import getYTVideoId from '_util/getYTVideoId';
+
+const _pool = {};
 
 function isFocusOnVideo() {
   return document.activeElement.id === 'movie_player';
 }
 
+export const getEmitter = (id) => {
+  if (_pool[id]) {
+    return _pool[id];
+  }
+
+  // clear all
+  forEach(_pool, (emtr, k) => {
+    delete _pool[k];
+    allOff(emtr);
+  });
+
+  _pool[id] = ee({ id });
+  return _pool[id];
+};
+
 export const bind = () => {
+  const emtr = () => getEmitter(getYTVideoId());
   const config = {
     a: () => {
-      _emitter.emit('add tag');
+      emtr().emit('add tag');
       return false;
     },
     '/': () => {
-      _emitter.emit('focus description');
+      emtr().emit('focus description');
       return false;
     },
     left: () => {
       if (isFocusOnVideo()) {
         return true;
       }
-      _emitter.emit('sub 5');
+      emtr().emit('sub 5');
       return false;
     },
     right: () => {
       if (isFocusOnVideo()) {
         return true;
       }
-      _emitter.emit('add 5');
+      emtr().emit('add 5');
       return false;
     },
     'alt+left': () => {
-      _emitter.emit('sub 1');
+      emtr().emit('sub 1');
       return false;
     },
     'alt+right': () => {
-      _emitter.emit('add 1');
+      emtr().emit('add 1');
       return false;
     },
     esc: () => {
-      _emitter.emit('clear active');
+      emtr().emit('clear active');
       return false;
     },
     space: () => {
       if (isFocusOnVideo()) {
         return true;
       }
-      _emitter.emit('pause or play');
+      emtr().emit('pause or play');
       return false;
     }
   };
@@ -58,5 +77,3 @@ export const bind = () => {
     Mousetrap.bind(key, fn);
   });
 };
-
-export const emitter = () => _emitter;

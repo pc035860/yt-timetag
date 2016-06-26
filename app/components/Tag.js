@@ -10,7 +10,7 @@ import MdClear from 'react-icons/lib/md/clear';
 
 import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
-import { emitter as keyOpsEmitter } from '_util/keyOps';
+import { getEmitter } from '_util/keyOps';
 
 import TagLink from './TagLink';
 
@@ -64,11 +64,12 @@ class Tag extends Component {
   }
 
   componentDidMount() {
-    keyOpsEmitter().on('focus description', this.onKeyFocusDescription);
-    keyOpsEmitter().on('add 5', this.onKeyAdd5);
-    keyOpsEmitter().on('sub 5', this.onKeySub5);
-    keyOpsEmitter().on('add 1', this.onKeyAdd1);
-    keyOpsEmitter().on('sub 1', this.onKeySub1);
+    const emitter = getEmitter(this.props.videoId);
+    emitter.on('focus description', this.onKeyFocusDescription);
+    emitter.on('add 5', this.onKeyAdd5);
+    emitter.on('sub 5', this.onKeySub5);
+    emitter.on('add 1', this.onKeyAdd1);
+    emitter.on('sub 1', this.onKeySub1);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -78,6 +79,15 @@ class Tag extends Component {
         // ytPlayer('seekTo', nextProps.tag.seconds);
       }
     }
+  }
+
+  componentWillUnmount() {
+    const emitter = getEmitter(this.props.videoId);
+    emitter.off('focus description', this.onKeyFocusDescription);
+    emitter.off('add 5', this.onKeyAdd5);
+    emitter.off('sub 5', this.onKeySub5);
+    emitter.off('add 1', this.onKeyAdd1);
+    emitter.off('sub 1', this.onKeySub1);
   }
 
   onKeyFocusDescription() {

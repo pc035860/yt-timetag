@@ -14,4 +14,10 @@
 	word-wrap: normal;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
+
+	&-videoId {
+		font-size: 12px;
+		color: #a7a7a7;
+		font-weight: normal;
+	}
 }

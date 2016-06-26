@@ -6,7 +6,9 @@ import TagList from '_components/TagList';
 
 const App = ({ videoId }) => (
   <div styleName="component">
-    <h4 styleName="title">Time Tags</h4>
+    <h4 styleName="title">
+      Time Tags <small styleName="title-videoId">({videoId})</small>
+    </h4>
     <TagList videoId={videoId} />
   </div>
 );

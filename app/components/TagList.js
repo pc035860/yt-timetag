@@ -18,7 +18,7 @@ import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 
 import ytPlayer from '_util/ytPlayer';
-import { emitter as keyOpsEmitter } from '_util/keyOps';
+import { getEmitter } from '_util/keyOps';
 import exportFromTags from '_util/exportFromTags';
 
 const TagList = ({
@@ -94,7 +94,7 @@ const addHandlers = withHandlers({
   },
   handleOutput: ({ tags }) => () => {
     const textarea = document.createElement('textarea');
-    textarea.value = exportFromTags(tags);
+    textarea.value = exportFromTags(tags, '｜');
 
     const body = document.getElementsByTagName('body')[0];
     body.appendChild(textarea);
@@ -114,7 +114,7 @@ const addHandlers = withHandlers({
 
 const addLifecyle = lifecycle({
   componentDidMount() {
-    const emitter = keyOpsEmitter();
+    const emitter = getEmitter(this.props.videoId);
 
     const onAddTag = function () {
       this.props.handleTagAdd();
@@ -160,6 +160,10 @@ const addLifecyle = lifecycle({
       });
     }.bind(this);
     emitter.on('pause or play', onPauseOrPlay);
+  },
+  componentWillUnmount() {
+    const emitter = getEmitter(this.props.videoId);
+    emitter.allOff();
   }
 });
 
