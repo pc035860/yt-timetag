@@ -73,16 +73,18 @@ chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
 bindKeyOps();
 renderApp();
 
-setTimeout(() => {
-  ytPlayer.on('playing', () => {
-    ytPlayer(true, 'getCurrentTime').then((t) => {
-      console.debug('playing t', t);
+if (process.env.NODE_ENV !== 'production') {
+  setTimeout(() => {
+    ytPlayer.on('playing', () => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
+        console.debug('playing t', t);
+      });
     });
-  });
 
-  ytPlayer.on('paused', () => {
-    ytPlayer(true, 'getCurrentTime').then((t) => {
-      console.debug('paused t', t);
+    ytPlayer.on('paused', () => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
+        console.debug('paused t', t);
+      });
     });
-  });
-}, 500);
+  }, 500);
+}

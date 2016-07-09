@@ -21,7 +21,7 @@
         "*://youtu.be/*"
       ],
       "js": [
-      	"ytapi.js"
+        "ytapi.js"
       ],
       "run_at": "document_end",
       "all_frames": false
@@ -41,6 +41,7 @@
     "https://youtu.be/"
   ],
   "web_accessible_resources": [
-  	"contentscript.js.map"
+    "contentscript.js.map",
+    "*.png"
   ]
 }

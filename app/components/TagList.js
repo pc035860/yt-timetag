@@ -135,7 +135,7 @@ const addHandlers = withHandlers({
   },
   handleOutput: ({ tags, onCopySuccess }) => () => {
     const textarea = document.createElement('textarea');
-    textarea.value = exportFromTags(tags, '｜');
+    textarea.value = exportFromTags(tags, '\n');
 
     const body = document.getElementsByTagName('body')[0];
     body.appendChild(textarea);
