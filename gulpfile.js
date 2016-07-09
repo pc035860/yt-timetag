@@ -22,13 +22,13 @@ var genCopyAssets = function (env) {
     var images = gulp.src('app/images/*')
     .pipe(cache(env + '-images'))
     .pipe(gulp.dest(
-      path.join(myPath.dev, 'images')
+      path.join(myPath[env], 'images')
     ));
 
     var manifest = gulp.src('app/manifest.json')
     .pipe(cache(env + '-manifest'))
     .pipe(gulp.dest(
-      path.join(myPath.dev)
+      path.join(myPath[env])
     ));
 
     return es.concat(images, manifest);
@@ -40,11 +40,13 @@ gulp.task('clean:dev', function () {
 });
 
 gulp.task('clean:dist', function () {
-  return gulp.src(myPath.dev).pipe(clean());
+  return gulp.src(myPath.dist).pipe(clean());
 });
 
-gulp.task('copy:dev', genCopyAssets('dev'));
-gulp.task('build:dev', function () {
+gulp.task('copy:dev', ['build:dev'], genCopyAssets('dev'));
+gulp.task('copy:dist', ['build:dist'], genCopyAssets('dist'));
+
+gulp.task('build:dev', ['clean:dev'], function () {
   env({
     vars: {
       NODE_ENV: 'development',
@@ -61,6 +63,23 @@ gulp.task('build:dev', function () {
   return gulp.src('./app/background.js')
   .pipe(webpack(webpackConfig))
   .pipe(gulp.dest(myPath.dev));
+});
+
+gulp.task('build:dist', ['clean:dist'], function () {
+  env({
+    vars: {
+      NODE_ENV: 'production'
+    }
+  });
+
+  var webpackConfig = require('./webpack-prod.config.js');
+  Object.assign(webpackConfig, {
+    colors: true
+  });
+
+  return gulp.src('./app/background.js')
+  .pipe(webpack(webpackConfig))
+  .pipe(gulp.dest(myPath.dist));
 });
 
 gulp.task('build:watch', function () {
@@ -91,4 +110,5 @@ gulp.task('copy:watch', function () {
 });
 
 gulp.task('watch', ['copy:watch']);
-gulp.task('dev', ['build:dev', 'copy:dev']);
+gulp.task('dev', ['clean:dev', 'build:dev', 'copy:dev']);
+gulp.task('dist', ['clean:dist', 'build:dist', 'copy:dist']);

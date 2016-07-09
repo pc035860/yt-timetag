@@ -7,6 +7,7 @@
     "webpackwatch": "cross-env NODE_ENV=development WEBPACK_NO_COMPRESS=1 WEBPACK_SOURCEMAP=1 webpack --config webpack-dev.config.js --watch --colors --cache",
     "gulpwatch": "gulp watch --colors",
     "dev": "gulp dev --colors",
+    "dist": "gulp dist --colors",
     "watch": "run-p webpackwatch gulpwatch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
