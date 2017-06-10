@@ -1,5 +1,7 @@
 # TimeTags for YouTube
 
+[Visit Chrome Web Store](https://chrome.google.com/webstore/detail/hpbmedimnlknflpbgfbllklgelbnelef)
+
 We all know that YouTube has a feature that you can tag(bookmark) any specific time of the current video with a video timestamp format like `11:25` in comments.
 
 I found that when you try to create lots of tags for a longer-duration video, it's pretty annoying to write down the tag manually (in text editors like notepad). You have to switch back and forth between different apps. And it's even more annoying when you try to ensure the tagged time is accurate and precise.
