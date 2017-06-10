@@ -37,7 +37,7 @@ export const toTag = (seconds) => {
   }
 
   if (!m && !h) {
-    output = `00:${output}`;
+    output = `0:${output}`;
   }
 
   return output;

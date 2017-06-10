@@ -134,7 +134,7 @@ class Tag extends Component {
   createTimeDiffHandler(secDiff) {
     return (evt) => {
       const { tag, onEdit, onSetActive } = this.props;
-      const seconds = tag.seconds + secDiff;
+      const seconds = Math.max(0, tag.seconds + secDiff);
       onEdit(tag.id, { seconds });
 
       ytPlayer('seekTo', seconds, true);
