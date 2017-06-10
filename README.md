@@ -49,7 +49,7 @@ Results will be copied to your clipboard, in the format:
 
 To import, click on the button next to "add" button.
 
-**Import share the exact same format with export.**
+**Import shares the exact same format with export.**
 
 
 # Changelog
