@@ -13,6 +13,7 @@
 
 	&-btn {
 		position: relative;
+		margin-right: 5px;
 		cursor: pointer;
 
 		&-hint {
@@ -43,5 +44,28 @@
 		&.anim-leave {
 			animation: yttt-fadeOut .3s both;
 		}
+	}
+
+	.TagListImportModal {
+		width: 100%;
+		max-width: 400px;
+
+		padding: 10px;
+	}
+
+	.TagListImportModalOverlay {
+		position: fixed;
+		left: 0; right: 0;
+		top: 0; bottom: 0;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 100%;
+		height: 100%;
+
+		background-color: fade-out(#fff, .1);
+		z-index: 214748364000;
 	}
 }

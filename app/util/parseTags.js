@@ -1,4 +1,6 @@
 import { toSeconds } from '_util/ytTime';
+import trim from 'lodash/trim';
+import sortBy from 'lodash/sortBy';
 
 export default function parseTags(str) {
   const re = /(\d{1,2}:\d{2}:\d{2})|(\d{1,2}:\d{2})/gm;
@@ -6,8 +8,8 @@ export default function parseTags(str) {
   const t = [];  // temporary tags list
   const d = [];  // temporary descriptions list
 
-  let result;
-  let lastMatchStart;
+  let result = null;
+  let lastMatchStart = null;
 
   /* eslint-disable */
   while ((result = re.exec(str)) !== null) {
@@ -15,6 +17,7 @@ export default function parseTags(str) {
       d.push(str.substring(lastMatchStart, result.index));
     }
     t.push(result[0]);
+    lastMatchStart = re.lastIndex;
   }
   /* eslint-enable */
 
@@ -23,8 +26,8 @@ export default function parseTags(str) {
     d.push(str.substring(lastMatchStart));
   }
 
-  return t.map((tag, i) => ({
+  return sortBy(t.map((tag, i) => ({
     seconds: toSeconds(tag),
-    description: d[i]
-  }));
+    description: trim(d[i])
+  })), ['seconds']);
 }

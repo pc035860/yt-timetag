@@ -1,0 +1,14 @@
+%tag-input {
+	box-sizing: border-box;
+	padding: 4px 6px;
+	box-sizing: border-box;
+	font-size: 13px;
+	border: 1px solid #ddd;
+
+	&:hover {
+		border-color: darken(#ddd, 8%);
+	}
+	&:focus {
+		border-color: #167ac6;
+	}
+}

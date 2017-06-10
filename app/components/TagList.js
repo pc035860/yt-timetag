@@ -17,12 +17,16 @@ import sortBy from 'lodash/sortBy';
 import * as actTag_ from '_actions/tag';
 import * as actActiveTag_ from '_actions/activeTag';
 
+import ReactModal from 'react-modal';
 import Tag from './Tag';
+import Importer from './Importer';
 import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
+import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 
 import ytPlayer from '_util/ytPlayer';
 import exportFromTags from '_util/exportFromTags';
+import parseTags from '_util/parseTags';
 
 const transitionConfig = {
   justCopied: {
@@ -35,15 +39,27 @@ const transitionConfig = {
 };
 
 const TagList = ({
-  videoId, keyOpsEmitter,
+  videoId,
+  keyOpsEmitter,
 
-  tags, activeTag, actTag, actActiveTag,
+  tags,
+  activeTag,
+  actTag,
+  actActiveTag,
 
   justCopied,
+  showImportModal,
 
-  handleTagAdd, handleTagEdit, handleTagRemove,
-  handleTagActiveSet, handleTagActiveClear,
-  handleOutput
+  handleTagAdd,
+  handleTagEdit,
+  handleTagRemove,
+  handleTagActiveSet,
+  handleTagActiveClear,
+  handleOutput,
+
+  handleTagImport,
+  handleImportModalClose,
+  handleImportModalImport
 }) => (
   <div>
     {tags.map(tag => (
@@ -56,31 +72,59 @@ const TagList = ({
         onEdit={handleTagEdit}
         onRemove={handleTagRemove}
         onSetActive={handleTagActiveSet}
-        onClearActive={handleTagActiveClear} />
+        onClearActive={handleTagActiveClear}
+      />
     ))}
     <div styleName="toolbar">
       <div styleName="toolbar-left">
-        <button styleName="toolbar-btn" type="button"
+        <button
+          styleName="toolbar-btn"
+          type="button"
           title="New Tag"
-          onClick={handleTagAdd}>
+          onClick={handleTagAdd}
+        >
           <MdAdd size={20} />
+        </button>
+        <button
+          styleName="toolbar-btn"
+          type="button"
+          title="Import"
+          onClick={handleTagImport}
+        >
+          <MdPlayListAdd size={20} />
         </button>
       </div>
       <div styleName="toolbar-right">
-        <button styleName="toolbar-btn" type="button"
+        <button
+          styleName="toolbar-btn"
+          type="button"
           title="Copy to Clipboard"
-          onClick={handleOutput}>
+          onClick={handleOutput}
+        >
           <CSSTransitionGroup {...transitionConfig.justCopied}>
             {justCopied &&
               <span
                 className="yttt-TagList__toolbar-btn-hint"
-                styleName="toolbar-btn-hint">Copied</span>
-            }
+                styleName="toolbar-btn-hint"
+              >
+                Copied
+              </span>}
           </CSSTransitionGroup>
           <MdPrint size={20} />
         </button>
       </div>
     </div>
+
+    {/* import modal*/}
+    <ReactModal
+      contentLabel="Modal For Importing Tags"
+      isOpen={showImportModal}
+      onRequestClose={handleImportModalClose}
+      className="TagListImportModal"
+      overlayClassName="TagListImportModalOverlay"
+    >
+      <Importer onImport={handleImportModalImport} onClose={handleImportModalClose} />
+    </ReactModal>
   </div>
 );
 TagList.propTypes = {
@@ -103,12 +147,29 @@ const addCopiedHint = compose(
       if (rest.justCopiedTimeout) {
         clearTimeout(rest.justCopiedTimeout);
       }
-      setJustCopiedTimeout(
-        setTimeout(() => setJustCopied(false), 1500)
-      );
+      setJustCopiedTimeout(setTimeout(() => setJustCopied(false), 1500));
     },
     ...rest
   }))
+);
+
+const addImportModal = compose(
+  withState('showImportModal', 'setImportModal', false),
+  withHandlers({
+    handleTagImport: ({ setImportModal }) => () => {
+      setImportModal(true);
+    },
+    handleImportModalClose: ({ setImportModal }) => () => {
+      setImportModal(false);
+    },
+    handleImportModalImport: ({ actTag, setImportModal }) => (text) => {
+      const draftTags = parseTags(text);
+      if (draftTags.length > 0) {
+        actTag.addMulti(draftTags);
+      }
+      setImportModal(false);
+    }
+  })
 );
 
 const addHandlers = withHandlers({
@@ -193,10 +254,12 @@ const addLifecyle = lifecycle({
 
     const onPauseOrPlay = function () {
       ytPlayer(true, 'getPlayerState').then(state => {
-        if (state === 2) {  // state: paused
+        if (state === 2) {
+          // state: paused
           ytPlayer('playVideo');
         }
-        else if (state === 1) {  // state: playing
+        else if (state === 1) {
+          // state: playing
           ytPlayer('pauseVideo');
         }
       });
@@ -208,11 +271,11 @@ const addLifecyle = lifecycle({
   }
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   tags: sortBy(state.tags, ['seconds']),
   activeTag: state.activeTag
 });
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   actTag: bindActionCreators(actTag_, dispatch),
   actActiveTag: bindActionCreators(actActiveTag_, dispatch)
 });
@@ -220,6 +283,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   addCopiedHint,
+  addImportModal,
   addHandlers,
   addLifecyle
 )(CSSModules(TagList, styles));

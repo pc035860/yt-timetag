@@ -1,3 +1,5 @@
+@import "~_sass/_placeholders.scss";
+
 .component {
 	display: flex;
 	flex-direction: row;
@@ -36,18 +38,8 @@
 	min-width: 50px;
 
 	&-input {
+		@extend %tag-input;
 		width: 90%;
-		padding: 4px 6px;
-		box-sizing: border-box;
-		font-size: 13px;
-		border: 1px solid #ddd;
-
-		&:hover {
-			border-color: darken(#ddd, 8%);
-		}
-		&:focus {
-			border-color: #167ac6;
-		}
 	}
 }
 
