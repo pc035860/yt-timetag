@@ -1,0 +1,12 @@
+// 將您的設定放入此檔案中以覆寫預設值和使用者設定。
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+
+    "**/node_modules": true
+  }
+}

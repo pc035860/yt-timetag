@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import CSSModules from 'react-css-modules';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import { CSSTransitionGroup } from 'react-transition-group';
 import styles from './TagList.scss';
 
 import compose from 'recompose/compose';
