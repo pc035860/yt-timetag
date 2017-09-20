@@ -20,6 +20,7 @@ import * as actActiveTag_ from '_actions/activeTag';
 import ReactModal from 'react-modal';
 import Tag from './Tag';
 import Importer from './Importer';
+import YTButton from './YTButton';
 import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
@@ -77,25 +78,25 @@ const TagList = ({
     ))}
     <div styleName="toolbar">
       <div styleName="toolbar-left">
-        <button
+        <YTButton
           styleName="toolbar-btn"
           type="button"
           title="New Tag"
           onClick={handleTagAdd}
         >
           <MdAdd size={20} />
-        </button>
-        <button
+        </YTButton>
+        <YTButton
           styleName="toolbar-btn"
           type="button"
           title="Import"
           onClick={handleTagImport}
         >
           <MdPlayListAdd size={20} />
-        </button>
+        </YTButton>
       </div>
       <div styleName="toolbar-right">
-        <button
+        <YTButton
           styleName="toolbar-btn"
           type="button"
           title="Copy to Clipboard"
@@ -111,7 +112,7 @@ const TagList = ({
               </span>}
           </CSSTransitionGroup>
           <MdPrint size={20} />
-        </button>
+        </YTButton>
       </div>
     </div>
 

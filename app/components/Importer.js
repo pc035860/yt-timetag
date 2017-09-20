@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import compose from 'recompose/compose';
 import withHandlers from 'recompose/withHandlers';
@@ -8,6 +9,7 @@ import CSSModules from 'react-css-modules';
 import styles from './Importer.scss';
 
 import LogoIcon from '_components/LogoIcon';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 const placeholder = `Example:
 
@@ -17,7 +19,12 @@ const placeholder = `Example:
 `;
 
 const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
-  <div styleName="importer">
+  <div
+    styleName="importer"
+    className={classNames({
+      [styles.newDesign]: is2017NewDesign()
+    })}
+  >
     <div styleName="heading">
       <LogoIcon /> Import from text
     </div>

@@ -13,6 +13,7 @@ import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
 
 import TagLink from './TagLink';
+import YTButton from './YTButton';
 
 class Tag extends Component {
   static propTypes = {
@@ -228,24 +229,24 @@ class Tag extends Component {
         </div>
         {isActive &&
           <div styleName="actions">
-            <button type="button"
+            <YTButton type="button"
               title="-5s"
               styleName="actions-btn"
               onClick={this.handleSub5}>
               <MdKeyboardArrowLeft size={16} />
-            </button>
-            <button type="button"
+            </YTButton>
+            <YTButton type="button"
               title="+5s"
               styleName="actions-btn"
               onClick={this.handleAdd5}>
               <MdKeyboardArrowRight size={16} />
-            </button>
-            <button type="button"
+            </YTButton>
+            <YTButton type="button"
               title="Remove"
               styleName="actions-btn-last"
               onClick={this.handleRemoveClick}>
               <MdClear size={16} />
-            </button>
+            </YTButton>
           </div>
         }
       </div>

@@ -17,11 +17,12 @@ import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
 import { bind as bindKeyOps, getEmitter as getKeyOpsEmitter } from '_util/keyOps';
 import getYTVideoId from '_util/getYTVideoId';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 const appRootId = 'yttt-app';
 
 function renderApp() {
-  const sidebarId = 'watch7-sidebar-contents';
+  const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
   const sidebarElm = document.getElementById(sidebarId);
 
   if (!sidebarElm) {
