@@ -1,0 +1,74 @@
+/**
+ * scrolling shadows
+ *
+ * Ref:
+ * 	http://lea.verou.me/2012/04/background-attachment-local/
+ * 	http://codepen.io/laustdeleuran/pen/DBaAu
+ */
+ @mixin scrolling-shadows(
+	$background-color: rgb(255, 255, 255),
+	$shadow-intensity: 0.1,
+	$shadow-color: rgb(0,0,0),
+	$cover-size: 10px,
+	$shadow-size: 5px) {
+
+	background:
+		// Shadow covers
+		linear-gradient($background-color 30%, rgba($background-color,0)),
+		linear-gradient(rgba($background-color,0), $background-color 70%) 0 100%,
+
+		// Shadows
+		radial-gradient(50% 0, farthest-side, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)),
+		radial-gradient(50% 100%,farthest-side, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)) 0 100%;
+	background:
+		// Shadow covers
+		linear-gradient($background-color 30%, rgba($background-color,0)),
+		linear-gradient(rgba($background-color,0), $background-color 70%) 0 100%,
+
+		// Shadows
+		radial-gradient(farthest-side at 50% 0, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)),
+		radial-gradient(farthest-side at 50% 100%, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)) 0 100%;
+	background-repeat: no-repeat;
+	background-color: $background-color;
+	background-size: 100% $cover-size, 100% $cover-size, 100% $shadow-size, 100% $shadow-size;
+
+	// Opera doesn't support this in the shorthand
+	background-attachment: local, local, scroll, scroll;
+}
+
+@mixin webkit-scrollbar($theme) {
+	$bg-color: rgba(0, 0, 0, 1);
+
+	@if $theme == dark {
+		$bg-color: rgba(255, 255, 255, 1);
+	} @else if $theme == light {
+		$bg-color: rgba(0, 0, 0, 1);
+	}
+
+	/**
+	 * Webkit scrollbar - for dark theme
+	 */
+	&::-webkit-scrollbar              { width: 4px; }
+	&::-webkit-scrollbar-button       { display: none; }
+	&::-webkit-scrollbar-track        { }
+	&::-webkit-scrollbar-track-piece  {
+		background-color: fade_out($bg-color, 0.9);
+		border-radius: 2px;
+	}
+	&::-webkit-scrollbar-thumb        {
+		background-color: fade_out($bg-color, 0.8);
+		border-radius: 2px;
+	}
+	&::-webkit-scrollbar-corner       { /* 6 */ }
+	&::-webkit-resizer                { /* 7 */ }
+
+	&:hover {
+		&::-webkit-scrollbar              { width: 5px; }
+		&::-webkit-scrollbar-track-piece  {
+			// background-color: fade_out($bg-color, 0.7);
+		}
+		&::-webkit-scrollbar-thumb        {
+			background-color: fade_out($bg-color, 0.6);
+		}
+	}
+}

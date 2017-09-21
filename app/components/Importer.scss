@@ -1,53 +1,111 @@
 @import "~_sass/_placeholders.scss";
 
 .importer {
-	padding: 15px 20px;
-	border: 1px solid #aaa;
-	background-color: #fff;
+    padding: 15px 20px;
+    border: 1px solid #aaa;
+    background-color: #fff;
+
+    &.new-design {
+        padding: 25px 35px;
+        border: none;
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+        0 6px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.4);
+    }
 }
 
 .heading {
-	margin-bottom: 10px;
-	font-size: 14px;
+    margin-bottom: 10px;
+    font-size: 14px;
 
-	> img {
-		margin: 5px;
-	}
+    > img {
+        margin: 5px;
+    }
 }
 
 .textarea {
-	@extend %tag-input;
+    @extend %tag-input;
 
-	width: 100%;
-	height: 200px;
+    width: 100%;
+    height: 200px;
 }
 
 .toolbar {
-	text-align: right;
+    text-align: right;
 
-	&-btn {
-		$hover: #f7f7f7;
+    &-btn {
+        $hover: #f7f7f7;
 
-		padding: 8px 12px;
-		margin-left: 5px;
+        padding: 8px 12px;
+        margin-left: 5px;
 
-		color: #bbb;
-		cursor: pointer;
+        color: #bbb;
+        cursor: pointer;
 
-		&:hover {
-			background-color: $hover;
-		}
-		&:active {
-			background-color: darken($hover, 5%);
-		}
+        &:hover {
+            background-color: $hover;
+        }
+        &:active {
+            background-color: darken($hover, 5%);
+        }
 
-		&-primary {
-			composes: toolbar-btn;
-			color: #167ac6;
-		}
-	}
+        &-primary {
+            composes: toolbar-btn;
+            color: #167ac6;
+        }
+    }
 }
 
-.newDesign {
+@mixin btn-color($color) {
+    $hover: lighten($color, 5%);
+    $active: darken($color, 5%);
 
+    &,
+    &:focus {
+        background-color: $color;
+    }
+    &:hover {
+        background-color: $hover;
+    }
+    &:active {
+        background-color: $active;
+    }
+}
+@mixin btn-disable {
+    &.disabled,
+    &[disabled] {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+.new-design {
+    .textarea {
+        padding: 6px 8px;
+    }
+
+    .toolbar {
+        margin-top: 8px;
+    }
+
+    .toolbar-btn {
+        @include btn-color(#EBEBEB);
+        @include btn-disable;
+
+        margin-left: 8px;
+        border: none;
+        color: rgba(17, 17, 17, 0.6);
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .toolbar-btn-primary {
+        @extend .toolbar-btn;
+
+        @include btn-color(#2793e6);
+        @include btn-disable;
+
+        color: #fff;
+    }
 }

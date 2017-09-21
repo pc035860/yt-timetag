@@ -1,15 +1,25 @@
 .component {
 }
 
+.tag-container {
+	max-height: 30vh;
+	overflow-y: auto;
+}
+
 .toolbar {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 
-	margin-top: 10px;
 	padding: 5px;
 	text-align: right;
 	border-top: 1px solid #ddd;
+
+	button {
+		position: relative;
+		margin-right: 5px;
+		cursor: pointer;
+	}
 
 	&-btn {
 		position: relative;
@@ -33,6 +43,22 @@
 	&-right {
 		flex: 0 1 auto;
 		text-align: right;
+
+		button {
+			margin-right: 0;
+		}
+	}
+}
+
+.new-design {
+	.toolbar {
+		border-color: rgba(238, 238, 238, 1.00);
+
+		.toolbar-left {
+			button {
+				margin-right: 8px;
+			}
+		}
 	}
 }
 
@@ -46,14 +72,19 @@
 		}
 	}
 
-	.TagListImportModal {
+	.yttt-TagListImportModal {
 		width: 100%;
 		max-width: 400px;
 
 		padding: 10px;
+		outline: none;
+
+		&.yttt-is-new-design {
+			max-width: 460px;
+		}
 	}
 
-	.TagListImportModalOverlay {
+	.yttt-TagListImportModalOverlay {
 		position: fixed;
 		left: 0; right: 0;
 		top: 0; bottom: 0;
@@ -67,5 +98,9 @@
 
 		background-color: fade-out(#fff, .1);
 		z-index: 214748364000;
+
+		&.yttt-is-new-design {
+			background-color: fade-out(#fff, .3);
+		}
 	}
 }

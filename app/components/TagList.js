@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 import { CSSTransitionGroup } from 'react-transition-group';
 import styles from './TagList.scss';
 
@@ -21,6 +22,7 @@ import ReactModal from 'react-modal';
 import Tag from './Tag';
 import Importer from './Importer';
 import YTButton from './YTButton';
+import TagContainer from './TagContainer';
 import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
@@ -28,6 +30,7 @@ import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 import ytPlayer from '_util/ytPlayer';
 import exportFromTags from '_util/exportFromTags';
 import parseTags from '_util/parseTags';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 const transitionConfig = {
   justCopied: {
@@ -62,36 +65,35 @@ const TagList = ({
   handleImportModalClose,
   handleImportModalImport
 }) => (
-  <div>
-    {tags.map(tag => (
-      <Tag
-        key={tag.id}
-        videoId={videoId}
-        keyOpsEmitter={keyOpsEmitter}
-        tag={tag}
-        isActive={tag.id === activeTag}
-        onEdit={handleTagEdit}
-        onRemove={handleTagRemove}
-        onSetActive={handleTagActiveSet}
-        onClearActive={handleTagActiveClear}
-      />
-    ))}
+  <div
+    className={classNames({
+      [styles['new-design']]: is2017NewDesign()
+    })}
+  >
+    <TagContainer
+      shadow
+      stopPropagation
+    >
+      {tags.map(tag => (
+        <Tag
+          key={tag.id}
+          videoId={videoId}
+          keyOpsEmitter={keyOpsEmitter}
+          tag={tag}
+          isActive={tag.id === activeTag}
+          onEdit={handleTagEdit}
+          onRemove={handleTagRemove}
+          onSetActive={handleTagActiveSet}
+          onClearActive={handleTagActiveClear}
+        />
+      ))}
+    </TagContainer>
     <div styleName="toolbar">
       <div styleName="toolbar-left">
-        <YTButton
-          styleName="toolbar-btn"
-          type="button"
-          title="New Tag"
-          onClick={handleTagAdd}
-        >
+        <YTButton styleName="toolbar-btn" type="button" title="New Tag" onClick={handleTagAdd}>
           <MdAdd size={20} />
         </YTButton>
-        <YTButton
-          styleName="toolbar-btn"
-          type="button"
-          title="Import"
-          onClick={handleTagImport}
-        >
+        <YTButton styleName="toolbar-btn" type="button" title="Import" onClick={handleTagImport}>
           <MdPlayListAdd size={20} />
         </YTButton>
       </div>
@@ -103,13 +105,11 @@ const TagList = ({
           onClick={handleOutput}
         >
           <CSSTransitionGroup {...transitionConfig.justCopied}>
-            {justCopied &&
-              <span
-                className="yttt-TagList__toolbar-btn-hint"
-                styleName="toolbar-btn-hint"
-              >
+            {justCopied && (
+              <span className="yttt-TagList__toolbar-btn-hint" styleName="toolbar-btn-hint">
                 Copied
-              </span>}
+              </span>
+            )}
           </CSSTransitionGroup>
           <MdPrint size={20} />
         </YTButton>
@@ -121,8 +121,12 @@ const TagList = ({
       contentLabel="Modal For Importing Tags"
       isOpen={showImportModal}
       onRequestClose={handleImportModalClose}
-      className="TagListImportModal"
-      overlayClassName="TagListImportModalOverlay"
+      className={classNames('yttt-TagListImportModal', {
+        'yttt-is-new-design': is2017NewDesign()
+      })}
+      overlayClassName={classNames('yttt-TagListImportModalOverlay', {
+        'yttt-is-new-design': is2017NewDesign()
+      })}
     >
       <Importer onImport={handleImportModalImport} onClose={handleImportModalClose} />
     </ReactModal>
@@ -163,7 +167,7 @@ const addImportModal = compose(
     handleImportModalClose: ({ setImportModal }) => () => {
       setImportModal(false);
     },
-    handleImportModalImport: ({ actTag, setImportModal }) => (text) => {
+    handleImportModalImport: ({ actTag, setImportModal }) => text => {
       const draftTags = parseTags(text);
       if (draftTags.length > 0) {
         actTag.addMulti(draftTags);

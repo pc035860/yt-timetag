@@ -22,7 +22,7 @@ const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
   <div
     styleName="importer"
     className={classNames({
-      [styles.newDesign]: is2017NewDesign()
+      [styles['new-design']]: is2017NewDesign()
     })}
   >
     <div styleName="heading">

@@ -66,6 +66,7 @@
     "event-emitter": "^0.3.4",
     "js-video-url-parser": "^0.1.6",
     "mousetrap": "^1.6.0",
+    "normalize-wheel": "^1.0.1",
     "prop-types": "^15.5.10",
     "q": "^1.4.1",
     "react": "^15.1.0",

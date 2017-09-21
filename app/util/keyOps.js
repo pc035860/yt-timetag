@@ -38,6 +38,10 @@ export const bind = () => {
       emtr().emit('focus description');
       return false;
     },
+    d: () => {
+      emtr().emit('focus description');
+      return false;
+    },
     left: () => {
       if (isFocusOnVideo()) {
         return true;

@@ -1,0 +1,14 @@
+@import "~_sass/_mixins";
+
+.component {
+	@include webkit-scrollbar(light);
+
+	max-height: 30vh;
+	overflow-y: auto;
+
+	padding-bottom: 8px;
+
+	&.withShadow {
+		@include scrolling-shadows($shadow-intensity: 0.15);
+	}
+}

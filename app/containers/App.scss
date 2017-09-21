@@ -1,6 +1,10 @@
 .component {
-	// padding-left: 10px;
+	padding-left: 10px;
 	margin-bottom: 20px;
+
+	&.new-design {
+		padding-left: 0;
+	}
 }
 
 .logo-wrap {
@@ -24,5 +28,11 @@
 		font-size: 12px;
 		color: #a7a7a7;
 		font-weight: normal;
+	}
+}
+
+.new-design {
+	.title {
+		margin-bottom: 10px;
 	}
 }

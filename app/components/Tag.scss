@@ -14,10 +14,19 @@
 
 	color: #333;
 	font-size: 13px;
-}
-.component-is-active {
-	background-color: fade-out(#dbe4eb, .5);
-	height: 34px;
+
+	&.new-design {
+		height: 28px;
+	}
+
+	&.component-is-active {
+		background-color: fade-out(#dbe4eb, .5);
+		height: 34px;
+
+		&.new-design {
+			height: 38px;
+		}
+	}
 }
 
 

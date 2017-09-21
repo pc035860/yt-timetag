@@ -11,6 +11,7 @@ import MdClear from 'react-icons/lib/md/clear';
 
 import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 import TagLink from './TagLink';
 import YTButton from './YTButton';
@@ -214,7 +215,8 @@ class Tag extends Component {
     return (
       <div styleName="component"
         className={classNames({
-          [styles['component-is-active']]: isActive
+          [styles['component-is-active']]: isActive,
+          [styles['new-design']]: is2017NewDesign()
         })}
         onClick={this.handleToggleComponent}>
         <div styleName="tag">
