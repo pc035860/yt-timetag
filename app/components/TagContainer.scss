@@ -3,6 +3,7 @@
 .component {
 	@include webkit-scrollbar(light);
 
+	position: relative;
 	max-height: 30vh;
 	overflow-y: auto;
 

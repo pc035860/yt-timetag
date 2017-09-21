@@ -1,3 +1,5 @@
+/* eslint no-param-reassign: 0 */
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import CSSModules from 'react-css-modules';
@@ -10,6 +12,9 @@ import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
+
+import debounce from 'lodash.debounce';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -63,7 +68,11 @@ const TagList = ({
 
   handleTagImport,
   handleImportModalClose,
-  handleImportModalImport
+  handleImportModalImport,
+
+  tagContainerRef,
+  handleTagContainerMount,
+  handleTagContainerScrollRequest
 }) => (
   <div
     className={classNames({
@@ -73,6 +82,7 @@ const TagList = ({
     <TagContainer
       shadow
       stopPropagation
+      onMount={handleTagContainerMount}
     >
       {tags.map(tag => (
         <Tag
@@ -85,6 +95,8 @@ const TagList = ({
           onRemove={handleTagRemove}
           onSetActive={handleTagActiveSet}
           onClearActive={handleTagActiveClear}
+          containerRef={tagContainerRef}
+          onContainerScrollRequest={handleTagContainerScrollRequest}
         />
       ))}
     </TagContainer>
@@ -276,6 +288,24 @@ const addLifecyle = lifecycle({
   }
 });
 
+// debouncely setting scrollTop
+const scrollTo = debounce((ref, scrollTop) => {
+  ref.scrollTop = scrollTop;
+}, 50);
+const addTagContainerRef = compose(
+  withState('tagContainerRef', 'setTagContainerRef', null),
+  withHandlers({
+    handleTagContainerMount: ({ setTagContainerRef }) => (c) => {
+      if (c) {
+        setTagContainerRef(c);
+      }
+    },
+    handleTagContainerScrollRequest: ({ tagContainerRef }) => (scrollTop) => {
+      scrollTo(tagContainerRef, scrollTop);
+    }
+  })
+);
+
 const mapStateToProps = state => ({
   tags: sortBy(state.tags, ['seconds']),
   activeTag: state.activeTag
@@ -287,6 +317,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  addTagContainerRef,
   addCopiedHint,
   addImportModal,
   addHandlers,

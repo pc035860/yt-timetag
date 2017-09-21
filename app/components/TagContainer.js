@@ -5,18 +5,22 @@ import classNames from 'classnames';
 
 import normalizeWheel from 'normalize-wheel';
 
+import noop from '_util/noop';
+
 import styles from './TagContainer.scss';
 
 class TagContainer extends Component {
   static propTypes = {
     children: PropTypes.any,
     stopPropagation: PropTypes.bool,
-    shadow: PropTypes.bool
+    shadow: PropTypes.bool,
+    onMount: PropTypes.func
   };
 
   static defaultProps = {
     stopPropagation: false,
-    shadow: false
+    shadow: false,
+    onMount: noop
   };
 
   componentDidMount() {
@@ -27,7 +31,7 @@ class TagContainer extends Component {
 
   componentWillUnmount() {
     if (this.elm) {
-      this.elm.removeEventListener('whee', this.onWheel);
+      this.elm.removeEventListener('wheel', this.onWheel);
       this.elm = null;
     }
   }
@@ -55,6 +59,7 @@ class TagContainer extends Component {
   handleMount = (c) => {
     if (c) {
       this.elm = c;
+      this.props.onMount(this.elm, this);
     }
   };
 
