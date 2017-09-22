@@ -83,7 +83,7 @@ const config = {
         exclude: /node_modules/,
         loader: ExtractTextPlugin.extract(
           'style?sourceMap',
-          `css?modules&sourceMap&importLoaders=1!postcss!sass?${toQuery(params.sass)}`
+          `css?modules&localIdentName=[name]__[local]&sourceMap&importLoaders=1!postcss!sass?${toQuery(params.sass)}`
         )
       },
       {

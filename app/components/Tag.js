@@ -11,9 +11,10 @@ import MdClear from 'react-icons/lib/md/clear';
 
 import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 import TagLink from './TagLink';
-
+import YTButton from './YTButton';
 class Tag extends Component {
   static propTypes = {
     videoId: PropTypes.string.isRequired,
@@ -25,18 +26,21 @@ class Tag extends Component {
       description: PropTypes.string
     }).isRequired,
     isActive: PropTypes.bool,
+    containerRef: PropTypes.any,
 
     onEdit: PropTypes.func,
     onRemove: PropTypes.func,
     onSetActive: PropTypes.func,
-    onClearActive: PropTypes.func
+    onClearActive: PropTypes.func,
+    onContainerScrollRequest: PropTypes.func
   };
   static defaultProps = {
     isActive: false,
     onEdit: noop,
     onRemove: noop,
     onSetActive: noop,
-    onClearActive: noop
+    onClearActive: noop,
+    onContainerScrollRequest: noop
   };
 
   constructor(...args) {
@@ -73,12 +77,13 @@ class Tag extends Component {
     emitter.on('tag sub 1', this.onKeySub1);
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextProps.isActive !== this.props.isActive) {
-      if (nextProps.isActive) {
-        // do nothing for now
-        // ytPlayer('seekTo', nextProps.tag.seconds);
-      }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isActive !== this.props.isActive && nextProps.isActive) {
+      this.scrollIntoView();
+    }
+
+    if (nextProps.tag !== this.props.tag) {
+      this.scrollIntoView();
     }
   }
 
@@ -89,6 +94,8 @@ class Tag extends Component {
     emitter.off('tag sub 5', this.onKeySub5);
     emitter.off('tag add 1', this.onKeyAdd1);
     emitter.off('tag sub 1', this.onKeySub1);
+
+    this.elm = null;
   }
 
   onKeyFocusDescription() {
@@ -131,6 +138,36 @@ class Tag extends Component {
     }
   }
 
+  elm;
+
+  scrollIntoView() {
+    const { containerRef } = this.props;
+    if (this.elm && containerRef) {
+      setTimeout(() => {
+        // view range: container.scrollTop -> container.scrollTop + container.offsetHeight
+        // elm range: elm.offsetTop -> elm.offsetTop + elm.offsetHeight
+
+        const elm = this.elm;
+        const cScrollTop = containerRef.scrollTop;
+        const cOffsetHeight = containerRef.offsetHeight;
+        const eOffsetTop = elm.offsetTop;
+        const eOffsetHeight = elm.offsetHeight;
+
+        let scrollTop;
+        if (cScrollTop > eOffsetTop) {
+          scrollTop = eOffsetTop;
+        }
+        else if (cScrollTop + cOffsetHeight < eOffsetTop + eOffsetHeight) {
+          scrollTop = eOffsetTop + eOffsetHeight - cOffsetHeight;
+        }
+
+        if (typeof scrollTop !== 'undefined') {
+          this.props.onContainerScrollRequest(scrollTop);
+        }
+      }, 100);
+    }
+  }
+
   createTimeDiffHandler(secDiff) {
     return (evt) => {
       const { tag, onEdit, onSetActive } = this.props;
@@ -145,6 +182,12 @@ class Tag extends Component {
       }
     };
   }
+
+  handleMount = (c) => {
+    if (c) {
+      this.elm = c;
+    }
+  };
 
   handleToggleComponent() {
     if (this.props.isActive) {
@@ -211,11 +254,15 @@ class Tag extends Component {
   render() {
     const { tag, isActive, videoId } = this.props;
     return (
-      <div styleName="component"
+      <div
+        styleName="component"
         className={classNames({
-          [styles['component-is-active']]: isActive
+          [styles['component-is-active']]: isActive,
+          [styles['new-design']]: is2017NewDesign()
         })}
-        onClick={this.handleToggleComponent}>
+        onClick={this.handleToggleComponent}
+        ref={this.handleMount}
+      >
         <div styleName="tag">
           <TagLink
             videoId={videoId}
@@ -228,24 +275,24 @@ class Tag extends Component {
         </div>
         {isActive &&
           <div styleName="actions">
-            <button type="button"
+            <YTButton type="button"
               title="-5s"
               styleName="actions-btn"
               onClick={this.handleSub5}>
               <MdKeyboardArrowLeft size={16} />
-            </button>
-            <button type="button"
+            </YTButton>
+            <YTButton type="button"
               title="+5s"
               styleName="actions-btn"
               onClick={this.handleAdd5}>
               <MdKeyboardArrowRight size={16} />
-            </button>
-            <button type="button"
+            </YTButton>
+            <YTButton type="button"
               title="Remove"
               styleName="actions-btn-last"
               onClick={this.handleRemoveClick}>
               <MdClear size={16} />
-            </button>
+            </YTButton>
           </div>
         }
       </div>

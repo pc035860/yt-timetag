@@ -1,6 +1,9 @@
+/* eslint no-param-reassign: 0 */
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 import { CSSTransitionGroup } from 'react-transition-group';
 import styles from './TagList.scss';
 
@@ -9,6 +12,9 @@ import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
+
+import debounce from 'lodash.debounce';
+
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -20,6 +26,8 @@ import * as actActiveTag_ from '_actions/activeTag';
 import ReactModal from 'react-modal';
 import Tag from './Tag';
 import Importer from './Importer';
+import YTButton from './YTButton';
+import TagContainer from './TagContainer';
 import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
@@ -27,6 +35,7 @@ import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 import ytPlayer from '_util/ytPlayer';
 import exportFromTags from '_util/exportFromTags';
 import parseTags from '_util/parseTags';
+import is2017NewDesign from '_util/is2017NewDesign';
 
 const transitionConfig = {
   justCopied: {
@@ -59,59 +68,63 @@ const TagList = ({
 
   handleTagImport,
   handleImportModalClose,
-  handleImportModalImport
+  handleImportModalImport,
+
+  tagContainerRef,
+  handleTagContainerMount,
+  handleTagContainerScrollRequest
 }) => (
-  <div>
-    {tags.map(tag => (
-      <Tag
-        key={tag.id}
-        videoId={videoId}
-        keyOpsEmitter={keyOpsEmitter}
-        tag={tag}
-        isActive={tag.id === activeTag}
-        onEdit={handleTagEdit}
-        onRemove={handleTagRemove}
-        onSetActive={handleTagActiveSet}
-        onClearActive={handleTagActiveClear}
-      />
-    ))}
+  <div
+    className={classNames({
+      [styles['new-design']]: is2017NewDesign()
+    })}
+  >
+    <TagContainer
+      shadow
+      stopPropagation
+      onMount={handleTagContainerMount}
+    >
+      {tags.map(tag => (
+        <Tag
+          key={tag.id}
+          videoId={videoId}
+          keyOpsEmitter={keyOpsEmitter}
+          tag={tag}
+          isActive={tag.id === activeTag}
+          onEdit={handleTagEdit}
+          onRemove={handleTagRemove}
+          onSetActive={handleTagActiveSet}
+          onClearActive={handleTagActiveClear}
+          containerRef={tagContainerRef}
+          onContainerScrollRequest={handleTagContainerScrollRequest}
+        />
+      ))}
+    </TagContainer>
     <div styleName="toolbar">
       <div styleName="toolbar-left">
-        <button
-          styleName="toolbar-btn"
-          type="button"
-          title="New Tag"
-          onClick={handleTagAdd}
-        >
+        <YTButton styleName="toolbar-btn" type="button" title="New Tag" onClick={handleTagAdd}>
           <MdAdd size={20} />
-        </button>
-        <button
-          styleName="toolbar-btn"
-          type="button"
-          title="Import"
-          onClick={handleTagImport}
-        >
+        </YTButton>
+        <YTButton styleName="toolbar-btn" type="button" title="Import" onClick={handleTagImport}>
           <MdPlayListAdd size={20} />
-        </button>
+        </YTButton>
       </div>
       <div styleName="toolbar-right">
-        <button
+        <YTButton
           styleName="toolbar-btn"
           type="button"
           title="Copy to Clipboard"
           onClick={handleOutput}
         >
           <CSSTransitionGroup {...transitionConfig.justCopied}>
-            {justCopied &&
-              <span
-                className="yttt-TagList__toolbar-btn-hint"
-                styleName="toolbar-btn-hint"
-              >
+            {justCopied && (
+              <span className="yttt-TagList__toolbar-btn-hint" styleName="toolbar-btn-hint">
                 Copied
-              </span>}
+              </span>
+            )}
           </CSSTransitionGroup>
           <MdPrint size={20} />
-        </button>
+        </YTButton>
       </div>
     </div>
 
@@ -120,8 +133,12 @@ const TagList = ({
       contentLabel="Modal For Importing Tags"
       isOpen={showImportModal}
       onRequestClose={handleImportModalClose}
-      className="TagListImportModal"
-      overlayClassName="TagListImportModalOverlay"
+      className={classNames('yttt-TagListImportModal', {
+        'yttt-is-new-design': is2017NewDesign()
+      })}
+      overlayClassName={classNames('yttt-TagListImportModalOverlay', {
+        'yttt-is-new-design': is2017NewDesign()
+      })}
     >
       <Importer onImport={handleImportModalImport} onClose={handleImportModalClose} />
     </ReactModal>
@@ -162,7 +179,7 @@ const addImportModal = compose(
     handleImportModalClose: ({ setImportModal }) => () => {
       setImportModal(false);
     },
-    handleImportModalImport: ({ actTag, setImportModal }) => (text) => {
+    handleImportModalImport: ({ actTag, setImportModal }) => text => {
       const draftTags = parseTags(text);
       if (draftTags.length > 0) {
         actTag.addMulti(draftTags);
@@ -271,6 +288,24 @@ const addLifecyle = lifecycle({
   }
 });
 
+// debouncely setting scrollTop
+const scrollTo = debounce((ref, scrollTop) => {
+  ref.scrollTop = scrollTop;
+}, 50);
+const addTagContainerRef = compose(
+  withState('tagContainerRef', 'setTagContainerRef', null),
+  withHandlers({
+    handleTagContainerMount: ({ setTagContainerRef }) => (c) => {
+      if (c) {
+        setTagContainerRef(c);
+      }
+    },
+    handleTagContainerScrollRequest: ({ tagContainerRef }) => (scrollTop) => {
+      scrollTo(tagContainerRef, scrollTop);
+    }
+  })
+);
+
 const mapStateToProps = state => ({
   tags: sortBy(state.tags, ['seconds']),
   activeTag: state.activeTag
@@ -282,6 +317,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
+  addTagContainerRef,
   addCopiedHint,
   addImportModal,
   addHandlers,
