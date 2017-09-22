@@ -82,6 +82,7 @@
     "redux-actions": "^0.10.0",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
+    "request-interval": "^2.0.0",
     "reselect": "^2.5.1"
   }
 }

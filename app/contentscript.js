@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import assign from 'lodash/assign';
+import requestInterval from 'request-interval';
 
 import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
@@ -20,22 +21,32 @@ import getYTVideoId from '_util/getYTVideoId';
 import is2017NewDesign from '_util/is2017NewDesign';
 
 const appRootId = 'yttt-app';
+const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
 
-function renderApp() {
-  const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
+function renderApp(videoId) {
   const sidebarElm = document.getElementById(sidebarId);
 
   if (!sidebarElm) {
     throw new Error('sidebar element not found');
   }
 
-  // 準備 react app root elemennt
-  const appElm = document.createElement('div');
-  assign(appElm, {
-    id: appRootId,
-    className: appRootId
-  });
-  sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
+  let appElm = document.getElementById(appRootId);
+
+  if (!appElm) {
+    // 準備 react app root elemennt
+    appElm = document.createElement('div');
+    assign(appElm, {
+      id: appRootId,
+      className: appRootId
+    });
+    sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
+  }
+
+  if (appElm.dataset.videoId === videoId) {
+    return;
+  }
+
+  appElm.dataset.videoId = videoId;
 
   loadCrState().then(state_ => {
     const state = state_;
@@ -46,7 +57,6 @@ function renderApp() {
     }
 
     const store = state ? configureStore(state) : configureStore();
-    const videoId = getYTVideoId();
 
     ReactDOM.render(
       <Provider store={store}>
@@ -59,20 +69,47 @@ function renderApp() {
   });
 }
 
+function unmountApp() {
+  const appElm = document.getElementById(appRootId);
+  if (appElm) {
+    ReactDOM.unmountComponentAtNode(appElm);
+    delete appElm.dataset.videoId;
+  }
+}
+
 
 // 回應 injection check
 chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
   if (res === MSG_CHECK_LOADED_REQUEST) {
     sendResponse(MSG_CHECK_LOADED_RESPONSE);
 
-    if (!document.getElementById(appRootId)) {
-      renderApp();
+    if (!document.getElementById(appRootId) || is2017NewDesign()) {
+      renderApp(getYTVideoId());
     }
   }
 });
 
 bindKeyOps();
-renderApp();
+renderApp(getYTVideoId());
+
+if (is2017NewDesign()) {
+  /**
+   * 新版 YouTube 不會在切換影片的時候清空 sidebar
+   * 所以這邊需要我們主動偵測並 unmount app
+   */
+
+  let lastVideoId;
+  requestInterval(500, () => {
+    const videoId = getYTVideoId();
+    if (lastVideoId && lastVideoId !== videoId) {
+      unmountApp();
+
+      // auto update with videoId ?
+      // renderApp(videoId);
+    }
+    lastVideoId = videoId;
+  });
+}
 
 if (process.env.NODE_ENV !== 'production') {
   setTimeout(() => {
