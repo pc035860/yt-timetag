@@ -28,7 +28,7 @@ Browse to any YouTube video, click the icon of the extension in browser bar to a
 | `alt+left`  | Backward 1 second         | ✓                   |
 | `right`     | Forward 5 seconds         | ✓                   |
 | `alt+right` | Forward 1 second          | ✓                   |
-| `/`         | Edit description          | ✓                   |
+| `/`, `d`    | Edit description          | ✓                   |
 
 
 ## Storage
@@ -55,6 +55,12 @@ To import, click on the button next to "add" button.
 
 
 # Changelog
+
+## 1.1.0
+
+- Support new YouTube design
+- Tag list will become scrollable when it feels overwhemled
+- Add keyboard shortcut `d` for editing active tag description, due to `/` is already used by the new YouTube
 
 ## 1.0.0
 Add "import" function.
