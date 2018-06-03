@@ -5,6 +5,9 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import { CSSTransitionGroup } from 'react-transition-group';
+
+import raf from 'raf';
+
 import styles from './TagList.scss';
 
 import compose from 'recompose/compose';
@@ -14,6 +17,7 @@ import withState from 'recompose/withState';
 import mapProps from 'recompose/mapProps';
 
 import debounce from 'lodash.debounce';
+import findIndex from 'lodash.findindex';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -202,9 +206,26 @@ const addHandlers = withHandlers({
   handleTagEdit: ({ actTag }) => (tagId, draft) => {
     actTag.edit(tagId, draft);
   },
-  handleTagRemove: ({ actTag, actActiveTag }) => tagId => {
+  handleTagRemove: ({ actTag, actActiveTag, tags }) => tagId => {
+    const index = findIndex(tags, ['id', tagId]);
+    const prevTag = tags[index - 1];
+    const nextTag = tags[index + 1];
+
     actTag.remove(tagId);
-    actActiveTag.clear();
+
+    // delay setting next active tag with a frame
+    // preventing onRemove from triggering on next active tag
+    raf(() => {
+      if (nextTag) {
+        actActiveTag.set(nextTag.id);
+      }
+      else if (prevTag) {
+        actActiveTag.set(prevTag.id);
+      }
+      else {
+        actActiveTag.clear();
+      }
+    });
   },
   handleTagActiveSet: ({ actActiveTag }) => tagId => {
     actActiveTag.set(tagId);

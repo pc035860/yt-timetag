@@ -78,6 +78,14 @@ export const bind = () => {
       }
       emtr().emit('pause or play');
       return false;
+    },
+    del: () => {
+      emtr().emit('tag remove');
+      return false;
+    },
+    backspace: () => {
+      emtr().emit('tag remove');
+      return false;
     }
   };
 

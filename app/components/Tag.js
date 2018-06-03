@@ -57,7 +57,8 @@ class Tag extends Component {
       'onKeyAdd5',
       'onKeySub5',
       'onKeyAdd1',
-      'onKeySub1'
+      'onKeySub1',
+      'onKeyRemove',
     ].forEach(name => {
       this[name] = this[name].bind(this);
     });
@@ -75,6 +76,7 @@ class Tag extends Component {
     emitter.on('tag sub 5', this.onKeySub5);
     emitter.on('tag add 1', this.onKeyAdd1);
     emitter.on('tag sub 1', this.onKeySub1);
+    emitter.on('tag remove', this.onKeyRemove);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -94,6 +96,7 @@ class Tag extends Component {
     emitter.off('tag sub 5', this.onKeySub5);
     emitter.off('tag add 1', this.onKeyAdd1);
     emitter.off('tag sub 1', this.onKeySub1);
+    emitter.off('tag remove', this.onKeyRemove);
 
     this.elm = null;
   }
@@ -135,6 +138,12 @@ class Tag extends Component {
   onKeySub1() {
     if (this.props.isActive) {
       this.handleSub1();
+    }
+  }
+
+  onKeyRemove() {
+    if (this.props.isActive) {
+      this.handleRemoveClick();
     }
   }
 
@@ -205,9 +214,12 @@ class Tag extends Component {
   }
 
   handleRemoveClick(evt) {
-    this.props.onRemove(this.props.tag.id);
+    const { onRemove, tag } = this.props;
+    onRemove(tag.id);
 
-    evt.stopPropagation();
+    if (evt) {
+      evt.stopPropagation();
+    }
   }
 
   handleDescriptionChange(evt) {
