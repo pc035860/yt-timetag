@@ -1,4 +1,8 @@
 .component {
+	&:global(.yt-simple-endpoint.yt-formatted-string:only-of-type) {
+		color: var(--yt-endpoint-color) !important;
+	}
+
 	&:focus {
 		text-decoration: none;
 	}
