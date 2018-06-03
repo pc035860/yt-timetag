@@ -232,8 +232,9 @@ class Tag extends Component {
     evt.stopPropagation();
   }
 
-  handleDescriptionKeyPress(evt) {
-    if (evt.charCode === 13) {
+  handleDescriptionKeyUp(evt) {
+    // enter & esc
+    if (evt.key === 'Enter' || evt.key === 'Escape') {
       evt.target.blur();
       evt.preventDefault();
     }
@@ -259,7 +260,7 @@ class Tag extends Component {
         placeholder="tag description"
         onChange={this.handleDescriptionChange}
         onClick={this.handleDescriptionClick}
-        onKeyPress={this.handleDescriptionKeyPress} />
+        onKeyUp={this.handleDescriptionKeyUp} />
     );
   }
 
