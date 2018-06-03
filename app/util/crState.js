@@ -1,4 +1,4 @@
-import { local } from '_util/chromeStorage';
+import { sync } from '_util/chromeStorage';
 import getYTVideoId from '_util/getYTVideoId';
 
 function getStorageKey() {
@@ -6,9 +6,9 @@ function getStorageKey() {
   return `crState-${videoId}`;
 }
 
-export const load = () => local.get(getStorageKey());
+export const load = () => sync.get(getStorageKey());
 
-export const save = state => local.set(getStorageKey(), state);
+export const save = state => sync.set(getStorageKey(), state);
 
 export const storeEnhancer = () =>
   next => (reducer, initialState) => {
