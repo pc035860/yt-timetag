@@ -19,16 +19,17 @@ Browse to any YouTube video, click the icon of the extension in browser bar to a
 
 **Shortcuts wouldn't work when YouTube's bulit-in shortcuts is active (which means your focus is currently on the video element).**
 
-| Shortcut    | Action                    | Apply to active tag |
-|-------------|---------------------------|---------------------|
-| `space`     | Pause / Play              |                     |
-| `a`         | Add a tag at current time |                     |
-| `esc`       | Unselect active tag       |                     |
-| `left`      | Backward 5 seconds        | ✓                   |
-| `alt+left`  | Backward 1 second         | ✓                   |
-| `right`     | Forward 5 seconds         | ✓                   |
-| `alt+right` | Forward 1 second          | ✓                   |
-| `/`, `d`    | Edit description          | ✓                   |
+| Shortcut              | Action                    | Apply to active tag |
+|-----------------------|---------------------------|---------------------|
+| `space`               | Pause / Play              |                     |
+| `a`                   | Add a tag at current time |                     |
+| `esc`                 | Unselect active tag       |                     |
+| `delete`, `backspace` | Remove active tag         | ✓                   |
+| `left`                | Backward 5 seconds        | ✓                   |
+| `alt+left`            | Backward 1 second         | ✓                   |
+| `right`               | Forward 5 seconds         | ✓                   |
+| `alt+right`           | Forward 1 second          | ✓                   |
+| `/`, `d`              | Edit description          | ✓                   |
 
 
 ## Storage
@@ -55,6 +56,13 @@ To import, click on the button next to "add" button.
 
 
 # Changelog
+
+## 1.2.0
+
+- Remove "tabs" permission
+- Default to sync storage of Chrome
+- Add shortcut for "remove"
+- Update for new YouTube design component change
 
 ## 1.1.0
 
