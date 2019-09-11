@@ -57,6 +57,11 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.3.0
+
+- Fix time tag display issue
+- Support Dark Mode
+
 ## 1.2.0
 
 - Remove "tabs" permission
