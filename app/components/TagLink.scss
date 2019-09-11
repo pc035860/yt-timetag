@@ -1,9 +1,11 @@
-.component {
-	&:global(.yt-simple-endpoint.yt-formatted-string:only-of-type) {
-		color: var(--yt-endpoint-color) !important;
-	}
+@import "~_sass/_variables.scss";
 
-	&:focus {
-		text-decoration: none;
+.component {
+	color: $endpoint-color !important;
+	text-decoration: none !important;
+}
+:global([dark]) {
+	.component {
+		color: $dark-endpoint-color !important;
 	}
 }

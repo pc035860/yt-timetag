@@ -1,0 +1,25 @@
+$text-color: #222;
+$secondary-text-color: #606060;
+$dark-text-color: #FFF;
+$dark-running-text-color: rgba(255, 255, 255, .88);
+$dark-secondary-text-color: #AAA;
+
+$ui-border-radius: 2px;  // --yt-button-border-radius
+
+$app-background-color: #FAFAFA;
+$dark-app-background-color: #1F1F1F;
+
+$input-border-color: #EEE;
+$dark-input-border-color: rgba(255, 255, 255, .5);
+$input-border-color-active: rgba(17, 17, 17, .6);
+$dark-input-border-color-active: rgba(255, 255, 255, .88);
+
+$endpoint-color: #065FD4;  // --yt-endpoint-color
+$dark-endpoint-color: #3EA6FF;
+
+$title-color: $text-color;
+$dark-title-color: $dark-text-color;
+
+$dark-divider-color: rgba(255, 255, 255, .1);
+
+$dark-modal-border-color: $dark-divider-color;

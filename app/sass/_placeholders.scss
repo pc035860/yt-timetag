@@ -1,15 +1,30 @@
+@import "_variables";
+
 %tag-input {
 	box-sizing: border-box;
-	padding: 4px 6px;
+	padding: 4px 0;
 	box-sizing: border-box;
 	font-size: 13px;
-	border: 1px solid #ddd;
+	border: 1px solid darken($input-border-color, 10%);
+	background-color: transparent;
+
+	border-width: 0 0 1px 0;
+
+	&:focus {
+		border-color: $input-border-color-active;
+		outline: none;
+	}
+}
+
+%dark-tag-input {
+	color: $dark-running-text-color;
+	border-color: $dark-input-border-color;
+	// background-color: darken($dark-app-background-color, 10%);
 
 	&:hover {
-		border-color: darken(#ddd, 8%);
+		border-color: lighten($dark-input-border-color, 5%);
 	}
 	&:focus {
-		border-color: #167ac6;
-		outline: none;
+		border-color: $dark-input-border-color-active;
 	}
 }

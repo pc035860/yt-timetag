@@ -1,3 +1,4 @@
+@import "~_sass/_variables.scss";
 @import "~_sass/_placeholders.scss";
 
 .component {
@@ -28,6 +29,15 @@
 		}
 	}
 }
+:global([dark]) {
+	.component {
+		color: $dark-running-text-color;
+
+		&.component-is-active {
+			background-color: rgba(255, 255, 255, .1);
+		}
+	}
+}
 
 
 .tag {
@@ -38,7 +48,6 @@
 	margin-right: 15px;
 
 	text-align: right;
-	color: #167ac6 !important;
 }
 
 .description {
@@ -51,6 +60,11 @@
 		width: 90%;
 	}
 }
+:global([dark]) {
+	.description-input {
+		@extend %dark-tag-input;
+	}
+}
 
 .actions {
 	flex: 0 1 auto;
@@ -58,6 +72,12 @@
 .actions-btn {
 	margin-right: 5px;
 	cursor: pointer;
+	color: $secondary-text-color;
+}
+:global([dark]) {
+	.actions-btn {
+		color: $dark-secondary-text-color;
+	}
 }
 .actions-btn-last {
 	composes: actions-btn;

@@ -8,36 +8,26 @@ import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 
 import { toTag } from '_util/ytTime';
 import noop from '_util/noop';
-import is2017NewDesign from '_util/is2017NewDesign';
 
-const CLASS_NAME_BASE = is2017NewDesign()
-  ? ['yt-simple-endpoint', 'style-scope', 'yt-formatted-string']
-  : '';
-
-const TagLink = ({ videoId, seconds, onClick, className }) => {
-  const aElm = (
-    <a
-      href={`/watch?v=${videoId}&t=${seconds >>> 0}s`}
-      styleName="component"
-      className={classNames(CLASS_NAME_BASE, className)}
-      onClick={onClick}
-    >
-      {toTag(seconds)}
-    </a>
-  );
-
-  if (is2017NewDesign()) {
-    return <yt-formatted-string class="ytd-comment-renderer">{aElm}</yt-formatted-string>;
-  }
-  return aElm;
-};
+const TagLink = ({ videoId, seconds, onClick, className }) => (
+  <a
+    href={`/watch?v=${videoId}&t=${seconds >>> 0}s`}
+    styleName="component"
+    className={classNames(className)}
+    onClick={onClick}
+  >
+    {toTag(seconds)}
+  </a>
+);
 TagLink.propTypes = {
   videoId: PropTypes.string.isRequired,
   seconds: PropTypes.number.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 TagLink.defaultProps = {
-  onClick: noop
+  onClick: noop,
 };
 
-export default onlyUpdateForKeys(['videoId', 'seconds'])(CSSModules(TagLink, styles));
+export default onlyUpdateForKeys(['videoId', 'seconds'])(
+  CSSModules(TagLink, styles)
+);

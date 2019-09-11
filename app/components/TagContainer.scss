@@ -1,3 +1,4 @@
+@import "~_sass/_variables";
 @import "~_sass/_mixins";
 
 .component {
@@ -10,6 +11,21 @@
 	padding-bottom: 8px;
 
 	&.withShadow {
-		@include scrolling-shadows($shadow-intensity: 0.15);
+		@include scrolling-shadows(
+			$shadow-intensity: 0.15,
+			$background-color: $app-background-color
+		);
+	}
+}
+
+:global([dark]) {
+	.component {
+		@include webkit-scrollbar(dark);
+		&.withShadow {
+			@include scrolling-shadows(
+				$shadow-intensity: 0.3,
+				$background-color: $dark-app-background-color
+			);
+		}
 	}
 }

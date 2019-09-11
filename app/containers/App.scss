@@ -1,3 +1,5 @@
+@import "~_sass/_variables.scss";
+
 .component {
 	padding-left: 10px;
 	margin-bottom: 20px;
@@ -8,6 +10,9 @@
 }
 
 .logo-wrap {
+	position: relative;
+	top: -1px;
+
 	display: inline-block;
 	margin-right: 5px;
 }
@@ -15,7 +20,7 @@
 .title {
 	margin: 0 0 5px;
 	font-size: 13px;
-	color: #222;
+	color: $title-color;
 	line-height: 1.3em;
 	width: 290px;
 	overflow: hidden;
@@ -28,6 +33,11 @@
 		font-size: 12px;
 		color: #a7a7a7;
 		font-weight: normal;
+	}
+}
+:global([dark]) {
+	.title {
+		color: $dark-title-color;
 	}
 }
 

@@ -1,3 +1,5 @@
+@import "~_sass/_variables.scss";
+
 .component {
 }
 
@@ -62,6 +64,17 @@
 	}
 }
 
+:global([dark]) {
+	.new-design {
+		.toolbar {
+			border-color: $dark-divider-color;
+		}
+		.toolbar-btn {
+			color: $dark-text-color;
+		}
+	}
+}
+
 :global {
 	.yttt-TagList__toolbar-btn-hint {
 		&.anim-enter {
@@ -102,5 +115,9 @@
 		&.yttt-is-new-design {
 			background-color: fade-out(#fff, .3);
 		}
+	}
+
+	[dark] .yttt-TagListImportModalOverlay.yttt-is-new-design {
+		background-color: fade-out(black, .3);
 	}
 }
