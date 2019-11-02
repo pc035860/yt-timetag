@@ -49,7 +49,7 @@
     "gulp-replace": "^0.5.4",
     "html-loader": "^0.4.3",
     "image-webpack-loader": "^1.8.0",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.13",
     "node-sass": "^3.7.0",
     "npm-run-all": "^2.2.2",
     "postcss": "^5.0.21",
