@@ -12,7 +12,7 @@ function isFocusOnVideo() {
   return document.activeElement.id === 'movie_player';
 }
 
-export const getEmitter = (id) => {
+export const getEmitter = id => {
   if (_pool[id]) {
     return _pool[id];
   }
@@ -72,13 +72,7 @@ export const bind = () => {
       emtr().emit('clear active');
       return false;
     },
-    space: () => {
-      if (isFocusOnVideo()) {
-        return true;
-      }
-      emtr().emit('pause or play');
-      return false;
-    },
+    space: () => true,
     del: () => {
       emtr().emit('tag remove');
       return false;
@@ -86,7 +80,7 @@ export const bind = () => {
     backspace: () => {
       emtr().emit('tag remove');
       return false;
-    }
+    },
   };
 
   forEach(config, (fn, key) => {
