@@ -57,6 +57,10 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.3.2
+
+- Fix youtube player retrieve issue
+
 ## 1.3.1
 
 - Fix spacebar shortcut issue
