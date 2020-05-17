@@ -32,8 +32,7 @@
     no-multi-spaces: 0
     func-names: 0
     brace-style:
-      - 2
-      - stroustrup
+      - 0
     no-unused-vars:
       - 1
       - args: none
