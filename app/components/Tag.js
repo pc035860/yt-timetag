@@ -237,6 +237,22 @@ class Tag extends Component {
     }
   }
 
+  handleSub5Click = (evt) => {
+    if (evt.altKey) {
+      this.handleSub1(evt);
+      return;
+    }
+    this.handleSub5(evt);
+  };
+
+  handleAdd5Click = (evt) => {
+    if (evt.altKey) {
+      this.handleAdd1(evt);
+      return;
+    }
+    this.handleAdd5(evt);
+  };
+
   renderDescription() {
     const { tag, isActive } = this.props;
 
@@ -286,17 +302,17 @@ class Tag extends Component {
           <div styleName="actions">
             <YTButton
               type="button"
-              title="-5s"
+              title="-5s ([alt] -1s)"
               styleName="actions-btn"
-              onClick={this.handleSub5}
+              onClick={this.handleSub5Click}
             >
               <MdKeyboardArrowLeft size={16} />
             </YTButton>
             <YTButton
               type="button"
-              title="+5s"
+              title="+5s ([alt] +1s)"
               styleName="actions-btn"
-              onClick={this.handleAdd5}
+              onClick={this.handleAdd5Click}
             >
               <MdKeyboardArrowRight size={16} />
             </YTButton>
