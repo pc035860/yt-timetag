@@ -6,10 +6,12 @@ import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 
 import CSSModules from 'react-css-modules';
-import styles from './Importer.scss';
 
 import LogoIcon from '_components/LogoIcon';
+
 import is2017NewDesign from '_util/is2017NewDesign';
+
+import styles from './dialog.scss';
 
 const placeholder = `Example:
 
@@ -20,9 +22,9 @@ const placeholder = `Example:
 
 const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
   <div
-    styleName="importer"
+    styleName="dialog"
     className={classNames({
-      [styles['new-design']]: is2017NewDesign()
+      [styles['new-design']]: is2017NewDesign(),
     })}
   >
     <div styleName="heading">
@@ -59,20 +61,25 @@ const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
 const addTextareaRef = compose(
   withState('textRef', 'setTextRef', null),
   withHandlers({
-    handleTextareaRef: ({ setTextRef }) => ref => {
-      if (ref) {
-        setTextRef(ref);
-      }
-    }
+    handleTextareaRef:
+      ({ setTextRef }) =>
+      (ref) => {
+        if (ref) {
+          setTextRef(ref);
+        }
+      },
   })
 );
 
 const addHandlers = withHandlers({
-  handleImportBtnClick: ({ onImport, textRef }) => () => {
-    onImport(textRef.value);
-  }
+  handleImportBtnClick:
+    ({ onImport, textRef }) =>
+    () => {
+      onImport(textRef.value);
+    },
 });
 
-export default compose(addTextareaRef, addHandlers)(
-  CSSModules(Importer, styles)
-);
+export default compose(
+  addTextareaRef,
+  addHandlers
+)(CSSModules(Importer, styles));
