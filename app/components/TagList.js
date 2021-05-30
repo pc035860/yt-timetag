@@ -14,13 +14,12 @@ import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
 
-import debounce from 'lodash.debounce';
-import findIndex from 'lodash.findindex';
+import debounce from 'lodash/debounce';
+import findIndex from 'lodash/findIndex';
+import sortBy from 'lodash/sortBy';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import sortBy from 'lodash/sortBy';
 
 import * as actTag_ from '_actions/tag';
 import * as actActiveTag_ from '_actions/activeTag';
