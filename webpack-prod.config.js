@@ -121,6 +121,7 @@ const config = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        YOUTUBE_API_KEY: JSON.stringify(process.env.YOUTUBE_API_KEY),
       },
     }),
     new webpack.ProvidePlugin({

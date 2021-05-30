@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var path = require('path');
 
 var gulp = require('gulp');
@@ -51,8 +53,9 @@ gulp.task('build:dev', ['clean:dev'], function () {
     vars: {
       NODE_ENV: 'development',
       WEBPACK_NO_COMPRESS: 1,
-      WEBPACK_SOURCEMAP: 1
-    }
+      WEBPACK_SOURCEMAP: 1,
+      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+    },
   });
 
   var webpackConfig = require('./webpack-dev.config.js');
@@ -68,8 +71,9 @@ gulp.task('build:dev', ['clean:dev'], function () {
 gulp.task('build:dist', ['clean:dist'], function () {
   env({
     vars: {
-      NODE_ENV: 'production'
-    }
+      NODE_ENV: 'production',
+      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
+    },
   });
 
   var webpackConfig = require('./webpack-prod.config.js');
@@ -87,7 +91,8 @@ gulp.task('build:watch', function () {
     vars: {
       NODE_ENV: 'development',
       WEBPACK_NO_COMPRESS: 1,
-      WEBPACK_SOURCEMAP: 1
+      WEBPACK_SOURCEMAP: 1,
+      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
     }
   });
 
