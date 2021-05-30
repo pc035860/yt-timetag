@@ -17,8 +17,8 @@ $dark-input-border-color-active: rgba(255, 255, 255, .88);
 $endpoint-color: #065FD4;  // --yt-endpoint-color
 $dark-endpoint-color: #3EA6FF;
 
-$title-color: $text-color;
-$dark-title-color: $dark-text-color;
+$title-color: fade-out($text-color, .2);
+$dark-title-color: fade-out($dark-text-color, .2);
 
 $dark-divider-color: rgba(255, 255, 255, .1);
 

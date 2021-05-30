@@ -1,7 +1,10 @@
 @import '~_sass/_variables.scss';
+@import '~_sass/_mixins.scss';
 @import '~_sass/_placeholders.scss';
 
-.importer {
+$copy-hint-text-opactiy: .9;
+
+.dialog {
 	padding: 15px 20px;
 	border: 1px solid #aaa;
 	border-radius: $ui-border-radius;
@@ -17,7 +20,7 @@
 }
 
 :global([dark]) {
-	.importer {
+	.dialog {
 		color: $dark-running-text-color;
 		background-color: $dark-app-background-color;
 
@@ -49,20 +52,54 @@
 
 .textarea {
 	@extend %tag-input;
+	@include webkit-scrollbar(light);
 
 	width: 100%;
-	height: 200px;
+	height: 40vh;
 
 	border-radius: $ui-border-radius;
 }
 :global([dark]) {
 	.textarea {
 		@extend %dark-tag-input;
+		@include webkit-scrollbar(dark);
+	}
+}
+.textarea-wrap {
+	position: relative;
+}
+.textarea-copy-btn {
+	@include bigger-hotzone(after);
+
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: var(--yt-spec-icon-inactive);
+
+	cursor: pointer;
+
+	opacity: .7;
+}
+.textarea-copy-btn__hint {
+	margin-right: 5px;
+	opacity: $copy-hint-text-opactiy;
+
+	&:global(.anim-enter) {
+		animation: fadeIn 0.3s both;
+	}
+	&:global(.anim-leave) {
+		animation: fadeOut 0.3s both;
 	}
 }
 
 .toolbar {
-	text-align: right;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+
+	&--export {
+		justify-content: space-between;
+	}
 }
 .toolbar-btn {
 	$hover: #f7f7f7;
@@ -138,5 +175,29 @@
 		@include btn-disable;
 
 		color: #fff;
+	}
+}
+
+.markdown-toggle-btn-text {
+	font-size: var(--paper-font-body1_-_font-size);
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: $copy-hint-text-opactiy;
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: $copy-hint-text-opactiy;
+	}
+
+	to {
+		opacity: 0;
 	}
 }

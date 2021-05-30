@@ -69,9 +69,6 @@
 		.toolbar {
 			border-color: $dark-divider-color;
 		}
-		.toolbar-btn {
-			color: $dark-text-color;
-		}
 	}
 }
 
@@ -93,7 +90,8 @@
 		outline: none;
 
 		&.yttt-is-new-design {
-			max-width: 460px;
+			max-width: none;
+			width: #{'clamp(460px, 60vw - 2.4rem, 760px)'};
 		}
 	}
 

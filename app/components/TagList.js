@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
-import { CSSTransitionGroup } from 'react-transition-group';
 
 import raf from 'raf';
 
@@ -14,7 +13,6 @@ import compose from 'recompose/compose';
 import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 import withState from 'recompose/withState';
-import mapProps from 'recompose/mapProps';
 
 import debounce from 'lodash.debounce';
 import findIndex from 'lodash.findindex';
@@ -32,24 +30,14 @@ import Tag from './Tag';
 import Importer from './Importer';
 import YTButton from './YTButton';
 import TagContainer from './TagContainer';
+import Export from './Export';
 import MdAdd from 'react-icons/lib/md/add';
 import MdPrint from 'react-icons/lib/md/print';
 import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 
 import ytPlayer from '_util/ytPlayer';
-import exportFromTags from '_util/exportFromTags';
 import parseTags from '_util/parseTags';
 import is2017NewDesign from '_util/is2017NewDesign';
-
-const transitionConfig = {
-  justCopied: {
-    transitionName: 'anim',
-    transitionAppear: true,
-    transitionAppearTimeout: 300,
-    transitionEnterTimeout: 300,
-    transitionLeaveTimeout: 300,
-  },
-};
 
 const TagList = ({
   videoId,
@@ -60,19 +48,21 @@ const TagList = ({
   actTag,
   actActiveTag,
 
-  justCopied,
   showImportModal,
+  showExportModal,
 
   handleTagAdd,
   handleTagEdit,
   handleTagRemove,
   handleTagActiveSet,
   handleTagActiveClear,
-  handleOutput,
 
   handleTagImport,
   handleImportModalClose,
   handleImportModalImport,
+
+  handleExport,
+  handleExportModalClose,
 
   tagContainerRef,
   handleTagContainerMount,
@@ -123,19 +113,9 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="Copy to Clipboard"
-          onClick={handleOutput}
+          title="Export"
+          onClick={handleExport}
         >
-          <CSSTransitionGroup {...transitionConfig.justCopied}>
-            {justCopied && (
-              <span
-                className="yttt-TagList__toolbar-btn-hint"
-                styleName="toolbar-btn-hint"
-              >
-                Copied
-              </span>
-            )}
-          </CSSTransitionGroup>
           <MdPrint size={20} />
         </YTButton>
       </div>
@@ -158,6 +138,21 @@ const TagList = ({
         onClose={handleImportModalClose}
       />
     </ReactModal>
+
+    {/* import modal*/}
+    <ReactModal
+      contentLabel="Modal For Exporting Tags"
+      isOpen={showExportModal}
+      onRequestClose={handleExportModalClose}
+      className={classNames('yttt-TagListImportModal', {
+        'yttt-is-new-design': is2017NewDesign(),
+      })}
+      overlayClassName={classNames('yttt-TagListImportModalOverlay', {
+        'yttt-is-new-design': is2017NewDesign(),
+      })}
+    >
+      <Export tags={tags} videoId={videoId} onClose={handleExportModalClose} />
+    </ReactModal>
   </div>
 );
 TagList.propTypes = {
@@ -170,21 +165,6 @@ TagList.propTypes = {
   actTag: PropTypes.object,
   actActiveTag: PropTypes.object,
 };
-
-const addCopiedHint = compose(
-  withState('justCopied', 'setJustCopied', false),
-  withState('justCopiedTimeout', 'setJustCopiedTimeout', null),
-  mapProps(({ setJustCopied, setJustCopiedTimeout, ...rest }) => ({
-    onCopySuccess: () => {
-      setJustCopied(true);
-      if (rest.justCopiedTimeout) {
-        clearTimeout(rest.justCopiedTimeout);
-      }
-      setJustCopiedTimeout(setTimeout(() => setJustCopied(false), 1500));
-    },
-    ...rest,
-  }))
-);
 
 const addImportModal = compose(
   withState('showImportModal', 'setImportModal', false),
@@ -207,6 +187,22 @@ const addImportModal = compose(
           actTag.addMulti(draftTags);
         }
         setImportModal(false);
+      },
+  })
+);
+
+const addExportModal = compose(
+  withState('showExportModal', 'setExportModal', false),
+  withHandlers({
+    handleExport:
+      ({ setExportModal }) =>
+      () => {
+        setExportModal(true);
+      },
+    handleExportModalClose:
+      ({ setExportModal }) =>
+      () => {
+        setExportModal(false);
       },
   })
 );
@@ -258,28 +254,6 @@ const addHandlers = withHandlers({
     ({ actActiveTag }) =>
     () => {
       actActiveTag.clear();
-    },
-  handleOutput:
-    ({ tags, onCopySuccess }) =>
-    () => {
-      const textarea = document.createElement('textarea');
-      textarea.value = exportFromTags(tags, '\n');
-
-      const body = document.getElementsByTagName('body')[0];
-      body.appendChild(textarea);
-
-      textarea.select();
-
-      try {
-        const success = document.execCommand('cut');
-        if (success) {
-          onCopySuccess();
-        }
-      } catch (err) {
-        /* do nothing */
-      }
-
-      body.removeChild(textarea);
     },
 });
 
@@ -369,8 +343,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   addTagContainerRef,
-  addCopiedHint,
   addImportModal,
+  addExportModal,
   addHandlers,
   addLifecyle
 )(CSSModules(TagList, styles));

@@ -72,3 +72,21 @@
 		}
 	}
 }
+
+@mixin bigger-hotzone($pseudo, $width: 48px, $height: $width) {
+	position: relative;
+
+	&::#{$pseudo} {
+		content: '';
+
+    	transform: translate(-50%, -50%);
+
+		position: absolute;
+		left: 50%; top: 50%;
+
+		width: $width;
+		height: $height;
+
+		// background-color: rgba(0, 0, 0, .5);
+	}
+}
