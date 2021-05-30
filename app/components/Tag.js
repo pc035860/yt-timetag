@@ -23,7 +23,7 @@ class Tag extends Component {
     tag: PropTypes.shape({
       id: PropTypes.string.isRequired,
       seconds: PropTypes.number.isRequired,
-      description: PropTypes.string
+      description: PropTypes.string,
     }).isRequired,
     isActive: PropTypes.bool,
     containerRef: PropTypes.any,
@@ -32,7 +32,7 @@ class Tag extends Component {
     onRemove: PropTypes.func,
     onSetActive: PropTypes.func,
     onClearActive: PropTypes.func,
-    onContainerScrollRequest: PropTypes.func
+    onContainerScrollRequest: PropTypes.func,
   };
   static defaultProps = {
     isActive: false,
@@ -40,7 +40,7 @@ class Tag extends Component {
     onRemove: noop,
     onSetActive: noop,
     onClearActive: noop,
-    onContainerScrollRequest: noop
+    onContainerScrollRequest: noop,
   };
 
   constructor(...args) {
@@ -59,7 +59,7 @@ class Tag extends Component {
       'onKeyAdd1',
       'onKeySub1',
       'onKeyRemove',
-    ].forEach(name => {
+    ].forEach((name) => {
       this[name] = this[name].bind(this);
     });
 
@@ -109,8 +109,7 @@ class Tag extends Component {
         input.focus();
         try {
           input.select();
-        }
-        catch (e) {
+        } catch (e) {
           /* nothing */
         }
       }
@@ -165,8 +164,7 @@ class Tag extends Component {
         let scrollTop;
         if (cScrollTop > eOffsetTop) {
           scrollTop = eOffsetTop;
-        }
-        else if (cScrollTop + cOffsetHeight < eOffsetTop + eOffsetHeight) {
+        } else if (cScrollTop + cOffsetHeight < eOffsetTop + eOffsetHeight) {
           scrollTop = eOffsetTop + eOffsetHeight - cOffsetHeight;
         }
 
@@ -201,8 +199,7 @@ class Tag extends Component {
   handleToggleComponent() {
     if (this.props.isActive) {
       this.props.onClearActive();
-    }
-    else {
+    } else {
       this.props.onSetActive(this.props.tag.id);
     }
   }
@@ -249,7 +246,7 @@ class Tag extends Component {
 
     return (
       <input
-        ref={ref => {
+        ref={(ref) => {
           if (ref) {
             this.descriptionInput = ref;
           }
@@ -260,7 +257,8 @@ class Tag extends Component {
         placeholder="tag description"
         onChange={this.handleDescriptionChange}
         onClick={this.handleDescriptionClick}
-        onKeyUp={this.handleDescriptionKeyUp} />
+        onKeyUp={this.handleDescriptionKeyUp}
+      />
     );
   }
 
@@ -271,7 +269,7 @@ class Tag extends Component {
         styleName="component"
         className={classNames({
           [styles['component-is-active']]: isActive,
-          [styles['new-design']]: is2017NewDesign()
+          [styles['new-design']]: is2017NewDesign(),
         })}
         onClick={this.handleToggleComponent}
         ref={this.handleMount}
@@ -281,37 +279,40 @@ class Tag extends Component {
             videoId={videoId}
             seconds={tag.seconds}
             onClick={this.handleLinkClick}
-            />
+          />
         </div>
-        <div styleName="description">
-          {this.renderDescription()}
-        </div>
-        {isActive &&
+        <div styleName="description">{this.renderDescription()}</div>
+        {isActive && (
           <div styleName="actions">
-            <YTButton type="button"
+            <YTButton
+              type="button"
               title="-5s"
               styleName="actions-btn"
-              onClick={this.handleSub5}>
+              onClick={this.handleSub5}
+            >
               <MdKeyboardArrowLeft size={16} />
             </YTButton>
-            <YTButton type="button"
+            <YTButton
+              type="button"
               title="+5s"
               styleName="actions-btn"
-              onClick={this.handleAdd5}>
+              onClick={this.handleAdd5}
+            >
               <MdKeyboardArrowRight size={16} />
             </YTButton>
-            <YTButton type="button"
+            <YTButton
+              type="button"
               title="Remove"
               styleName="actions-btn-last"
-              onClick={this.handleRemoveClick}>
+              onClick={this.handleRemoveClick}
+            >
               <MdClear size={16} />
             </YTButton>
           </div>
-        }
+        )}
       </div>
     );
   }
 }
-
 
 export default CSSModules(Tag, styles);

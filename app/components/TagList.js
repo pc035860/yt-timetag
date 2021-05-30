@@ -47,8 +47,8 @@ const transitionConfig = {
     transitionAppear: true,
     transitionAppearTimeout: 300,
     transitionEnterTimeout: 300,
-    transitionLeaveTimeout: 300
-  }
+    transitionLeaveTimeout: 300,
+  },
 };
 
 const TagList = ({
@@ -76,19 +76,15 @@ const TagList = ({
 
   tagContainerRef,
   handleTagContainerMount,
-  handleTagContainerScrollRequest
+  handleTagContainerScrollRequest,
 }) => (
   <div
     className={classNames({
-      [styles['new-design']]: is2017NewDesign()
+      [styles['new-design']]: is2017NewDesign(),
     })}
   >
-    <TagContainer
-      shadow
-      stopPropagation
-      onMount={handleTagContainerMount}
-    >
-      {tags.map(tag => (
+    <TagContainer shadow stopPropagation onMount={handleTagContainerMount}>
+      {tags.map((tag) => (
         <Tag
           key={tag.id}
           videoId={videoId}
@@ -106,10 +102,20 @@ const TagList = ({
     </TagContainer>
     <div styleName="toolbar">
       <div styleName="toolbar-left">
-        <YTButton styleName="toolbar-btn" type="button" title="New Tag" onClick={handleTagAdd}>
+        <YTButton
+          styleName="toolbar-btn"
+          type="button"
+          title="New Tag"
+          onClick={handleTagAdd}
+        >
           <MdAdd size={20} />
         </YTButton>
-        <YTButton styleName="toolbar-btn" type="button" title="Import" onClick={handleTagImport}>
+        <YTButton
+          styleName="toolbar-btn"
+          type="button"
+          title="Import"
+          onClick={handleTagImport}
+        >
           <MdPlayListAdd size={20} />
         </YTButton>
       </div>
@@ -122,7 +128,10 @@ const TagList = ({
         >
           <CSSTransitionGroup {...transitionConfig.justCopied}>
             {justCopied && (
-              <span className="yttt-TagList__toolbar-btn-hint" styleName="toolbar-btn-hint">
+              <span
+                className="yttt-TagList__toolbar-btn-hint"
+                styleName="toolbar-btn-hint"
+              >
                 Copied
               </span>
             )}
@@ -138,13 +147,16 @@ const TagList = ({
       isOpen={showImportModal}
       onRequestClose={handleImportModalClose}
       className={classNames('yttt-TagListImportModal', {
-        'yttt-is-new-design': is2017NewDesign()
+        'yttt-is-new-design': is2017NewDesign(),
       })}
       overlayClassName={classNames('yttt-TagListImportModalOverlay', {
-        'yttt-is-new-design': is2017NewDesign()
+        'yttt-is-new-design': is2017NewDesign(),
       })}
     >
-      <Importer onImport={handleImportModalImport} onClose={handleImportModalClose} />
+      <Importer
+        onImport={handleImportModalImport}
+        onClose={handleImportModalClose}
+      />
     </ReactModal>
   </div>
 );
@@ -156,7 +168,7 @@ TagList.propTypes = {
   activeTag: PropTypes.string,
 
   actTag: PropTypes.object,
-  actActiveTag: PropTypes.object
+  actActiveTag: PropTypes.object,
 };
 
 const addCopiedHint = compose(
@@ -170,90 +182,105 @@ const addCopiedHint = compose(
       }
       setJustCopiedTimeout(setTimeout(() => setJustCopied(false), 1500));
     },
-    ...rest
+    ...rest,
   }))
 );
 
 const addImportModal = compose(
   withState('showImportModal', 'setImportModal', false),
   withHandlers({
-    handleTagImport: ({ setImportModal }) => () => {
-      setImportModal(true);
-    },
-    handleImportModalClose: ({ setImportModal }) => () => {
-      setImportModal(false);
-    },
-    handleImportModalImport: ({ actTag, setImportModal }) => text => {
-      const draftTags = parseTags(text);
-      if (draftTags.length > 0) {
-        actTag.addMulti(draftTags);
-      }
-      setImportModal(false);
-    }
+    handleTagImport:
+      ({ setImportModal }) =>
+      () => {
+        setImportModal(true);
+      },
+    handleImportModalClose:
+      ({ setImportModal }) =>
+      () => {
+        setImportModal(false);
+      },
+    handleImportModalImport:
+      ({ actTag, setImportModal }) =>
+      (text) => {
+        const draftTags = parseTags(text);
+        if (draftTags.length > 0) {
+          actTag.addMulti(draftTags);
+        }
+        setImportModal(false);
+      },
   })
 );
 
 const addHandlers = withHandlers({
-  handleTagAdd: ({ actTag, actActiveTag }) => () => {
-    ytPlayer(true, 'getCurrentTime').then(t => {
-      const draft = {
-        seconds: t
-      };
-      actTag.add(draft);
-      actActiveTag.setLastAdded();
-    });
-  },
-  handleTagEdit: ({ actTag }) => (tagId, draft) => {
-    actTag.edit(tagId, draft);
-  },
-  handleTagRemove: ({ actTag, actActiveTag, tags }) => tagId => {
-    const index = findIndex(tags, ['id', tagId]);
-    const prevTag = tags[index - 1];
-    const nextTag = tags[index + 1];
+  handleTagAdd:
+    ({ actTag, actActiveTag }) =>
+    () => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
+        const draft = {
+          seconds: t,
+        };
+        actTag.add(draft);
+        actActiveTag.setLastAdded();
+      });
+    },
+  handleTagEdit:
+    ({ actTag }) =>
+    (tagId, draft) => {
+      actTag.edit(tagId, draft);
+    },
+  handleTagRemove:
+    ({ actTag, actActiveTag, tags }) =>
+    (tagId) => {
+      const index = findIndex(tags, ['id', tagId]);
+      const prevTag = tags[index - 1];
+      const nextTag = tags[index + 1];
 
-    actTag.remove(tagId);
+      actTag.remove(tagId);
 
-    // delay setting next active tag with a frame
-    // preventing onRemove from triggering on next active tag
-    raf(() => {
-      if (nextTag) {
-        actActiveTag.set(nextTag.id);
+      // delay setting next active tag with a frame
+      // preventing onRemove from triggering on next active tag
+      raf(() => {
+        if (nextTag) {
+          actActiveTag.set(nextTag.id);
+        } else if (prevTag) {
+          actActiveTag.set(prevTag.id);
+        } else {
+          actActiveTag.clear();
+        }
+      });
+    },
+  handleTagActiveSet:
+    ({ actActiveTag }) =>
+    (tagId) => {
+      actActiveTag.set(tagId);
+    },
+  handleTagActiveClear:
+    ({ actActiveTag }) =>
+    () => {
+      actActiveTag.clear();
+    },
+  handleOutput:
+    ({ tags, onCopySuccess }) =>
+    () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = exportFromTags(tags, '\n');
+
+      const body = document.getElementsByTagName('body')[0];
+      body.appendChild(textarea);
+
+      textarea.select();
+
+      try {
+        const success = document.execCommand('cut');
+        if (success) {
+          onCopySuccess();
+        }
+      } catch (err) {
+        /* do nothing */
       }
-      else if (prevTag) {
-        actActiveTag.set(prevTag.id);
-      }
-      else {
-        actActiveTag.clear();
-      }
-    });
-  },
-  handleTagActiveSet: ({ actActiveTag }) => tagId => {
-    actActiveTag.set(tagId);
-  },
-  handleTagActiveClear: ({ actActiveTag }) => () => {
-    actActiveTag.clear();
-  },
-  handleOutput: ({ tags, onCopySuccess }) => () => {
-    const textarea = document.createElement('textarea');
-    textarea.value = exportFromTags(tags, '\n');
 
-    const body = document.getElementsByTagName('body')[0];
-    body.appendChild(textarea);
-
-    textarea.select();
-
-    try {
-      const success = document.execCommand('cut');
-      if (success) {
-        onCopySuccess();
-      }
-    }
-    catch (err) {
-      /* do nothing */
-    }
-
-    body.removeChild(textarea);
-  }
+      body.removeChild(textarea);
+    },
 });
 
 const addLifecyle = lifecycle({
@@ -274,7 +301,7 @@ const addLifecyle = lifecycle({
       if (this.props.activeTag) {
         return;
       }
-      ytPlayer(true, 'getCurrentTime').then(t => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
         ytPlayer('seekTo', (t >>> 0) + 5);
       });
     }.bind(this);
@@ -284,19 +311,18 @@ const addLifecyle = lifecycle({
       if (this.props.activeTag) {
         return;
       }
-      ytPlayer(true, 'getCurrentTime').then(t => {
+      ytPlayer(true, 'getCurrentTime').then((t) => {
         ytPlayer('seekTo', (t >>> 0) - 5);
       });
     }.bind(this);
     emitter.on('backward 5', onKeySub5);
 
     const onPauseOrPlay = function () {
-      ytPlayer(true, 'getPlayerState').then(state => {
+      ytPlayer(true, 'getPlayerState').then((state) => {
         if (state === 2) {
           // state: paused
           ytPlayer('playVideo');
-        }
-        else if (state === 1) {
+        } else if (state === 1) {
           // state: playing
           ytPlayer('pauseVideo');
         }
@@ -306,7 +332,7 @@ const addLifecyle = lifecycle({
   },
   componentWillUnmount() {
     // TODO: emitter.off here someday
-  }
+  },
 });
 
 // debouncely setting scrollTop
@@ -316,24 +342,28 @@ const scrollTo = debounce((ref, scrollTop) => {
 const addTagContainerRef = compose(
   withState('tagContainerRef', 'setTagContainerRef', null),
   withHandlers({
-    handleTagContainerMount: ({ setTagContainerRef }) => (c) => {
-      if (c) {
-        setTagContainerRef(c);
-      }
-    },
-    handleTagContainerScrollRequest: ({ tagContainerRef }) => (scrollTop) => {
-      scrollTo(tagContainerRef, scrollTop);
-    }
+    handleTagContainerMount:
+      ({ setTagContainerRef }) =>
+      (c) => {
+        if (c) {
+          setTagContainerRef(c);
+        }
+      },
+    handleTagContainerScrollRequest:
+      ({ tagContainerRef }) =>
+      (scrollTop) => {
+        scrollTo(tagContainerRef, scrollTop);
+      },
   })
 );
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   tags: sortBy(state.tags, ['seconds']),
-  activeTag: state.activeTag
+  activeTag: state.activeTag,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   actTag: bindActionCreators(actTag_, dispatch),
-  actActiveTag: bindActionCreators(actActiveTag_, dispatch)
+  actActiveTag: bindActionCreators(actActiveTag_, dispatch),
 });
 
 export default compose(
