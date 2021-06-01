@@ -7,14 +7,14 @@ const API_ENDPOINT = 'https://www.googleapis.com/youtube/v3';
 
 const defaultOnProgress = (progress) => null;
 
-const fetchTotalCount = (videoId) => {
+const fetchTotalCount = (videoId, { signal }) => {
   const query = queryString.stringify({
     key: API_KEY,
     id: videoId,
     part: 'statistics',
   });
   const url = `${API_ENDPOINT}/videos?${query}`;
-  return fetch(url)
+  return fetch(url, { signal })
     .then((response) => response.json())
     .then((res) => {
       const totalCount = get(res, 'items[0].statistics.commentCount');
@@ -22,7 +22,7 @@ const fetchTotalCount = (videoId) => {
     });
 };
 
-const fetchCommentThreads = (videoId, { pageToken } = {}) => {
+const fetchCommentThreads = (videoId, { pageToken, signal } = {}) => {
   const query = queryString.stringify({
     key: API_KEY,
     videoId,
@@ -32,7 +32,7 @@ const fetchCommentThreads = (videoId, { pageToken } = {}) => {
     maxResults: 100,
   });
   const url = `${API_ENDPOINT}/commentThreads?${query}`;
-  return fetch(url)
+  return fetch(url, { signal })
     .then((response) => response.json())
     .then((res) => {
       const items = res.items.map((item) => ({
@@ -51,40 +51,52 @@ const fetchCommentThreads = (videoId, { pageToken } = {}) => {
 
 export default function fetchYTCommentThreads(
   videoId,
-  { onProgress = defaultOnProgress } = {}
+  { onProgress = defaultOnProgress, signal } = {}
 ) {
-  return fetchTotalCount(videoId).then(
-    (totalCount) =>
-      new Promise((resolve) => {
-        let progressCount = 0;
-        let threads = [];
+  return fetchTotalCount(videoId, { signal })
+    .then(
+      (totalCount) =>
+        new Promise((resolve) => {
+          let progressCount = 0;
+          let threads = [];
 
-        let promise = Promise.resolve();
+          let promise = Promise.resolve();
 
-        const _loop = (nextPageToken) => {
-          promise = promise.then(() =>
-            fetchCommentThreads(videoId, { pageToken: nextPageToken }).then(
-              (res) => {
-                progressCount += res.threadCount;
-                threads = threads.concat(res.threads);
+          const _loop = (nextPageToken) => {
+            promise = promise.then(() =>
+              fetchCommentThreads(videoId, { pageToken: nextPageToken, signal })
+                .then((res) => {
+                  progressCount += res.threadCount;
+                  threads = threads.concat(res.threads);
 
-                onProgress(progressCount / totalCount, threads);
+                  onProgress(progressCount / totalCount, threads);
 
-                if (res.nextPageToken) {
-                  _loop(res.nextPageToken);
-                  return;
-                }
+                  if (res.nextPageToken) {
+                    _loop(res.nextPageToken);
+                    return;
+                  }
 
-                resolve({
-                  threads,
-                  totalCount,
-                });
-              }
-            )
-          );
-        };
+                  resolve({
+                    threads,
+                    totalCount,
+                  });
+                })
+                .catch((error) => {
+                  resolve({
+                    threads,
+                    totalCount,
+                    error,
+                  });
+                })
+            );
+          };
 
-        _loop();
-      })
-  );
+          _loop();
+        })
+    )
+    .catch((error) => ({
+      threads: [],
+      totalCount: 0,
+      error,
+    }));
 }
