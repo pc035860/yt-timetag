@@ -1,5 +1,37 @@
+@import 'variables';
+
 :global {
 	body {
+		--yttt-text-color: #{$text-color};
+		--yttt-secondary-text-color: #{$secondary-text-color};
+		--yttt-running-text-color: #{$running-text-color};
+		--yttt-app-background-color: #{$app-background-color};
+		--yttt-input-border-color: #{$input-border-color};
+		--yttt-input-border-color-active: #{$input-border-color-active};
+		--yttt-endpoint-color: #{$endpoint-color};
+		--yttt-title-color: #{$title-color};
+		--yttt-divider-color: #{$divider-color};
+		--yttt-modal-border-color: #{$modal-border-color};
+		--yttt-success-color: #{$success-color};
+		--yttt-tag-active-background-color: #{$tag-active-background-color};
+
 		background-color: black;
+	}
+
+	[dark] {
+		body {
+			--yttt-text-color: #{$dark-text-color};
+			--yttt-secondary-text-color: #{$dark-secondary-text-color};
+			--yttt-running-text-color: #{$dark-running-text-color};
+			--yttt-app-background-color: #{$dark-app-background-color};
+			--yttt-input-border-color: #{$input-border-color};
+			--yttt-input-border-color-active: #{$dark-input-border-color-active};
+			--yttt-endpoint-color: #{$dark-endpoint-color};
+			--yttt-title-color: #{$dark-title-color};
+			--yttt-divider-color: #{$dark-divider-color};
+			--yttt-modal-border-color: #{$dark-modal-border-color};
+			--yttt-success-color: #{$dark-success-color};
+			--yttt-tag-active-background-color: #{$dark-tag-active-background-color};
+		}
 	}
 }

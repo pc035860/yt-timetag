@@ -1,44 +1,40 @@
-@import "~_sass/_variables.scss";
-@import "~_sass/_placeholders.scss";
+@import '~_sass/_variables.scss';
+@import '~_sass/_placeholders.scss';
 
 .component {
+	position: relative;
+
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
 
-	transition: height .15s;
+	transition: height 0.15s;
 
 	padding: 0 5px;
 
 	height: 20px;
 
-	color: #333;
+	color: var(--yttt-running-text-color);
 	font-size: 13px;
 
 	&.new-design {
-		height: 28px;
+		height: 38px;
 	}
 
 	&.component-is-active {
-		background-color: fade-out(#dbe4eb, .5);
+		background-color: var(--yttt-tag-active-background-color);
 		height: 34px;
 
 		&.new-design {
 			height: 38px;
 		}
 	}
-}
-:global([dark]) {
-	.component {
-		color: $dark-running-text-color;
 
-		&.component-is-active {
-			background-color: rgba(255, 255, 255, .1);
-		}
+	&.comment {
+		height: 38px;
 	}
 }
-
 
 .tag {
 	flex: 0 0 auto;
@@ -77,14 +73,68 @@
 .actions-btn {
 	margin-right: 5px;
 	cursor: pointer;
-	color: $secondary-text-color;
-}
-:global([dark]) {
-	.actions-btn {
-		color: $dark-secondary-text-color;
-	}
+	color: var(--yttt-secondary-text-color);
 }
 .actions-btn-last {
 	composes: actions-btn;
 	margin-right: 0;
+}
+
+.comment-actions {
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	width: 40px;
+	height: 100%;
+
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+.comment-actions-btn {
+	composes: actions-btn;
+}
+
+.comment-status {
+	composes: comment-actions;
+}
+.comment-status-btn {
+	composes: actions-btn;
+	color: var(--yttt-success-color);
+}
+
+.comment-wrap {
+	position: relative;
+
+	.comment {
+		position: sticky;
+		top: 0;
+		z-index: 1;
+	}
+
+	.comment-text {
+		position: relative;
+		padding: 8px 12px;
+
+		color: var(--yttt-running-text-color);
+		background-color: rgb(238, 241, 243);
+
+		.pre {
+			font-size: 12px;
+			white-space: pre-wrap;
+			line-height: 1.4;
+		}
+
+		.highlight {
+			background-color: rgba(255, 255, 0, .33);
+		}
+	}
+}
+:global([dark]) {
+	.comment-wrap {
+		.comment-text {
+			background-color: rgb(37, 37, 37);
+		}
+	}
 }

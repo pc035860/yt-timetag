@@ -1,8 +1,14 @@
 $text-color: #222;
-$secondary-text-color: #606060;
 $dark-text-color: #FFF;
-$dark-running-text-color: rgba(255, 255, 255, .88);
+
+$secondary-text-color: #606060;
 $dark-secondary-text-color: #AAA;
+
+$running-text-color: #333;
+$dark-running-text-color: rgba(255, 255, 255, .88);
+
+$tag-active-background-color: rgb(231, 236, 240);
+$dark-tag-active-background-color: rgb(52, 52,52);
 
 $ui-border-radius: 2px;  // --yt-button-border-radius
 
@@ -20,6 +26,13 @@ $dark-endpoint-color: #3EA6FF;
 $title-color: fade-out($text-color, .2);
 $dark-title-color: fade-out($dark-text-color, .2);
 
+$divider-color: transparent;
 $dark-divider-color: rgba(255, 255, 255, .1);
 
+$modal-border-color: transparent;
 $dark-modal-border-color: $dark-divider-color;
+
+$success-color: #00ad00;
+$dark-success-color: #0bc112;
+
+$tag-container-height: 40vh;
