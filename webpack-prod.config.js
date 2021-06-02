@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const OUTPUT_FILENAME = (function () {
   return process.env.WEBPACK_OUTPUT_FILENAME || '[name]';
-}());
+})();
 
 const params = {
   sass: {
@@ -16,22 +16,22 @@ const params = {
     includePaths: [
       // encodeURIComponent(path.resolve(__dirname, "./node_modules/compass-mixins/lib/")),
       // encodeURIComponent(path.resolve(__dirname, "./app/sass/lib/"))
-    ]
+    ],
   },
   url: {
     // and file
     name: '[hash].[ext]',
-    limit: 100
+    limit: 100,
   },
   babel: {
     cacheDirectory: true,
-    presets: ['react', 'es2015', 'stage-0']
-  }
+    presets: ['react', 'es2015', 'stage-0'],
+  },
 };
 
 const myPath = {
   app: path.resolve(__dirname, 'app'),
-  dist: path.resolve(__dirname, 'dist')
+  dist: path.resolve(__dirname, 'dist'),
 };
 
 const config = {
@@ -40,22 +40,22 @@ const config = {
     contentscript: './contentscript.js',
     ytapi: './ytapi.js',
 
-    background: './background.js'
+    background: './background.js',
   },
   output: {
     path: myPath.dist,
-    filename: `${OUTPUT_FILENAME}.js`
+    filename: `${OUTPUT_FILENAME}.js`,
   },
   externals: {
-    chrome: 'chrome'
+    chrome: 'chrome',
   },
   module: {
     preLoaders: [
       {
         test: /\.jsx?$/,
         loader: 'eslint',
-        exclude: [/node_modules/, path.join(myPath.app, 'lib')]
-      }
+        exclude: [/node_modules/, path.join(myPath.app, 'lib')],
+      },
     ],
     loaders: [
       { test: /\.html$/, loader: 'html', exclude: /node_modules/ },
@@ -64,16 +64,16 @@ const config = {
         exclude: /node_modules/,
         loaders: [
           `url?${toQuery(params.url)}`,
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false',
+        ],
       },
       {
         test: /\.svg$/,
         exclude: /node_modules/,
         loaders: [
           `url?${toQuery(params.url)}`,
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
+          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false',
+        ],
       },
       {
         test: /\.(scss|sass)$/,
@@ -81,14 +81,14 @@ const config = {
         loader: ExtractTextPlugin.extract(
           'style',
           `css?modules&importLoaders=1!postcss!sass?${toQuery(params.sass)}`
-        )
+        ),
       },
       {
         test: /\.jsx?$/,
         loader: `babel?${toQuery(params.babel)}`,
-        exclude: [/node_modules/]
-      }
-    ]
+        exclude: [/node_modules/],
+      },
+    ],
   },
   // eslint: {
   //   configFile: path.resolve(__dirname, '.eslint.yml')
@@ -98,7 +98,7 @@ const config = {
       // custom version of postcss-transform-shortcut
       // https://github.com/jonathantneal/postcss-transform-shortcut/issues/3
       require('./lib/postcss-transform-shortcut'),
-      require('autoprefixer')('last 2 versions')
+      require('autoprefixer')('last 2 versions'),
     ];
   },
   resolve: {
@@ -114,26 +114,27 @@ const config = {
       _app: myPath.app,
       _images: path.join(myPath.app, 'images'),
       _sass: path.join(myPath.app, 'sass'),
-      'component-sass': path.join(myPath.app, 'sass', '_component-base.scss')
-    }
+      'component-sass': path.join(myPath.app, 'sass', '_component-base.scss'),
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+        YOUTUBE_API_KEY: JSON.stringify(process.env.YOUTUBE_API_KEY),
+      },
     }),
     new webpack.ProvidePlugin({
-      chrome: 'chrome'
+      chrome: 'chrome',
     }),
     new ExtractTextPlugin(`${OUTPUT_FILENAME}.css`),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
       },
-      sourceMap: false
-    })
-  ]
+      sourceMap: false,
+    }),
+  ],
 };
 
 module.exports = config;

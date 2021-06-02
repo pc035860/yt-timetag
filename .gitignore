@@ -3,3 +3,5 @@ dev/
 dist/
 
 dist-*.zip
+
+.env

@@ -7,8 +7,14 @@ export default function getYTVideoId() {
   const url = location.href;
   if (!_lastUrl || url !== _lastUrl) {
     _lastUrl = url;
-    const videoId = urlParser.parse(url).id;
-    _lastVideoId = videoId;
+
+    const parsed = urlParser.parse(url);
+    if (parsed) {
+      const videoId = parsed.id;
+      _lastVideoId = videoId;
+    } else {
+      _lastVideoId = undefined;
+    }
   }
   return _lastVideoId;
 }

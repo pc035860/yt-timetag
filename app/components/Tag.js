@@ -1,20 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
-import styles from './Tag.scss';
 
 import classNames from 'classnames';
 
 import MdKeyboardArrowLeft from 'react-icons/lib/md/keyboard-arrow-left';
 import MdKeyboardArrowRight from 'react-icons/lib/md/keyboard-arrow-right';
 import MdClear from 'react-icons/lib/md/clear';
+import TagLink from './TagLink';
+import YTButton from './YTButton';
 
-import noop from '_util/noop';
 import ytPlayer from '_util/ytPlayer';
 import is2017NewDesign from '_util/is2017NewDesign';
 
-import TagLink from './TagLink';
-import YTButton from './YTButton';
+import styles from './Tag.scss';
+
 class Tag extends Component {
   static propTypes = {
     videoId: PropTypes.string.isRequired,
@@ -36,11 +36,11 @@ class Tag extends Component {
   };
   static defaultProps = {
     isActive: false,
-    onEdit: noop,
-    onRemove: noop,
-    onSetActive: noop,
-    onClearActive: noop,
-    onContainerScrollRequest: noop,
+    onEdit: (tagId, { seconds }) => null,
+    onRemove: (tagId) => null,
+    onSetActive: (tagId) => null,
+    onClearActive: () => null,
+    onContainerScrollRequest: (scrollTop) => null,
   };
 
   constructor(...args) {
@@ -71,12 +71,14 @@ class Tag extends Component {
 
   componentDidMount() {
     const emitter = this.props.keyOpsEmitter;
-    emitter.on('focus description', this.onKeyFocusDescription);
-    emitter.on('tag add 5', this.onKeyAdd5);
-    emitter.on('tag sub 5', this.onKeySub5);
-    emitter.on('tag add 1', this.onKeyAdd1);
-    emitter.on('tag sub 1', this.onKeySub1);
-    emitter.on('tag remove', this.onKeyRemove);
+    if (emitter) {
+      emitter.on('focus description', this.onKeyFocusDescription);
+      emitter.on('tag add 5', this.onKeyAdd5);
+      emitter.on('tag sub 5', this.onKeySub5);
+      emitter.on('tag add 1', this.onKeyAdd1);
+      emitter.on('tag sub 1', this.onKeySub1);
+      emitter.on('tag remove', this.onKeyRemove);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,12 +93,14 @@ class Tag extends Component {
 
   componentWillUnmount() {
     const emitter = this.props.keyOpsEmitter;
-    emitter.off('focus description', this.onKeyFocusDescription);
-    emitter.off('tag add 5', this.onKeyAdd5);
-    emitter.off('tag sub 5', this.onKeySub5);
-    emitter.off('tag add 1', this.onKeyAdd1);
-    emitter.off('tag sub 1', this.onKeySub1);
-    emitter.off('tag remove', this.onKeyRemove);
+    if (emitter) {
+      emitter.off('focus description', this.onKeyFocusDescription);
+      emitter.off('tag add 5', this.onKeyAdd5);
+      emitter.off('tag sub 5', this.onKeySub5);
+      emitter.off('tag add 1', this.onKeyAdd1);
+      emitter.off('tag sub 1', this.onKeySub1);
+      emitter.off('tag remove', this.onKeyRemove);
+    }
 
     this.elm = null;
   }

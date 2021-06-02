@@ -5,7 +5,7 @@
 	@include webkit-scrollbar(light);
 
 	position: relative;
-	max-height: 30vh;
+	height: $tag-container-height;
 	overflow-y: auto;
 
 	padding-bottom: 8px;
