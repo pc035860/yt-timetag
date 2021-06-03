@@ -138,9 +138,10 @@ const addCommentsProgress = compose(
         setCommentsProgress(progress);
       },
     handleCommentListDone:
-      ({ setCommentsDone, setCommentsTagCount }) =>
+      ({ setCommentsDone, setCommentsTagCount, setCommentsProgress }) =>
       (tags) => {
         setCommentsTagCount(tags.length);
+        setCommentsProgress(1);
         setCommentsDone(true);
       },
   })
