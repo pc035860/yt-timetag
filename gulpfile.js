@@ -15,23 +15,21 @@ var es = require('event-stream');
 var myPath = {
   app: path.resolve(__dirname, 'app'),
   dev: path.resolve(__dirname, 'dev'),
-  dist: path.resolve(__dirname, 'dist')
+  dist: path.resolve(__dirname, 'dist'),
 };
 
 // env: dev, dist
 var genCopyAssets = function (env) {
   return function () {
-    var images = gulp.src('app/images/*')
-    .pipe(cache(env + '-images'))
-    .pipe(gulp.dest(
-      path.join(myPath[env], 'images')
-    ));
+    var images = gulp
+      .src('app/images/*')
+      .pipe(cache(env + '-images'))
+      .pipe(gulp.dest(path.join(myPath[env], 'images')));
 
-    var manifest = gulp.src('app/manifest.json')
-    .pipe(cache(env + '-manifest'))
-    .pipe(gulp.dest(
-      path.join(myPath[env])
-    ));
+    var manifest = gulp
+      .src('app/manifest.json')
+      .pipe(cache(env + '-manifest'))
+      .pipe(gulp.dest(path.join(myPath[env])));
 
     return es.concat(images, manifest);
   };
@@ -54,36 +52,36 @@ gulp.task('build:dev', ['clean:dev'], function () {
       NODE_ENV: 'development',
       WEBPACK_NO_COMPRESS: 1,
       WEBPACK_SOURCEMAP: 1,
-      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
     },
   });
 
   var webpackConfig = require('./webpack-dev.config.js');
   Object.assign(webpackConfig, {
-    colors: true
+    colors: true,
   });
 
-  return gulp.src('./app/background.js')
-  .pipe(webpack(webpackConfig))
-  .pipe(gulp.dest(myPath.dev));
+  return gulp
+    .src('./app/background.js')
+    .pipe(webpack(webpackConfig))
+    .pipe(gulp.dest(myPath.dev));
 });
 
 gulp.task('build:dist', ['clean:dist'], function () {
   env({
     vars: {
       NODE_ENV: 'production',
-      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
     },
   });
 
   var webpackConfig = require('./webpack-prod.config.js');
   Object.assign(webpackConfig, {
-    colors: true
+    colors: true,
   });
 
-  return gulp.src('./app/background.js')
-  .pipe(webpack(webpackConfig))
-  .pipe(gulp.dest(myPath.dist));
+  return gulp
+    .src('./app/background.js')
+    .pipe(webpack(webpackConfig))
+    .pipe(gulp.dest(myPath.dist));
 });
 
 gulp.task('build:watch', function () {
@@ -92,24 +90,24 @@ gulp.task('build:watch', function () {
       NODE_ENV: 'development',
       WEBPACK_NO_COMPRESS: 1,
       WEBPACK_SOURCEMAP: 1,
-      YOUTUBE_API_KEY: process.env.YOUTUBE_API_KEY,
-    }
+    },
   });
 
   var webpackConfig = require('./webpack-dev.config.js');
   Object.assign(webpackConfig, {
     watch: true,
     cache: true,
-    colors: true
+    colors: true,
   });
 
-  return gulp.src('./app/background.js')
-  .pipe(webpack(webpackConfig))
-  .pipe(gulp.dest(myPath.dev));
+  return gulp
+    .src('./app/background.js')
+    .pipe(webpack(webpackConfig))
+    .pipe(gulp.dest(myPath.dev));
 });
 gulp.task('copy:watch', function () {
   var watchOptions = {
-    ignoreInitial: false
+    ignoreInitial: false,
   };
   gulp.watch(['app/images/*', 'app/manifest.json'], ['copy:dev']);
 });
