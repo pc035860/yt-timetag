@@ -2,14 +2,13 @@ import get from 'lodash/get';
 import sumBy from 'lodash/sumBy';
 import queryString from 'query-string';
 
-const API_KEY = process.env.YOUTUBE_API_KEY;
-const API_ENDPOINT = 'https://www.googleapis.com/youtube/v3';
+const API_ENDPOINT = 'https://yt-timetag.pymaster.tw';
+const API_ENDPOINT_RAW = 'https://us-central1-yt-timetag.cloudfunctions.net';
 
 const defaultOnProgress = (progress) => null;
 
 const fetchTotalCount = (videoId, { signal }) => {
   const query = queryString.stringify({
-    key: API_KEY,
     id: videoId,
     part: 'statistics',
   });
@@ -22,30 +21,47 @@ const fetchTotalCount = (videoId, { signal }) => {
     });
 };
 
-const fetchCommentThreads = (videoId, { pageToken, signal } = {}) => {
+const fetchCommentThreads = (
+  videoId,
+  { pageToken, signal, rawEndpoint = false } = {}
+) => {
   const query = queryString.stringify({
-    key: API_KEY,
     videoId,
     pageToken,
     part: 'snippet',
     order: 'relevance',
     maxResults: 100,
   });
-  const url = `${API_ENDPOINT}/commentThreads?${query}`;
+  const url = `${
+    rawEndpoint ? API_ENDPOINT_RAW : API_ENDPOINT
+  }/commentThreads?${query}`;
+
+  const parseResponse = (res, raw = false) => {
+    const items = res.items.map((item) => ({
+      id: item.id,
+      text: get(item, 'snippet.topLevelComment.snippet.textOriginal'),
+      replyCount: get(item, 'snippet.totalReplyCount'),
+    }));
+
+    return {
+      threads: items,
+      threadCount: sumBy(items, (item) => item.replyCount + 1),
+      nextPageToken: get(res, 'nextPageToken'),
+      raw,
+    };
+  };
+
   return fetch(url, { signal })
     .then((response) => response.json())
-    .then((res) => {
-      const items = res.items.map((item) => ({
-        id: item.id,
-        text: get(item, 'snippet.topLevelComment.snippet.textOriginal'),
-        replyCount: get(item, 'snippet.totalReplyCount'),
-      }));
-
-      return {
-        threads: items,
-        threadCount: sumBy(items, (item) => item.replyCount + 1),
-        nextPageToken: get(res, 'nextPageToken'),
-      };
+    .then((res) => parseResponse(res))
+    .catch((error) => {
+      if (rawEndpoint) {
+        return Promise.reject(error);
+      }
+      const rawUrl = `${API_ENDPOINT_RAW}/commentThreads?${query}`;
+      return fetch(rawUrl, { signal })
+        .then((response) => response.json())
+        .then((res) => parseResponse(res, /* raw */ true));
     });
 };
 
@@ -61,15 +77,25 @@ export default function fetchYTCommentThreads(
           let threads = [];
 
           let promise = Promise.resolve();
+          let rawEndpoint = false;
 
           const _loop = (nextPageToken) => {
             promise = promise.then(() =>
-              fetchCommentThreads(videoId, { pageToken: nextPageToken, signal })
+              fetchCommentThreads(videoId, {
+                pageToken: nextPageToken,
+                signal,
+                rawEndpoint,
+              })
                 .then((res) => {
                   progressCount += res.threadCount;
                   threads = threads.concat(res.threads);
 
                   onProgress(progressCount / totalCount, threads);
+
+                  if (res.raw) {
+                    // switch to raw endpoint when max request size hit
+                    rawEndpoint = true;
+                  }
 
                   if (res.nextPageToken) {
                     _loop(res.nextPageToken);

@@ -5,3 +5,11 @@ dist/
 dist-*.zip
 
 .env
+.DS_Store
+
+*.crx
+*.pem
+
+ui-debug.log
+
+.firebase/*
