@@ -45,5 +45,11 @@
   "web_accessible_resources": [
     "contentscript.js.map",
     "*.png"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "yt-timetag@pymaster.tw",
+      "strict_min_version": "78.0"
+    }
+  }
 }
