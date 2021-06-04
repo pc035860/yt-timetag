@@ -57,10 +57,11 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
-## 1.4.1
+## 1.4.2
 
 - Export in Markdown format
 - CommentList UI: add time tags in comments to your collection
+- Firefox support
 
 ## 1.3.2
 
