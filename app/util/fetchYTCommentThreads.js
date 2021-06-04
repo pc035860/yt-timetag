@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import sumBy from 'lodash/sumBy';
 import queryString from 'query-string';
 
-const API_ENDPOINT = 'https://yt-timetag.pymaster.tw';
+const API_ENDPOINT = 'https://cloud.pymaster.tw/yt-timetag';
 const API_ENDPOINT_RAW = 'https://us-central1-yt-timetag.cloudfunctions.net';
 
 const defaultOnProgress = (progress) => null;
@@ -32,9 +32,8 @@ const fetchCommentThreads = (
     order: 'relevance',
     maxResults: 100,
   });
-  const url = `${
-    rawEndpoint ? API_ENDPOINT_RAW : API_ENDPOINT
-  }/commentThreads?${query}`;
+  const url = `${rawEndpoint ? API_ENDPOINT_RAW : API_ENDPOINT
+    }/commentThreads?${query}`;
 
   const parseResponse = (res, raw = false) => {
     const items = res.items.map((item) => ({
