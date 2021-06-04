@@ -17,7 +17,7 @@ const baseTag = {
   id: null,
   seconds: -1,
   description: '',
-  sourceCommentId: null,
+  sourceCommentId: undefined,
 };
 
 const defaultState = [];
