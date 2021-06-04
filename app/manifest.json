@@ -1,6 +1,6 @@
 {
   "name": "TimeTags for YouTube",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "manifest_version": 2,
   "description": "Create YouTube time tags with simple keyboard shortcuts",
   "icons": {
@@ -39,7 +39,7 @@
 
     "https://www.youtube.com/",
     "https://youtu.be/",
-    "https://yt-timetag.pymaster.tw/",
+    "https://cloud.pymaster.tw/",
     "https://us-central1-yt-timetag.cloudfunctions.net/"
   ],
   "web_accessible_resources": [
