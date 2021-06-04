@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
 
+import md5 from 'md5';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createSelector } from 'reselect';
@@ -20,7 +21,8 @@ import * as actTag_ from '_actions/tag';
 
 import styles from './TagList.scss';
 
-const keyGen = (commentId, seconds) => `${commentId}@${seconds}`;
+const keyGen = (commentId, seconds, description) =>
+  md5([commentId || '', seconds, description].join('@')).substr(0, 8);
 
 class CommentList extends Component {
   state = {
@@ -129,12 +131,12 @@ class CommentList extends Component {
           stopProgation
           onMount={this.handleTagContainerMount}
         >
-          {tags.map((tag) => {
-            const key = keyGen(tag.sourceCommentId, tag.seconds);
+          {tags.map((tag, i) => {
+            const key = keyGen(tag.sourceCommentId, tag.seconds, tag.description);
             const added = addedCommentTag[key];
             return (
               <CommentTag
-                key={key}
+                key={i}
                 videoId={videoId}
                 tag={tag}
                 addedTagId={added ? added.id : undefined}
@@ -187,7 +189,7 @@ const addedCommentTagSelector = createSelector(
   (tags) =>
     tags.reduce((o, v) => {
       if (v.sourceCommentId) {
-        const key = keyGen(v.sourceCommentId, v.seconds);
+        const key = keyGen(v.sourceCommentId, v.seconds, v.description);
         // eslint-disable-next-line no-param-reassign
         o[key] = v;
       }
