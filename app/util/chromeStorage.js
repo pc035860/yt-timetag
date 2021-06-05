@@ -2,15 +2,28 @@ import Q from 'q';
 
 function factory(area) {
   return {
+    getAll() {
+      return Q.Promise(resolve => {
+        chrome.storage[area].get(null, items => {
+          if (chrome.runtime.lastError) {
+            resolve();
+            return;
+          }
+          resolve(items);
+        });
+      });
+    },
+
     get(key) {
       return Q.Promise(resolve => {
-        if (chrome.runtime.lastError) {
-          console.debug(
-            `[yt-timetag] get ${area} storage error`,
-            chrome.runtime.lastError
-          );
-        }
         chrome.storage[area].get(key, item => {
+          if (chrome.runtime.lastError) {
+            console.debug(
+              `[yt-timetag] get ${area} storage error`,
+              chrome.runtime.lastError
+            );
+          }
+
           if (item && item[key]) {
             resolve(item[key]);
           }
@@ -42,6 +55,10 @@ function factory(area) {
           resolve();
         });
       });
+    },
+
+    setAll(items) {
+      return this.set(items);
     },
 
     remove(keys) {
