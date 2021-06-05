@@ -59,9 +59,11 @@ To import, click on the button next to "add" button.
 
 ## 1.4.3
 
-- Add storage.local as primary storage option
-- Compress storage.sync data to better utilize the quota (100kB max)
-- Also store video id, video title information for future roadmap
+- Add `chrome.storage.local` as primary storage option
+- "Sync" feature of Chrome
+  - Now syncs recently updated 100 video only
+  - Compress `chrome.storage.sync` data to better utilize the quota (100kB max)
+- Store video id, video title information for upcoming features
 
 ## 1.4.2
 
