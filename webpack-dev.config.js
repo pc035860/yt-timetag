@@ -93,6 +93,11 @@ const config = {
       {
         test: /\.jsx?$/,
         loader: `babel?${toQuery(params.babel)}`,
+        include: [/node_modules\/p-queue/],
+      },
+      {
+        test: /\.jsx?$/,
+        loader: `babel?${toQuery(params.babel)}`,
         exclude: [/node_modules/],
       },
     ],
