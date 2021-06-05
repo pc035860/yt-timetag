@@ -57,11 +57,17 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.4.4
+
+- Fix "sync" feature recent videos ordering bug
+- Optimize sync compression performance (UX)
+- Refine tag description display in different container widths
+
 ## 1.4.3
 
 - Add `chrome.storage.local` as primary storage option
 - "Sync" feature of Chrome
-  - Now syncs recently updated 100 video only
+  - Now syncs recently updated 100 videos only
   - Compress `chrome.storage.sync` data to better utilize the quota (100kB max)
 - Store video id, video title information for upcoming features
 
