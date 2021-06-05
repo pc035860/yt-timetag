@@ -41,6 +41,7 @@
     key-spacing: 0
     no-console: 1
     no-else-return: 0
+    arrow-body-style: 0
     react/prop-types: 0
     react/jsx-boolean-value: 0
     react/jsx-closing-bracket-location:

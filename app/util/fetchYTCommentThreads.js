@@ -7,17 +7,23 @@ const API_ENDPOINT_RAW = 'https://us-central1-yt-timetag.cloudfunctions.net';
 
 const defaultOnProgress = (progress) => null;
 
-const fetchTotalCount = (videoId, { signal }) => {
+const fetchVideoInfo = (videoId, { signal }) => {
   const query = queryString.stringify({
     id: videoId,
-    part: 'statistics',
+    part: 'statistics,snippet',
   });
   const url = `${API_ENDPOINT}/videos?${query}`;
   return fetch(url, { signal })
     .then((response) => response.json())
     .then((res) => {
-      const totalCount = get(res, 'items[0].statistics.commentCount');
-      return totalCount;
+      const item = get(res, 'items[0]');
+      const totalCount = get(item, 'statistics.commentCount');
+      const title = get(item, 'snippet.localized.title');
+      return {
+        id: videoId,
+        title,
+        totalCount,
+      };
     });
 };
 
@@ -68,9 +74,9 @@ export default function fetchYTCommentThreads(
   videoId,
   { onProgress = defaultOnProgress, signal } = {}
 ) {
-  return fetchTotalCount(videoId, { signal })
+  return fetchVideoInfo(videoId, { signal })
     .then(
-      (totalCount) =>
+      ({ title, totalCount }) =>
         new Promise((resolve) => {
           let progressCount = 0;
           let threads = [];
@@ -102,12 +108,16 @@ export default function fetchYTCommentThreads(
                   }
 
                   resolve({
+                    id: videoId,
+                    title,
                     threads,
                     totalCount,
                   });
                 })
                 .catch((error) => {
                   resolve({
+                    id: videoId,
+                    title,
                     threads,
                     totalCount,
                     error,
@@ -120,6 +130,8 @@ export default function fetchYTCommentThreads(
         })
     )
     .catch((error) => ({
+      id: videoId,
+      title: '',
       threads: [],
       totalCount: 0,
       error,

@@ -4,8 +4,10 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import compose from 'recompose/compose';
 import withState from 'recompose/withState';
+import lifecycle from 'recompose/lifecycle';
 import withHandlers from 'recompose/withHandlers';
 
 import LogoIcon from '_components/LogoIcon';
@@ -13,6 +15,8 @@ import TagList from '_components/TagList';
 import CommentList from '_components/CommentList';
 
 import is2017NewDesign from '_util/is2017NewDesign';
+
+import * as actInfo_ from '_actions/info';
 
 import styles from './App.scss';
 
@@ -115,15 +119,21 @@ App.propTypes = {
   keyOpsEmitter: PropTypes.object.isRequired,
 };
 
+const addInitInfo = lifecycle({
+  componentWillMount() {
+    const { actInfo, videoId } = this.props;
+    actInfo.init({ videoId });
+  }
+});
 const addTabSwitch = compose(
   withState('activeTab', 'setActiveTab', TAB.MINE),
   withHandlers({
     handleTabBtnClick:
       ({ setActiveTab }) =>
-      (evt) => {
-        const { currentTarget } = evt;
-        setActiveTab(currentTarget.dataset.tab);
-      },
+        (evt) => {
+          const { currentTarget } = evt;
+          setActiveTab(currentTarget.dataset.tab);
+        },
   })
 );
 const addCommentsProgress = compose(
@@ -133,25 +143,29 @@ const addCommentsProgress = compose(
   withHandlers({
     handleCommentListProgress:
       ({ setCommentsProgress, setCommentsTagCount }) =>
-      (progress, tags) => {
-        setCommentsTagCount(tags.length);
-        setCommentsProgress(progress);
-      },
+        (progress, tags) => {
+          setCommentsTagCount(tags.length);
+          setCommentsProgress(progress);
+        },
     handleCommentListDone:
       ({ setCommentsDone, setCommentsTagCount, setCommentsProgress }) =>
-      (tags) => {
-        setCommentsTagCount(tags.length);
-        setCommentsProgress(1);
-        setCommentsDone(true);
-      },
+        (tags) => {
+          setCommentsTagCount(tags.length);
+          setCommentsProgress(1);
+          setCommentsDone(true);
+        },
   })
 );
 
 const mapStateToProps = (state) => ({
   tags: state.tags,
 });
+const mapDispatchToProps = (dispatch) => ({
+  actInfo: bindActionCreators(actInfo_, dispatch)
+});
 export default compose(
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, mapDispatchToProps),
+  addInitInfo,
   addTabSwitch,
   addCommentsProgress
 )(CSSModules(App, styles));
