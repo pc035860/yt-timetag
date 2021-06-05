@@ -1,6 +1,9 @@
 import orderBy from 'lodash/orderBy';
 import compact from 'lodash/compact';
 import get from 'lodash/get';
+import mapValues from 'lodash/mapValues';
+import pick from 'lodash/pick';
+import each from 'lodash/each';
 import debounce from 'es6-promise-debounce';
 import LZUTF8 from 'lzutf8';
 
@@ -12,20 +15,58 @@ const getStorageKey = () => {
   return `crState-${videoId}`;
 };
 
-// debounce sync write by 1 second
-const saveToSyncStorage = debounce(state => {
-  return new Promise(resolve => {
-    // compress
-    const str = JSON.stringify(state);
-    LZUTF8.compressAsync(str, {
-      outputEncoding: 'Base64'
-    }, (result) => {
-      sync.set(getStorageKey(), result).then(() => {
-        resolve();
-      });
-    });
+const getRecentItems = (items, count) => {
+  const itemValues = Object.values(mapValues(items, (v, k) => ({
+    ...v,
+    _key: k
+  })));
+  const trimmedValues = itemValues.filter(v => {
+    return v.tags && v.tags.length > 0;
   });
-}, 1000);
+  const orderedValues = orderBy(trimmedValues, v =>
+    Number(get(v, 'info.lastUpdated', 0))
+  );
+  const recentItemKeys = orderedValues.slice(0, count).map(v => v._key);
+  return pick(items, recentItemKeys);
+};
+
+// debounce storage syncing by 30 seconds
+const syncDebounceDuration = 30 * 1000;
+const syncStorage = debounce(() => {
+  // get everything
+  return local.getAll().then(items => {
+    if (!items) {
+      return Promise.resolve();
+    }
+
+    // get recently updated 100 items
+    const recentItems = getRecentItems(items, 100);
+
+    const promises = [];
+    each(recentItems, (v, k) => {
+      // compress
+      const str = JSON.stringify(v);
+      const p = new Promise(resolve => {
+        LZUTF8.compressAsync(str, {
+          outputEncoding: 'Base64'
+        }, (result) => {
+          // resolve as pair
+          resolve([k, result]);
+        });
+      });
+      promises.push(p);
+    });
+
+    return Promise.all(promises)
+      .then((pairs) => {
+        const compressedItems = Object.fromEntries(pairs);
+        return sync.setAll(compressedItems);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+}, syncDebounceDuration);
 
 const getFromSyncStorage = key => {
   return sync.get(key).then(str => {
@@ -65,8 +106,11 @@ export const load = () => {
 };
 
 export const save = state => {
-  const localPromise = local.set(getStorageKey(), state);
-  saveToSyncStorage(state);
+  const localPromise = local.set(getStorageKey(), state)
+    .then(() => {
+      syncStorage();
+      return;
+    });
   return localPromise;
 };
 
