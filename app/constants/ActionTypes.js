@@ -5,3 +5,6 @@ export const TAG_EDIT = 'TAG_EDIT';
 
 export const ACTIVE_TAG_SET = 'ACTIVE_TAG_SET';
 export const ACTIVE_TAG_CLEAR = 'ACTIVE_TAG_CLEAR';
+
+export const INFO_INIT = 'INFO_INIT';
+export const INFO_UPDATE_TICK = 'INFO_UPDATE_TICK';

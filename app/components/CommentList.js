@@ -18,6 +18,7 @@ import is2017NewDesign from '_util/is2017NewDesign';
 import parseTags from '_util/parseTags';
 
 import * as actTag_ from '_actions/tag';
+import * as actInfo_ from '_actions/info';
 
 import styles from './TagList.scss';
 
@@ -31,7 +32,7 @@ class CommentList extends Component {
   };
 
   componentWillMount() {
-    const { videoId, onDone } = this.props;
+    const { videoId, actInfo, onDone } = this.props;
 
     this.fetchController = new window.AbortController();
     const { signal } = this.fetchController;
@@ -46,10 +47,15 @@ class CommentList extends Component {
     };
 
     fetchYTCommentThreads(videoId, { signal, onProgress }).then(
-      ({ threads, totalCount, error }) => {
+      ({ id, title, threads, totalCount, error }) => {
         const tags = this.parseTags(threads);
         this.setState({
           tags,
+        });
+
+        actInfo.init({
+          videoId,
+          title,
         });
 
         onDone(tags);
@@ -177,6 +183,7 @@ CommentList.propTypes = {
   onImportTag: PropTypes.func,
 
   actTag: PropTypes.object.isRequired,
+  actInfo: PropTypes.object.isRequired,
   addedCommentTag: PropTypes.object.isRequired,
 };
 CommentList.defaultProps = {
@@ -202,6 +209,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
   actTag: bindActionCreators(actTag_, dispatch),
+  actInfo: bindActionCreators(actInfo_, dispatch)
 });
 
 export default connect(

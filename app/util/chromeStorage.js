@@ -4,6 +4,12 @@ function factory(area) {
   return {
     get(key) {
       return Q.Promise(resolve => {
+        if (chrome.runtime.lastError) {
+          console.debug(
+            `[yt-timetag] get ${area} storage error`,
+            chrome.runtime.lastError
+          );
+        }
         chrome.storage[area].get(key, item => {
           if (item && item[key]) {
             resolve(item[key]);
@@ -27,6 +33,12 @@ function factory(area) {
         }
 
         chrome.storage[area].set(item, () => {
+          if (chrome.runtime.lastError) {
+            console.debug(
+              `[yt-timetag] set ${area} storage error`,
+              chrome.runtime.lastError
+            );
+          }
           resolve();
         });
       });
@@ -35,6 +47,12 @@ function factory(area) {
     remove(keys) {
       return Q.Promise(resolve => {
         chrome.storage[area].remove(keys, () => {
+          if (chrome.runtime.lastError) {
+            console.debug(
+              `[yt-timetag] remove ${area} storage error`,
+              chrome.runtime.lastError
+            );
+          }
           resolve();
         });
       });
@@ -43,6 +61,12 @@ function factory(area) {
     clear() {
       return Q.Promise(resolve => {
         chrome.storage[area].clear(() => {
+          if (chrome.runtime.lastError) {
+            console.debug(
+              `[yt-timetag] clear ${area} storage error`,
+              chrome.runtime.lastError
+            );
+          }
           resolve();
         });
       });

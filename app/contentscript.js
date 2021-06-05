@@ -48,15 +48,19 @@ function renderApp(videoId) {
 
   appElm.dataset.videoId = videoId;
 
-  loadCrState().then(state_ => {
-    const state = state_;
-
+  loadCrState().then(state => {
+    let initialState;
     if (state) {
-      // ignore activeTag state
-      state.activeTag = '';
+      initialState = {
+        ...state,
+        // ignore activeTag state
+        activeTag: ''
+      };
     }
 
-    const store = state ? configureStore(state) : configureStore();
+    const store = initialState ?
+      configureStore(initialState) :
+      configureStore();
 
     ReactDOM.render(
       <Provider store={store}>
@@ -115,13 +119,13 @@ if (process.env.NODE_ENV !== 'production') {
   setTimeout(() => {
     ytPlayer.on('playing', () => {
       ytPlayer(true, 'getCurrentTime').then((t) => {
-        console.debug('playing t', t);
+        console.debug('[yt-timetag] playing t', t);
       });
     });
 
     ytPlayer.on('paused', () => {
       ytPlayer(true, 'getCurrentTime').then((t) => {
-        console.debug('paused t', t);
+        console.debug('[yt-timetag] paused t', t);
       });
     });
   }, 500);
