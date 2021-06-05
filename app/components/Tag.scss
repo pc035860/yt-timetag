@@ -50,7 +50,7 @@
 	flex: 1 0 auto;
 
 	min-width: 50px;
-	max-width: 200px;
+	max-width: calc(#{'100% - 100px'});
 
 	overflow: hidden;
 	white-space: nowrap;
@@ -60,6 +60,12 @@
 		@extend %tag-input;
 		width: 90%;
 	}
+}
+.component-is-active .description {
+	max-width: calc(#{'100% - 190px'});
+}
+.comment .description {
+	max-width: calc(#{'100% - 130px'});
 }
 :global([dark]) {
 	.description-input {
