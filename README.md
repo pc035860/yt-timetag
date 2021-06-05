@@ -57,11 +57,20 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.4.3
+
+- Add storage.local as primary storage option
+- Compress storage.sync data to better utilize the quota (100kB max)
+- Also store video id, video title information for future roadmap
+
 ## 1.4.2
+
+- Firefox support
+
+## 1.4.0
 
 - Export in Markdown format
 - CommentList UI: add time tags in comments to your collection
-- Firefox support
 
 ## 1.3.2
 
