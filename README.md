@@ -57,6 +57,10 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.4.5
+
+- Remove unnecessary site `permissions` specified for Firefox support in Chrome build
+
 ## 1.4.4
 
 - Fix "sync" feature recent videos ordering bug
