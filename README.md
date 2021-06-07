@@ -1,6 +1,10 @@
 # TimeTags for YouTube
 
-[Visit Chrome Web Store](https://chrome.google.com/webstore/detail/hpbmedimnlknflpbgfbllklgelbnelef)
+Available on
+
+- Chrome Web Store [https://chrome.google.com/webstore/detail/hpbmedimnlknflpbgfbllklgelbnelef](https://chrome.google.com/webstore/detail/hpbmedimnlknflpbgfbllklgelbnelef)
+- Firefox Add-ons [https://addons.mozilla.org/en-US/firefox/addon/timetags-for-youtube/](https://addons.mozilla.org/en-US/firefox/addon/timetags-for-youtube/)
+
 
 We all know that YouTube has a feature that you can tag(bookmark) any specific time of the current video with a video timestamp format like `11:25` in comments.
 
