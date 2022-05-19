@@ -61,6 +61,11 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.5.0
+
+- Add "CHAPTERS" tab
+- Fix: seek-to-time operation sometimes doesn't work
+
 ## 1.4.5
 
 - Remove unnecessary site `permissions` specified for Firefox support in Chrome build
