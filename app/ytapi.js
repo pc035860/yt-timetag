@@ -41,6 +41,13 @@ inject(
       }
 
       return function () {
+        // prioritize #movie_player element
+        if (!_ytPlayer || !/html/i.test(_toString(_ytPlayer))) {
+          if (document.getElementById('movie_player') !== null) {
+            _ytPlayer = document.getElementById('movie_player');
+          }
+        }
+
         if (_ytPlayer) {
           return _ytPlayer;
         } else if (
@@ -92,6 +99,8 @@ inject(
     function _onMessagePlayerApi(data) {
       const player = getPlayer();
       let result;
+
+      console.log('@player', player, data.name, data.args);
 
       if (player) {
         result = player[data.name].apply(player, data.args);
