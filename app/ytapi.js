@@ -100,8 +100,6 @@ inject(
       const player = getPlayer();
       let result;
 
-      console.log('@player', player, data.name, data.args);
-
       if (player) {
         result = player[data.name].apply(player, data.args);
 
