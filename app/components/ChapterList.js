@@ -3,32 +3,30 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
 
-import md5 from 'md5';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { createSelector } from 'reselect';
 import omit from 'lodash/omit';
-import sortBy from 'lodash/sortBy';
 
 import CommentTag from './CommentTag';
 import TagContainer from './TagContainer';
 
-import { fetchYTCommentThreads } from '_util/ytDataApi';
+import { fetchYTVideoInfo } from '_util/ytDataApi';
 import is2017NewDesign from '_util/is2017NewDesign';
 import parseTags from '_util/parseTags';
+import { keyGen as commentKeyGen } from './CommentList';
 
 import * as actTag_ from '_actions/tag';
 import * as actInfo_ from '_actions/info';
 
 import styles from './TagList.scss';
 
-export const keyGen = (commentId, seconds, description) =>
-  md5([commentId || '', seconds, description].join('@')).substr(0, 8);
+const keyGen = (videoId, seconds, description) =>
+  commentKeyGen(videoId, seconds, description);
 
-class CommentList extends Component {
+class ChapterList extends Component {
   state = {
     tags: [],
-    sortByTimestamp: false,
   };
 
   componentWillMount() {
@@ -37,18 +35,9 @@ class CommentList extends Component {
     this.fetchController = new window.AbortController();
     const { signal } = this.fetchController;
 
-    const onProgress = (progress, threads) => {
-      const tags = this.parseTags(threads);
-      this.setState({
-        tags,
-      });
-
-      this.props.onProgress(progress, tags);
-    };
-
-    fetchYTCommentThreads(videoId, { signal, onProgress }).then(
-      ({ id, title, threads, totalCount, error }) => {
-        const tags = this.parseTags(threads);
+    fetchYTVideoInfo(videoId, { signal }).then(
+      ({ id, title, description, totalCount, error }) => {
+        const tags = this.parseTags(description);
         this.setState({
           tags,
         });
@@ -69,25 +58,13 @@ class CommentList extends Component {
     }
   }
 
-  threadCache = {};
-  parseTags(threads) {
-    const tags = [];
-    threads.forEach((thread) => {
-      const cache = this.threadCache[thread.id];
-      if (cache) {
-        cache.forEach((tag) => tags.push(tag));
-        return;
-      }
-
-      const buf = parseTags(thread.text).map((tag) => ({
-        ...tag,
-        sourceCommentId: thread.id,
-        _text: thread.text,
-      }));
-      buf.forEach((tag) => tags.push(tag));
-      this.threadCache[thread.id] = buf;
-    });
-    return tags;
+  parseTags(description) {
+    const { videoId } = this.props;
+    return parseTags(description, { chapterMode: true }).map((tag) => ({
+      ...tag,
+      sourceCommentId: videoId,
+      _text: description,
+    }));
   }
 
   handleTagImport = (commentTag) => {
@@ -100,21 +77,6 @@ class CommentList extends Component {
     actTag.remove(tagId);
   };
 
-  handleToggleSortByTimestamp = () => {
-    const { sortByTimestamp } = this.state;
-    this.setState(
-      {
-        sortByTimestamp: !sortByTimestamp,
-      },
-      () => {
-        if (this.tagContainerElm) {
-          // scroll to top when toggling sort by timestamp
-          this.tagContainerElm.scrollTo(0, 0);
-        }
-      }
-    );
-  };
-
   tagContainerElm;
   handleTagContainerMount = (elm) => {
     this.tagContainerElm = elm;
@@ -122,9 +84,9 @@ class CommentList extends Component {
 
   render() {
     const { videoId, addedCommentTag } = this.props;
-    const { tags: _tags, sortByTimestamp } = this.state;
+    const { tags: _tags } = this.state;
 
-    const tags = sortByTimestamp ? sortBy(_tags, 'seconds') : _tags;
+    const tags = _tags;
 
     return (
       <div
@@ -138,11 +100,7 @@ class CommentList extends Component {
           onMount={this.handleTagContainerMount}
         >
           {tags.map((tag, i) => {
-            const key = keyGen(
-              tag.sourceCommentId,
-              tag.seconds,
-              tag.description
-            );
+            const key = keyGen(videoId, tag.seconds, tag.description);
             const added = addedCommentTag[key];
             return (
               <CommentTag
@@ -156,41 +114,19 @@ class CommentList extends Component {
             );
           })}
         </TagContainer>
-        <div styleName="toolbar" className={styles.comment}>
-          <tp-yt-paper-checkbox
-            id="checkbox"
-            className="style-scope ytd-playlist-add-to-option-renderer"
-            role="checkbox"
-            tabindex="0"
-            toggles=""
-            aria-disabled="false"
-            style={{
-              '--paper-checkbox-ink-size': '32px',
-              '--paper-checkbox-size': '16px',
-              '--paper-checkbox-label_-_font-size': '14px',
-              '--paper-checkbox-label-spacing': '8px',
-              '--paper-checkbox-label-color': 'var(--yttt-running-text-color)',
-            }}
-            onClick={this.handleToggleSortByTimestamp}
-          >
-            Sort by timestamp
-          </tp-yt-paper-checkbox>
-        </div>
       </div>
     );
   }
 }
-CommentList.propTypes = {
+ChapterList.propTypes = {
   videoId: PropTypes.string,
-  onProgress: PropTypes.func,
   onDone: PropTypes.func,
 
   actTag: PropTypes.object.isRequired,
   actInfo: PropTypes.object.isRequired,
   addedCommentTag: PropTypes.object.isRequired,
 };
-CommentList.defaultProps = {
-  onProgress: (progress, tags) => null,
+ChapterList.defaultProps = {
   onDone: (tags) => null,
 };
 
@@ -199,7 +135,8 @@ const addedCommentTagSelector = createSelector(
   (tags) =>
     tags.reduce((o, v) => {
       if (v.sourceCommentId) {
-        const key = keyGen(v.sourceCommentId, v.seconds, v.description);
+        const videoId = v.sourceCommentId;
+        const key = keyGen(videoId, v.seconds, v.description);
         // eslint-disable-next-line no-param-reassign
         o[key] = v;
       }
@@ -218,4 +155,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CSSModules(CommentList, styles));
+)(CSSModules(ChapterList, styles));
