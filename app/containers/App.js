@@ -13,6 +13,7 @@ import withHandlers from 'recompose/withHandlers';
 import LogoIcon from '_components/LogoIcon';
 import TagList from '_components/TagList';
 import CommentList from '_components/CommentList';
+import ChapterList from '_components/ChapterList';
 
 import is2017NewDesign from '_util/is2017NewDesign';
 
@@ -23,6 +24,7 @@ import styles from './App.scss';
 const TAB = {
   MINE: 'MINE',
   COMMENTS: 'COMMENTS',
+  CHAPTERS: 'CHAPTERS',
 };
 
 const App = ({
@@ -31,11 +33,16 @@ const App = ({
   tags,
   activeTab,
   handleTabBtnClick,
+
   commentsTagCount,
   commentsProgress,
   commentsDone,
   handleCommentListProgress,
   handleCommentListDone,
+
+  chaptersTagCount,
+  chaptersAvailable,
+  handleChapterListDone,
 }) => (
   <div
     styleName="component"
@@ -90,6 +97,20 @@ const App = ({
             />
           </div>
         </tp-yt-paper-button>
+        {chaptersAvailable && (
+          <tp-yt-paper-button
+            class={classNames('style-scope', styles.btn, {
+              [styles.active]: activeTab === TAB.CHAPTERS,
+            })}
+            role="option"
+            tabindex="0"
+            aria-disabled="false"
+            data-tab={TAB.CHAPTERS}
+            onClick={handleTabBtnClick}
+          >
+            CHAPTERS<small>&nbsp;({chaptersTagCount})</small>
+          </tp-yt-paper-button>
+        )}
       </div>
       <div styleName="tabs">
         <div
@@ -110,6 +131,13 @@ const App = ({
             onDone={handleCommentListDone}
           />
         </div>
+        <div
+          className={classNames({
+            [styles.hide]: activeTab !== TAB.CHAPTERS || !chaptersAvailable,
+          })}
+        >
+          <ChapterList videoId={videoId} onDone={handleChapterListDone} />
+        </div>
       </div>
     </div>
   </div>
@@ -123,17 +151,17 @@ const addInitInfo = lifecycle({
   componentWillMount() {
     const { actInfo, videoId } = this.props;
     actInfo.init({ videoId });
-  }
+  },
 });
 const addTabSwitch = compose(
   withState('activeTab', 'setActiveTab', TAB.MINE),
   withHandlers({
     handleTabBtnClick:
       ({ setActiveTab }) =>
-        (evt) => {
-          const { currentTarget } = evt;
-          setActiveTab(currentTarget.dataset.tab);
-        },
+      (evt) => {
+        const { currentTarget } = evt;
+        setActiveTab(currentTarget.dataset.tab);
+      },
   })
 );
 const addCommentsProgress = compose(
@@ -143,17 +171,29 @@ const addCommentsProgress = compose(
   withHandlers({
     handleCommentListProgress:
       ({ setCommentsProgress, setCommentsTagCount }) =>
-        (progress, tags) => {
-          setCommentsTagCount(tags.length);
-          setCommentsProgress(progress);
-        },
+      (progress, tags) => {
+        setCommentsTagCount(tags.length);
+        setCommentsProgress(progress);
+      },
     handleCommentListDone:
       ({ setCommentsDone, setCommentsTagCount, setCommentsProgress }) =>
-        (tags) => {
-          setCommentsTagCount(tags.length);
-          setCommentsProgress(1);
-          setCommentsDone(true);
-        },
+      (tags) => {
+        setCommentsTagCount(tags.length);
+        setCommentsProgress(1);
+        setCommentsDone(true);
+      },
+  })
+);
+const addChaptersAvailable = compose(
+  withState('chaptersAvailable', 'setChaptersAvailable', false),
+  withState('chaptersTagCount', 'setChaptersTagCount', 0),
+  withHandlers({
+    handleChapterListDone:
+      ({ setChaptersAvailable, setChaptersTagCount }) =>
+      (tags) => {
+        setChaptersTagCount(tags.length);
+        setChaptersAvailable(tags.length > 0);
+      },
   })
 );
 
@@ -161,11 +201,12 @@ const mapStateToProps = (state) => ({
   tags: state.tags,
 });
 const mapDispatchToProps = (dispatch) => ({
-  actInfo: bindActionCreators(actInfo_, dispatch)
+  actInfo: bindActionCreators(actInfo_, dispatch),
 });
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   addInitInfo,
   addTabSwitch,
-  addCommentsProgress
+  addCommentsProgress,
+  addChaptersAvailable
 )(CSSModules(App, styles));

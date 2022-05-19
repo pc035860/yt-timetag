@@ -19,9 +19,11 @@ const fetchVideoInfo = (videoId, { signal }) => {
       const item = get(res, 'items[0]');
       const totalCount = get(item, 'statistics.commentCount');
       const title = get(item, 'snippet.localized.title');
+      const description = get(item, 'snippet.localized.description');
       return {
         id: videoId,
         title,
+        description,
         totalCount,
       };
     });
@@ -38,8 +40,9 @@ const fetchCommentThreads = (
     order: 'relevance',
     maxResults: 100,
   });
-  const url = `${rawEndpoint ? API_ENDPOINT_RAW : API_ENDPOINT
-    }/commentThreads?${query}`;
+  const url = `${
+    rawEndpoint ? API_ENDPOINT_RAW : API_ENDPOINT
+  }/commentThreads?${query}`;
 
   const parseResponse = (res, raw = false) => {
     const items = res.items.map((item) => ({
@@ -70,10 +73,10 @@ const fetchCommentThreads = (
     });
 };
 
-export default function fetchYTCommentThreads(
+export const fetchYTCommentThreads = (
   videoId,
   { onProgress = defaultOnProgress, signal } = {}
-) {
+) => {
   return fetchVideoInfo(videoId, { signal })
     .then(
       ({ title, totalCount }) =>
@@ -136,4 +139,6 @@ export default function fetchYTCommentThreads(
       totalCount: 0,
       error,
     }));
-}
+};
+
+export const fetchYTVideoInfo = fetchVideoInfo;
