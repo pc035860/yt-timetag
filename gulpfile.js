@@ -12,10 +12,12 @@ var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var es = require('event-stream');
 
+const getIsFirefox = require('./lib/getIsFirefoxBranch');
+
 var myPath = {
   app: path.resolve(__dirname, 'app'),
-  dev: path.resolve(__dirname, 'dev'),
-  dist: path.resolve(__dirname, 'dist'),
+  dev: path.resolve(__dirname, getIsFirefox() ? 'dev-ff' : 'dev'),
+  dist: path.resolve(__dirname, getIsFirefox() ? 'dist-ff' : 'dist'),
 };
 
 // env: dev, dist
