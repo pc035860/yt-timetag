@@ -46,7 +46,9 @@
   ],
   "host_permissions": [
     "https://www.youtube.com/",
-    "https://youtu.be/"
+    "https://youtu.be/",
+    "https://cloud.pymaster.tw/",
+    "https://us-central1-yt-timetag.cloudfunctions.net/"
   ],
   "web_accessible_resources": [
     {
