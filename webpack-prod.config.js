@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const toQuery = require('./lib/toQuery');
+const getIsFirefox = require('./lib/getIsFirefoxBranch');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const OUTPUT_FILENAME = (function () {
@@ -31,7 +32,7 @@ const params = {
 
 const myPath = {
   app: path.resolve(__dirname, 'app'),
-  dist: path.resolve(__dirname, 'dist'),
+  dist: path.resolve(__dirname, getIsFirefox() ? 'dist-ff' : 'dist'),
 };
 
 const config = {

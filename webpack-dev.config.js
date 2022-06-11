@@ -3,6 +3,7 @@ require('dotenv').config();
 const path = require('path');
 const webpack = require('webpack');
 const toQuery = require('./lib/toQuery');
+const getIsFirefox = require('./lib/getIsFirefoxBranch');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const SOURCEMAP = process.env.WEBPACK_SOURCEMAP == 1; // eslint-disable-line
@@ -35,7 +36,7 @@ const params = {
 
 const myPath = {
   app: path.resolve(__dirname, 'app'),
-  dist: path.resolve(__dirname, 'dev'),
+  dist: path.resolve(__dirname, getIsFirefox() ? 'dev-ff' : 'dev'),
 };
 
 const config = {
