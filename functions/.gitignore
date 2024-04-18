@@ -4,3 +4,7 @@ node_modules/
 ui-debug.log
 
 credentials.json
+
+.env
+.env.default
+.env.local

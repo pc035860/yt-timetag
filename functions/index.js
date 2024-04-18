@@ -1,9 +1,10 @@
 const functions = require('firebase-functions');
+const { defineString } = require('firebase-functions/params');
 const cors = require('cors');
 const axios = require('axios');
 const queryString = require('query-string');
 
-const API_KEY = functions.config().youtube.apikey;
+const API_KEY = defineString('YOUTUBE_APIKEY');
 
 // cache for a week
 const maxAge = 86400 * 7;
@@ -24,7 +25,7 @@ function createYoutubeAPIProxy(resourcePath, { region = 'us-central1' } = {}) {
 
     cors(corsOptions)(req, res, () => {
       const query = queryString.stringify({
-        key: API_KEY,
+        key: API_KEY.value(),
         ...req.query,
       });
       const url = `https://www.googleapis.com/youtube/v3/${resourcePath}?${query}`;
