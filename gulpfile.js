@@ -1,54 +1,61 @@
 require('dotenv').config();
 
-var path = require('path');
+const path = require('path');
 
-var gulp = require('gulp');
-var env = require('gulp-env');
-var webpack = require('webpack-stream');
-var clean = require('gulp-clean');
-var cache = require('gulp-cached');
-// var watch = require('gulp-watch');
-var rename = require('gulp-rename');
-var replace = require('gulp-replace');
-var es = require('event-stream');
+const gulp = require('gulp');
+const env = require('gulp-env');
+const webpack = require('webpack-stream');
+const clean = require('gulp-clean');
+const cache = require('gulp-cached');
+// const watch = require('gulp-watch');
+const rename = require('gulp-rename');
+const replace = require('gulp-replace');
+const es = require('event-stream');
 
 const getIsFirefox = require('./lib/getIsFirefoxBranch');
 
-var myPath = {
+const myPath = {
   app: path.resolve(__dirname, 'app'),
   dev: path.resolve(__dirname, getIsFirefox() ? 'dev-ff' : 'dev'),
   dist: path.resolve(__dirname, getIsFirefox() ? 'dist-ff' : 'dist'),
 };
 
 // env: dev, dist
-var genCopyAssets = function (env) {
+const genCopyAssets = function (_env) {
   return function () {
-    var images = gulp
+    const images = gulp
       .src('app/images/*')
-      .pipe(cache(env + '-images'))
-      .pipe(gulp.dest(path.join(myPath[env], 'images')));
+      .pipe(cache(`${_env}-images`))
+      .pipe(gulp.dest(path.join(myPath[_env], 'images')));
 
-    var manifest = gulp
+    const manifest = gulp
       .src('app/manifest.json')
-      .pipe(cache(env + '-manifest'))
-      .pipe(gulp.dest(path.join(myPath[env])));
+      .pipe(cache(`${_env}-manifest`))
+      .pipe(gulp.dest(path.join(myPath[_env])));
 
-    return es.concat(images, manifest);
+    const optionsUi = gulp
+      .src('options/dist/**/*')
+      .pipe(gulp.dest(path.join(myPath[_env], 'options')));
+
+    return es.concat(images, manifest, optionsUi);
   };
 };
 
-gulp.task('clean:dev', function () {
+gulp.task('clean:dev', () => {
   return gulp.src(myPath.dev).pipe(clean());
 });
 
-gulp.task('clean:dist', function () {
+gulp.task('clean:dist', () => {
   return gulp.src(myPath.dist).pipe(clean());
 });
 
 gulp.task('copy:dev', ['build:dev'], genCopyAssets('dev'));
 gulp.task('copy:dist', ['build:dist'], genCopyAssets('dist'));
 
-gulp.task('build:dev', ['clean:dev'], function () {
+gulp.task('raw-copy:dev', genCopyAssets('dev'));
+gulp.task('raw-copy:dist', genCopyAssets('dist'));
+
+gulp.task('build:dev', ['clean:dev'], () => {
   env({
     vars: {
       NODE_ENV: 'development',
@@ -57,7 +64,7 @@ gulp.task('build:dev', ['clean:dev'], function () {
     },
   });
 
-  var webpackConfig = require('./webpack-dev.config.js');
+  const webpackConfig = require('./webpack-dev.config.js');
   Object.assign(webpackConfig, {
     colors: true,
   });
@@ -68,14 +75,14 @@ gulp.task('build:dev', ['clean:dev'], function () {
     .pipe(gulp.dest(myPath.dev));
 });
 
-gulp.task('build:dist', ['clean:dist'], function () {
+gulp.task('build:dist', ['clean:dist'], () => {
   env({
     vars: {
       NODE_ENV: 'production',
     },
   });
 
-  var webpackConfig = require('./webpack-prod.config.js');
+  const webpackConfig = require('./webpack-prod.config.js');
   Object.assign(webpackConfig, {
     colors: true,
   });
@@ -86,7 +93,7 @@ gulp.task('build:dist', ['clean:dist'], function () {
     .pipe(gulp.dest(myPath.dist));
 });
 
-gulp.task('build:watch', function () {
+gulp.task('build:watch', () => {
   env({
     vars: {
       NODE_ENV: 'development',
@@ -95,7 +102,7 @@ gulp.task('build:watch', function () {
     },
   });
 
-  var webpackConfig = require('./webpack-dev.config.js');
+  const webpackConfig = require('./webpack-dev.config.js');
   Object.assign(webpackConfig, {
     watch: true,
     cache: true,
@@ -107,11 +114,14 @@ gulp.task('build:watch', function () {
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest(myPath.dev));
 });
-gulp.task('copy:watch', function () {
-  var watchOptions = {
+gulp.task('copy:watch', () => {
+  const watchOptions = {
     ignoreInitial: false,
   };
-  gulp.watch(['app/images/*', 'app/manifest.json'], ['copy:dev']);
+  gulp.watch(
+    ['app/images/*', 'app/manifest.json', 'options/dist/*'],
+    ['raw-copy:dev']
+  );
 });
 
 gulp.task('watch', ['copy:watch']);
