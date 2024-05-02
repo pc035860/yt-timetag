@@ -3,8 +3,8 @@ import Q from 'q';
 function factory(area) {
   return {
     getAll() {
-      return Q.Promise(resolve => {
-        chrome.storage[area].get(null, items => {
+      return Q.Promise((resolve) => {
+        chrome.storage[area].get().then((items) => {
           if (chrome.runtime.lastError) {
             resolve();
             return;
@@ -15,8 +15,8 @@ function factory(area) {
     },
 
     get(key) {
-      return Q.Promise(resolve => {
-        chrome.storage[area].get(key, item => {
+      return Q.Promise((resolve) => {
+        chrome.storage[area].get(key).then((item) => {
           if (chrome.runtime.lastError) {
             console.debug(
               `[yt-timetag] get ${area} storage error`,
@@ -26,8 +26,7 @@ function factory(area) {
 
           if (item && item[key]) {
             resolve(item[key]);
-          }
-          else {
+          } else {
             resolve();
           }
         });
@@ -36,16 +35,15 @@ function factory(area) {
 
     set(key, value) {
       let item;
-      return Q.Promise(resolve => {
+      return Q.Promise((resolve) => {
         if (typeof key === 'object') {
           item = key;
-        }
-        else {
+        } else {
           item = {};
           item[key] = value;
         }
 
-        chrome.storage[area].set(item, () => {
+        chrome.storage[area].set(item).then(() => {
           if (chrome.runtime.lastError) {
             console.debug(
               `[yt-timetag] set ${area} storage error`,
@@ -62,8 +60,8 @@ function factory(area) {
     },
 
     remove(keys) {
-      return Q.Promise(resolve => {
-        chrome.storage[area].remove(keys, () => {
+      return Q.Promise((resolve) => {
+        chrome.storage[area].remove(keys).then(() => {
           if (chrome.runtime.lastError) {
             console.debug(
               `[yt-timetag] remove ${area} storage error`,
@@ -76,8 +74,8 @@ function factory(area) {
     },
 
     clear() {
-      return Q.Promise(resolve => {
-        chrome.storage[area].clear(() => {
+      return Q.Promise((resolve) => {
+        chrome.storage[area].clear().then(() => {
           if (chrome.runtime.lastError) {
             console.debug(
               `[yt-timetag] clear ${area} storage error`,
@@ -99,7 +97,7 @@ function factory(area) {
       return () => {
         chrome.storage.onChanged.removeListener(storageOnChanged);
       };
-    }
+    },
   };
 }
 

@@ -1,17 +1,14 @@
 {
   "name": "TimeTags for YouTube",
   "version": "1.5.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "Create YouTube time tags with simple keyboard shortcuts",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -24,10 +21,11 @@
         "ytapi.js"
       ],
       "run_at": "document_end",
-      "all_frames": false
+      "all_frames": false,
+      "world": "MAIN"
     }
   ],
-  "browser_action": {
+  "action": {
     "default_icon": {
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
@@ -35,19 +33,23 @@
     "default_title": "TimeTags for YouTube"
   },
   "permissions": [
-    "storage",
-
+    "storage", "scripting", "unlimitedStorage"
+  ],
+  "host_permissions": [
     "https://www.youtube.com/",
     "https://youtu.be/"
   ],
   "web_accessible_resources": [
-    "contentscript.js.map",
-    "*.png"
-  ],
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "yt-timetag@pymaster.tw",
-      "strict_min_version": "78.0"
+    {
+      "resources": [
+        "contentscript.js.map",
+        "*.png"
+      ],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://youtube.com/*",
+        "*://youtu.be/*"
+      ]
     }
-  }
+  ]
 }
