@@ -7,6 +7,8 @@ import SetupTheme from './components/SetupTheme';
 
 import { useHashLocation } from 'wouter/use-hash-location';
 
+import './fontAwesome';
+
 import './App.css';
 
 const THEME_CONFIG = {

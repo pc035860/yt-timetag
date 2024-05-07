@@ -1,0 +1,59 @@
+{
+  "extName": {
+    "message": "YouTube時間標記幫手"
+  },
+  "extDescription": {
+    "message": "用鍵盤就能輕鬆為 YouTube 影片加上時間標記"
+  },
+  "optionsExplorerTab": {
+    "message": "瀏覽器"
+  },
+  "optionsDataTab": {
+    "message": "資料管理"
+  },
+  "optionsAboutTab": {
+    "message": "關於"
+  },
+  "optionsImport": {
+    "message": "匯入"
+  },
+  "optionsExport": {
+    "message": "匯出"
+  },
+  "optionsClear": {
+    "message": "清除"
+  },
+  "optionsImportDescription": {
+    "message": "匯入並自動與現有的時間標記合併"
+  },
+  "optionsExportDescription": {
+    "message": "將所有時間標記匯出成 YAML 檔案"
+  },
+  "optionsClearDescription": {
+    "message": "刪除所有時間標記"
+  },
+  "optionsImportSuccessTitle": {
+    "message": "匯入成功"
+  },
+  "optionsImportSuccessMessage": {
+    "message": "時間標記已成功匯入。"
+  },
+  "optionsImportErrorTitle": {
+    "message": "匯入失敗"
+  },
+  "optionsExportSuccessTitle": {
+    "message": "匯出成功"
+  },
+  "optionsExportSuccessMessage": {
+    "message": "時間標記已成功匯出。"
+  },
+  "optionsClearSuccessTitle": {
+    "message": "清除成功"
+  },
+  "optionsClearSuccessMessage": {
+    "message": "時間標記已成功清除。"
+  },
+  "optionsClearErrorTitle": {
+    "message": "清除失敗"
+  }
+}

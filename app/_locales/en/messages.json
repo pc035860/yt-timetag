@@ -1,0 +1,59 @@
+{
+  "extName": {
+    "message": "TimeTags for YouTube"
+  },
+  "extDescription": {
+    "message": "Create YouTube time tags with simple keyboard shortcuts"
+  },
+  "optionsExplorerTab": {
+    "message": "Explorer"
+  },
+  "optionsDataTab": {
+    "message": "Data"
+  },
+  "optionsAboutTab": {
+    "message": "About"
+  },
+  "optionsImport": {
+    "message": "Import"
+  },
+  "optionsExport": {
+    "message": "Export"
+  },
+  "optionsClear": {
+    "message": "Clear"
+  },
+  "optionsImportDescription": {
+    "message": "Imports and merges the data from the file with the current data."
+  },
+  "optionsExportDescription": {
+    "message": "Exports the current data to a YAML file."
+  },
+  "optionsClearDescription": {
+    "message": "Clears all data."
+  },
+  "optionsImportSuccessTitle": {
+    "message": "Successful Import"
+  },
+  "optionsImportSuccessMessage": {
+    "message": "Time tags have been imported successfully."
+  },
+  "optionsImportErrorTitle": {
+    "message": "Error"
+  },
+  "optionsExportSuccessTitle": {
+    "message": "Successful Export"
+  },
+  "optionsExportSuccessMessage": {
+    "message": "Time tags has been exported successfully."
+  },
+  "optionsClearSuccessTitle": {
+    "message": "Cleared"
+  },
+  "optionsClearSuccessMessage": {
+    "message": "Time tags has been successfully cleared."
+  },
+  "optionsClearErrorTitle": {
+    "message": "Error"
+  }
+}

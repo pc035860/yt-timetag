@@ -28,16 +28,26 @@ const genCopyAssets = function (_env) {
       .pipe(cache(`${_env}-images`))
       .pipe(gulp.dest(path.join(myPath[_env], 'images')));
 
+    const locales = gulp
+      .src('app/_locales/**/*')
+      .pipe(cache(`${_env}-locales`))
+      .pipe(gulp.dest(path.join(myPath[_env], '_locales')));
+
     const manifest = gulp
       .src('app/manifest.json')
       .pipe(cache(`${_env}-manifest`))
       .pipe(gulp.dest(path.join(myPath[_env])));
 
-    const optionsUi = gulp
-      .src('options/dist/**/*')
-      .pipe(gulp.dest(path.join(myPath[_env], 'options')));
+    let optionsUi;
+    if (_env === 'dev') {
+      optionsUi = gulp.src('options/dist/**/*');
+    } else {
+      // exclude sourcemap files
+      optionsUi = gulp.src(['options/dist/**/*', '!options/dist/**/*.map']);
+    }
+    optionsUi.pipe(gulp.dest(path.join(myPath[_env], 'options')));
 
-    return es.concat(images, manifest, optionsUi);
+    return es.concat(images, locales, manifest, optionsUi);
   };
 };
 
@@ -119,7 +129,12 @@ gulp.task('copy:watch', () => {
     ignoreInitial: false,
   };
   gulp.watch(
-    ['app/images/*', 'app/manifest.json', 'options/dist/*'],
+    [
+      'app/images/*',
+      'app/_locales/**/*',
+      'app/manifest.json',
+      'options/dist/*',
+    ],
     ['raw-copy:dev']
   );
 });

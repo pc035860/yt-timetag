@@ -35,12 +35,13 @@ function factory(area) {
         item[key] = value;
       }
 
-      chrome.storage[area].set(item).then(() => {
+      return chrome.storage[area].set(item).then(() => {
         if (chrome.runtime.lastError) {
           console.debug(
             `[yt-timetag] set ${area} storage error`,
             chrome.runtime.lastError
           );
+          throw new Error(chrome.runtime.lastError);
         }
       });
     },
@@ -67,6 +68,7 @@ function factory(area) {
             `[yt-timetag] clear ${area} storage error`,
             chrome.runtime.lastError
           );
+          throw new Error(chrome.runtime.lastError);
         }
       });
     },
