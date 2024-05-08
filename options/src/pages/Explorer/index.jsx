@@ -1,5 +1,7 @@
+import Page from '../../components/Page';
+
 const ExplorerPage = () => {
-  return <div>explorer page</div>;
+  return <Page>explorer page</Page>;
 };
 
 ExplorerPage.propTypes = {};

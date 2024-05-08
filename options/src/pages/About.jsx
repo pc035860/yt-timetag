@@ -1,5 +1,7 @@
+import Page from '../components/Page';
+
 const AboutPage = () => {
-  return <div>about page</div>;
+  return <Page>about page</Page>;
 };
 
 AboutPage.propTypes = {};

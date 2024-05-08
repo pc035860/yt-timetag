@@ -3,6 +3,7 @@ import cn from 'classnames';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Row from './Row';
+import Page from '../../components/Page';
 
 import { useDropzone } from 'react-dropzone';
 import useAlert from './useAlert.jsx';
@@ -81,7 +82,7 @@ const DataPage = () => {
 
   return (
     <>
-      <div className="container mx-auto py-12 max-w-[400px]">
+      <Page className="max-w-[400px]">
         <Row
           className="mb-8"
           buttonSlot={
@@ -126,7 +127,7 @@ const DataPage = () => {
           }
           description={t('optionsClearDescription')}
         />
-      </div>
+      </Page>
       {renderAlert()}
       {renderConfirm()}
     </>
