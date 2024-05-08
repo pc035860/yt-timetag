@@ -12,8 +12,8 @@ import './fontAwesome';
 import './App.css';
 
 const THEME_CONFIG = {
-  [SetupTheme.SCHEME.DARK]: 'business',
-  [SetupTheme.SCHEME.LIGHT]: 'corporate',
+  [SetupTheme.SCHEME.DARK]: 'dim',
+  [SetupTheme.SCHEME.LIGHT]: 'pastel',
 };
 
 function App() {
