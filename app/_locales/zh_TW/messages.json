@@ -47,6 +47,12 @@
   "optionsExportSuccessMessage": {
     "message": "時間標記已成功匯出。"
   },
+  "optionsClearConfirmTitle": {
+    "message": "確認清除"
+  },
+  "optionsClearConfirmMessage": {
+    "message": "確定要清除所有時間標記嗎？這個動作無法復原。"
+  },
   "optionsClearSuccessTitle": {
     "message": "清除成功"
   },
@@ -55,5 +61,11 @@
   },
   "optionsClearErrorTitle": {
     "message": "清除失敗"
+  },
+  "optionsConfirm": {
+    "message": "確定"
+  },
+  "optionsCancel": {
+    "message": "取消"
   }
 }

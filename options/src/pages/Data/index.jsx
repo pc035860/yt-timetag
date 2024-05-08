@@ -6,6 +6,7 @@ import Row from './Row';
 
 import { useDropzone } from 'react-dropzone';
 import useAlert from './useAlert.jsx';
+import useConfirm from './useConfirm.jsx';
 
 import { clear, download, upload } from './utils';
 import { t } from '../../utils/i18n';
@@ -54,21 +55,29 @@ const DataPage = () => {
     download();
   }, []);
 
+  const { open: openConfirm, render: renderConfirm } = useConfirm();
   const handleClear = useCallback(() => {
-    clear()
-      .then(() => {
-        openAlert({
-          title: t('optionsClearSuccessTitle'),
-          message: t('optionsClearSuccessMessage'),
+    openConfirm({
+      title: t('optionsClearConfirmTitle'),
+      message: t('optionsClearConfirmMessage'),
+      passphrase: 'clear',
+    }).then(isConfirmed => {
+      if (!isConfirmed) return;
+      clear()
+        .then(() => {
+          openAlert({
+            title: t('optionsClearSuccessTitle'),
+            message: t('optionsClearSuccessMessage'),
+          });
+        })
+        .catch(err => {
+          openAlert({
+            title: t('optionsClearErrorTitle'),
+            message: err.message,
+          });
         });
-      })
-      .catch(err => {
-        openAlert({
-          title: t('optionsClearErrorTitle'),
-          message: err.message,
-        });
-      });
-  }, [openAlert]);
+    });
+  }, [openAlert, openConfirm]);
 
   return (
     <>
@@ -119,6 +128,7 @@ const DataPage = () => {
         />
       </div>
       {renderAlert()}
+      {renderConfirm()}
     </>
   );
 };

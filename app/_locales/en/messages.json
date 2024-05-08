@@ -47,6 +47,12 @@
   "optionsExportSuccessMessage": {
     "message": "Time tags has been exported successfully."
   },
+  "optionsClearConfirmTitle": {
+    "message": "Clear Confirmation"
+  },
+  "optionsClearConfirmMessage": {
+    "message": "Are you sure you want to clear all time tags? This action cannot be undone."
+  },
   "optionsClearSuccessTitle": {
     "message": "Cleared"
   },
@@ -55,5 +61,11 @@
   },
   "optionsClearErrorTitle": {
     "message": "Error"
+  },
+  "optionsConfirm": {
+    "message": "Confirm"
+  },
+  "optionsCancel": {
+    "message": "Cancel"
   }
 }
