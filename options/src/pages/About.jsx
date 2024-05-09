@@ -12,6 +12,7 @@ import githubLogoWhiteSrc from '../assets/github-mark-white.svg';
 import githubLogoSrc from '../assets/github-mark.svg';
 
 import pkg from '../../package.json';
+import styles from './About.module.scss';
 
 const LINKS = [
   [
@@ -55,8 +56,11 @@ const AboutPage = () => {
       <figure className="mb-6">
         <img
           src={logoSrc}
-          alt="TimeTags for Youtube"
-          className="mx-auto max-w-[60px]"
+          alt={t('extName')}
+          className={cn(
+            'mx-auto max-w-[60px] border-2 border-accent',
+            styles.logo
+          )}
         />
       </figure>
       <h2 className="text-lg font-bold mb-2">{t('extName')}</h2>
