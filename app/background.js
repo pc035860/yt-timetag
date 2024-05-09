@@ -28,3 +28,8 @@ chrome.action.onClicked.addListener((tab) => {
     });
   }
 });
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  sendResponse('from background');
+  return true;
+});

@@ -9,10 +9,7 @@ const Tabs = ({ className }) => {
   const [isAbout] = useRoute('/about');
 
   return (
-    <div
-      role="tablist"
-      className={cx('tabs tabs-bordered mx-auto max-w-[400px]', className)}
-    >
+    <div role="tablist" className={cx('tabs tabs-bordered', className)}>
       <Link
         role="tab"
         className={cx('tab', {

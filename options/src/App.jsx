@@ -6,10 +6,12 @@ import Tabs from './components/Tabs';
 import SetupTheme from './components/SetupTheme';
 
 import { useHashLocation } from 'wouter/use-hash-location';
+import { t } from './utils/i18n';
 
 import './fontAwesome';
 
 import './App.css';
+import { useLayoutEffect } from 'react';
 
 const THEME_CONFIG = {
   [SetupTheme.SCHEME.DARK]: 'dim',
@@ -17,18 +19,31 @@ const THEME_CONFIG = {
 };
 
 function App() {
+  useLayoutEffect(() => {
+    document.title = `${t('extName')}`;
+  }, []);
+
   return (
     <Router hook={useHashLocation}>
       <>
         <SetupTheme config={THEME_CONFIG} />
 
-        <Tabs className="mt-8" />
+        <Switch>
+          <Route path="/explorer">
+            <div className="container mx-auto">
+              <Tabs className="max-w-[400px] mt-8 relative z-10" />
+            </div>
+          </Route>
+          <Route>
+            <Tabs className="mx-auto max-w-[400px] mt-8 relative z-10" />
+          </Route>
+        </Switch>
 
         <Switch>
           <Route path="/explorer" component={ExplorerPage} />
           <Route path="/data" component={DataPage} />
           <Route path="/about" component={AboutPage} />
-          <Redirect to="/about" />
+          <Redirect to="/explorer" />
         </Switch>
         {/* <div>
           <a href="https://vitejs.dev" target="_blank">
