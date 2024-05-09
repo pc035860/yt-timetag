@@ -22,13 +22,13 @@ function App() {
       <>
         <SetupTheme config={THEME_CONFIG} />
 
-        <Tabs />
+        <Tabs className="mt-8" />
 
         <Switch>
           <Route path="/explorer" component={ExplorerPage} />
           <Route path="/data" component={DataPage} />
           <Route path="/about" component={AboutPage} />
-          <Redirect to="/data" />
+          <Redirect to="/about" />
         </Switch>
         {/* <div>
           <a href="https://vitejs.dev" target="_blank">

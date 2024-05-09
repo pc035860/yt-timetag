@@ -67,5 +67,8 @@
   },
   "optionsCancel": {
     "message": "Cancel"
+  },
+  "optionsAboutVersion": {
+    "message": "Version $1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "YouTube時間標記幫手"
+    "message": "YouTube 時間標記幫手"
   },
   "extDescription": {
     "message": "用鍵盤就能輕鬆為 YouTube 影片加上時間標記"
@@ -67,5 +67,8 @@
   },
   "optionsCancel": {
     "message": "取消"
+  },
+  "optionsAboutVersion": {
+    "message": "版本 $1"
   }
 }
