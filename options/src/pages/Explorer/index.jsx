@@ -25,13 +25,16 @@ const ExplorerPage = () => {
     }
 
     const handleMessage = evt => {
-      if (evt.data === 'ready') {
-        console.log('@ready');
-        evt.source.postMessage(JSON.stringify(data), '*');
-      } else if (evt.data.indexOf('height:') === 0) {
-        const height = evt.data.split(':')[1];
-        console.log('@height', height);
-        iframeRef.current.style.height = `${height}px`;
+      console.log('@message out', evt.data);
+      if (evt.data === 'yt-timetag explorer ready') {
+        console.log('@post data');
+        evt.source.postMessage(
+          JSON.stringify({
+            source: 'yt-timetag',
+            data,
+          }),
+          '*'
+        );
       }
     };
     window.addEventListener('message', handleMessage, false);

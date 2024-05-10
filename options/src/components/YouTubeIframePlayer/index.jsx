@@ -13,6 +13,7 @@ import makeAsyncScript from 'react-async-script';
 
 import Context from './Context';
 import useLazyRef from '../../hooks/useLazyRef';
+import enhancePlayer from './enhancePlayer';
 
 const loadYouTubeIframeApi = makeAsyncScript(
   'https://www.youtube.com/iframe_api',
@@ -47,7 +48,8 @@ const Inner = ({ YT, children, playerClassName }) => {
         videoId: 'P8jxA9t4nfQ',
         events: {
           onReady: () => {
-            playerDfdRef.current.resolve(buf);
+            const nextPlayer = enhancePlayer(buf);
+            playerDfdRef.current.resolve(nextPlayer);
           },
         },
       });
@@ -56,7 +58,7 @@ const Inner = ({ YT, children, playerClassName }) => {
 
   return (
     <Context.Provider value={value}>
-      {children({ playerElement: cPlayer })}
+      {children({ playerElement: cPlayer, getPlayer })}
     </Context.Provider>
   );
 };
