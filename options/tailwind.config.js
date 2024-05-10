@@ -6,6 +6,10 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {},
+    colors: {
+      'timetag-light': '#065fd4',
+      'timetag-dark': '#3ea6ff',
+    },
   },
   plugins: [daisyui],
   daisyui: {

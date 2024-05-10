@@ -13,8 +13,31 @@ const THEME_CONFIG = {
 
 const EXTENSION_ID = 'dnglncgcgihledggdehmcbnkppanjohg';
 
+const EMPTY_PAIRS = [];
+
 function App() {
   const [data, setData] = useState(null);
+
+  const dataList = useMemo(() => {
+    if (!data) {
+      return EMPTY_PAIRS;
+    }
+
+    const list = _.keys(data).map(key => data[key]);
+
+    return _.orderBy(
+      list.map(d => {
+        return {
+          ...d,
+          tags: _.orderBy(d.tags, 'seconds', 'asc'),
+        };
+      }),
+      'info.lastUpdated',
+      'desc'
+    );
+  }, [data]);
+
+  console.log('@dataList', dataList);
 
   useEffect(() => {
     window.parent.postMessage('yt-timetag explorer ready', '*');
@@ -39,58 +62,61 @@ function App() {
       },
       false
     );
-
-    // requestInterval(16, () => {
-    //   window.parent.postMessage(`height:${document.body.scrollHeight}`, '*');
-    // });
   }, []);
+
+  const defaultVideoId = _.get(dataList, '[0].info.videoId', null);
 
   return (
     <>
       <SetupTheme config={THEME_CONFIG} />
-      <YouTubeIframePlayer playerClassName="w-full h-auto aspect-video">
-        {({ playerElement, getPlayer }) => {
+      <YouTubeIframePlayer
+        playerClassName="w-full h-auto aspect-video"
+        defaultVideoId={defaultVideoId}
+      >
+        {({ playerElement, player }) => {
           const load = (videoId, seconds) => {
-            getPlayer().then(player => {
-              player.loadVideoById(videoId, seconds);
-            });
+            player.loadVideoById(videoId, seconds);
           };
           return (
             <div className="container mx-auto mt-24">
               <div className="flex justify-between items-start">
                 <div className="grow">{playerElement}</div>
-                <div className="grow-0 ml-6 w-[400px] h-[3000px]">
+                <div className="grow-0 ml-8 w-[400px] h-[3000px]">
                   <div>
-                    {_.keys(data).map(key => {
-                      const d = data[key];
+                    {dataList.map(d => {
                       const { info, tags } = d;
+                      const key = info.videoId;
                       return (
                         <div key={key} className="mb-4">
-                          <h2 className="text-xl font-bold">{info.title}</h2>
-                          <div className="mt-4">
-                            <ul>
-                              {tags.map(tag => {
-                                const { id, seconds, description } = tag;
-                                return (
-                                  <li key={id} className="mb-2">
-                                    <a
-                                      href=""
-                                      onClick={evt => {
-                                        evt.preventDefault();
-                                        load(info.videoId, seconds);
-                                      }}
-                                    >
-                                      <span className="font-bold">
-                                        {seconds}
-                                      </span>
-                                      <span className="ml-2">
-                                        {description}
-                                      </span>
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
+                          <div className="card border border-accent shadow-md dark:shadow-lg">
+                            <div className="card-body">
+                              <h2 className="card-title">{info.title}</h2>
+                              <div className="mt-4">
+                                <ul>
+                                  {tags.map(tag => {
+                                    const { id, seconds, description } = tag;
+                                    return (
+                                      <li key={id} className="mb-2">
+                                        <a
+                                          href=""
+                                          onClick={evt => {
+                                            evt.preventDefault();
+                                            load(info.videoId, seconds);
+                                          }}
+                                        >
+                                          <span className="font-bold">
+                                            {seconds}
+                                          </span>
+                                          <span className="ml-2">
+                                            {description}
+                                          </span>
+                                        </a>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       );

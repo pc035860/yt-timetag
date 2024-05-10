@@ -23,9 +23,7 @@ const loadYouTubeIframeApi = makeAsyncScript(
   }
 );
 
-const Inner = ({ YT, children, playerClassName }) => {
-  console.log('@yt', YT);
-
+const Inner = ({ YT, children, playerClassName, defaultVideoId }) => {
   const playerIdRef = useRef(_.uniqueId('yt-player-'));
 
   const cPlayer = <div id={playerIdRef.current} className={playerClassName} />;
@@ -34,31 +32,35 @@ const Inner = ({ YT, children, playerClassName }) => {
   const getPlayer = useCallback(() => {
     return playerDfdRef.current.promise;
   }, [playerDfdRef]);
+  const [player, setPlayer] = useState(null);
 
   const value = useMemo(() => {
     return {
       YT,
       getPlayer,
+      player,
     };
-  }, [YT, getPlayer]);
+  }, [YT, getPlayer, player]);
 
   useEffect(() => {
     if (YT) {
+      playerDfdRef.current = pDefer();
       const buf = new YT.Player(playerIdRef.current, {
-        videoId: 'P8jxA9t4nfQ',
+        videoId: defaultVideoId,
         events: {
           onReady: () => {
             const nextPlayer = enhancePlayer(buf);
+            setPlayer(nextPlayer);
             playerDfdRef.current.resolve(nextPlayer);
           },
         },
       });
     }
-  }, [YT, playerDfdRef]);
+  }, [YT, defaultVideoId, playerDfdRef]);
 
   return (
     <Context.Provider value={value}>
-      {children({ playerElement: cPlayer, getPlayer })}
+      {children({ playerElement: cPlayer, getPlayer, player })}
     </Context.Provider>
   );
 };
@@ -69,6 +71,7 @@ Inner.propTypes = {
   }),
   children: PropTypes.func,
   playerClassName: PropTypes.string,
+  defaultVideoId: PropTypes.string,
 };
 
 const YouTubeIframePlayer = loadYouTubeIframeApi(Inner);

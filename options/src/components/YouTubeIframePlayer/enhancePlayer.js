@@ -27,11 +27,18 @@ export default function enhancePlayer(player) {
     if (stateSequence.length > 6) {
       stateSequence.shift();
     }
+    console.log('@seq', stateSequence);
 
     const seq2Str = stateSequence.slice(-2).join(',');
     const seq4Str = stateSequence.slice(-4).join(',');
 
-    if (seq4Str === '-1,3,-1,3') {
+    // -1,3,-1,3: 一般情況下需要 buffer
+    // -1,3,-1,(1|2): 剛好不需要 buffer (含暫停狀態)
+    if (
+      seq4Str === '-1,3,-1,3' ||
+      seq4Str === '-1,3,-1,1' ||
+      seq4Str === '-1,3,-1,2'
+    ) {
       _.each(loadVideoDfdList, dfd => {
         const end = performance.now();
         dfd.resolve(end - dfd._start);
@@ -39,7 +46,8 @@ export default function enhancePlayer(player) {
       loadVideoDfdList.length = 0;
     }
 
-    if (seq2Str === '3,1') {
+    // 含暫停狀態
+    if (seq2Str === '3,1' || seq2Str === '3,2') {
       _.each(seekDfdList, dfd => {
         const end = performance.now();
         dfd.resolve(end - dfd._start);
@@ -50,7 +58,11 @@ export default function enhancePlayer(player) {
 
   function loadVideoById(videoId, seconds = null) {
     const videoData = player.getVideoData();
-    if (videoData && videoData.video_id === videoId) {
+
+    const currentState = player.getPlayerState();
+
+    // if video is in "cued" state, we can't call seekTo directly
+    if (currentState !== 5 && videoData && videoData.video_id === videoId) {
       return seekTo(seconds);
     }
 

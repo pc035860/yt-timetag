@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import Context from './Context';
 
 export default function useYouTubeIframePlayer() {
-  const { YT, getPlayer } = useContext(Context);
+  const { YT, getPlayer, player } = useContext(Context);
 
-  return { YT, getPlayer };
+  return { YT, getPlayer, player };
 }

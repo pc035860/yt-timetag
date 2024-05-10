@@ -6,6 +6,7 @@ import cn from 'classnames';
 import Page from '../../components/Page';
 
 import useData from './useData';
+import IframeSkeleton from './IframeSkeleton';
 
 const ExplorerPage = () => {
   const { data, loading, error } = useData();
@@ -14,9 +15,11 @@ const ExplorerPage = () => {
 
   const iframeSrc = useMemo(() => {
     // return chrome.runtime.getURL('options/explorer.html');
+    // MOCK
     return 'http://localhost:5173/explorer';
   }, []);
 
+  const [isIframeReady, setIsIframeReady] = useState(false);
   const iframeRef = useRef(null);
   useEffect(() => {
     if (iframeRef.current) {
@@ -35,6 +38,7 @@ const ExplorerPage = () => {
           }),
           '*'
         );
+        setIsIframeReady(true);
       }
     };
     window.addEventListener('message', handleMessage, false);
@@ -44,11 +48,20 @@ const ExplorerPage = () => {
   }, [data]);
 
   return (
-    <iframe
-      src={iframeSrc}
-      ref={iframeRef}
-      className="fixed w-full h-full top-0"
-    />
+    <>
+      <iframe
+        src={iframeSrc}
+        ref={iframeRef}
+        className={cn('fixed w-full h-full top-0', {
+          hidden: !isIframeReady,
+        })}
+      />
+      {!isIframeReady && (
+        <div className="fixed w-full top-0">
+          <IframeSkeleton />
+        </div>
+      )}
+    </>
   );
 };
 
