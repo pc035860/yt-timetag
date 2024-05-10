@@ -1,10 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
 import SetupTheme from './components/SetupTheme';
 import YouTubeIframePlayer from './components/YouTubeIframePlayer';
+import ExplorerVideoList from './components/ExplorerVideoList';
+
+import mockedData from './pages/Explorer/mockData.json';
+import { useMeasure } from 'react-use';
 
 const THEME_CONFIG = {
   [SetupTheme.SCHEME.DARK]: 'dim',
@@ -16,14 +20,17 @@ const EXTENSION_ID = 'dnglncgcgihledggdehmcbnkppanjohg';
 const EMPTY_PAIRS = [];
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(mockedData);
 
   const dataList = useMemo(() => {
     if (!data) {
       return EMPTY_PAIRS;
     }
 
-    const list = _.keys(data).map(key => data[key]);
+    const list = _.filter(
+      _.keys(data).map(key => data[key]),
+      d => d.tags.length > 0
+    );
 
     return _.orderBy(
       list.map(d => {
@@ -66,62 +73,33 @@ function App() {
 
   const defaultVideoId = _.get(dataList, '[0].info.videoId', null);
 
+  const [ref, { width: playerWidth }] = useMeasure();
+  useLayoutEffect(() => {
+    const playerElm = document.getElementById('explorer-player');
+    if (playerElm) {
+      playerElm.style.width = `${playerWidth}px`;
+    }
+  }, [playerWidth]);
+
   return (
     <>
       <SetupTheme config={THEME_CONFIG} />
       <YouTubeIframePlayer
-        playerClassName="w-full h-auto aspect-video"
+        id="explorer-player"
+        playerClassName="h-auto aspect-video fixed"
         defaultVideoId={defaultVideoId}
       >
-        {({ playerElement, player }) => {
-          const load = (videoId, seconds) => {
-            player.loadVideoById(videoId, seconds);
-          };
+        {({ renderPlayer }) => {
           return (
-            <div className="container mx-auto mt-24">
+            <div className="container mx-auto mt-24 min-w-[1024px]">
               <div className="flex justify-between items-start">
-                <div className="grow">{playerElement}</div>
-                <div className="grow-0 ml-8 w-[400px] h-[3000px]">
-                  <div>
-                    {dataList.map(d => {
-                      const { info, tags } = d;
-                      const key = info.videoId;
-                      return (
-                        <div key={key} className="mb-4">
-                          <div className="card border border-accent shadow-md dark:shadow-lg">
-                            <div className="card-body">
-                              <h2 className="card-title">{info.title}</h2>
-                              <div className="mt-4">
-                                <ul>
-                                  {tags.map(tag => {
-                                    const { id, seconds, description } = tag;
-                                    return (
-                                      <li key={id} className="mb-2">
-                                        <a
-                                          href=""
-                                          onClick={evt => {
-                                            evt.preventDefault();
-                                            load(info.videoId, seconds);
-                                          }}
-                                        >
-                                          <span className="font-bold">
-                                            {seconds}
-                                          </span>
-                                          <span className="ml-2">
-                                            {description}
-                                          </span>
-                                        </a>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                <div className="grow">
+                  <div ref={ref} className="w-full aspect-video">
+                    {renderPlayer({ style: { width: playerWidth } })}
                   </div>
+                </div>
+                <div className="grow-0 ml-8 w-[480px]">
+                  <ExplorerVideoList dataList={dataList} />
                 </div>
               </div>
             </div>

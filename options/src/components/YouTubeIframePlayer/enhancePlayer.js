@@ -66,7 +66,7 @@ export default function enhancePlayer(player) {
       return seekTo(seconds);
     }
 
-    player.loadVideoById(videoId);
+    player.loadVideoById(videoId, seconds);
     const dfd = pDefer();
     dfd._start = performance.now();
     loadVideoDfdList.push(dfd);

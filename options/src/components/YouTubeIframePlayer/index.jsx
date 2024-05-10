@@ -6,6 +6,7 @@ import React, {
   useState,
 } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import _ from 'lodash';
 import pDefer from 'p-defer';
@@ -23,10 +24,21 @@ const loadYouTubeIframeApi = makeAsyncScript(
   }
 );
 
-const Inner = ({ YT, children, playerClassName, defaultVideoId }) => {
-  const playerIdRef = useRef(_.uniqueId('yt-player-'));
+const Inner = ({ id, YT, children, playerClassName, defaultVideoId }) => {
+  const playerIdRef = useRef(id || _.uniqueId('yt-player-'));
 
-  const cPlayer = <div id={playerIdRef.current} className={playerClassName} />;
+  const renderPlayer = useCallback(
+    ({ className, ...restProps }) => {
+      return (
+        <div
+          id={playerIdRef.current}
+          className={cn(playerClassName, className)}
+          {...restProps}
+        />
+      );
+    },
+    [playerClassName]
+  );
 
   const playerDfdRef = useLazyRef(() => pDefer());
   const getPlayer = useCallback(() => {
@@ -60,7 +72,7 @@ const Inner = ({ YT, children, playerClassName, defaultVideoId }) => {
 
   return (
     <Context.Provider value={value}>
-      {children({ playerElement: cPlayer, getPlayer, player })}
+      {children({ renderPlayer, getPlayer, player })}
     </Context.Provider>
   );
 };
@@ -69,6 +81,7 @@ Inner.propTypes = {
   YT: PropTypes.shape({
     Player: PropTypes.func,
   }),
+  id: PropTypes.string,
   children: PropTypes.func,
   playerClassName: PropTypes.string,
   defaultVideoId: PropTypes.string,
