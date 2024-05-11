@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
@@ -6,25 +12,31 @@ import _ from 'lodash';
 import SetupTheme from './components/SetupTheme';
 import YouTubeIframePlayer from './components/YouTubeIframePlayer';
 import ExplorerVideoList from './components/ExplorerVideoList';
+import ImportDataDropZone from './components/ImportDataDropZone';
 
-import mockedData from './pages/Explorer/mockData.json';
 import { useMeasure } from 'react-use';
+
+import './fontAwesome';
 
 const THEME_CONFIG = {
   [SetupTheme.SCHEME.DARK]: 'dim',
-  [SetupTheme.SCHEME.LIGHT]: 'pastel',
+  [SetupTheme.SCHEME.LIGHT]: 'cupcake',
 };
 
 const EXTENSION_ID = 'dnglncgcgihledggdehmcbnkppanjohg';
 
-const EMPTY_PAIRS = [];
+const IN_IFRAME = window !== window.parent;
 
 function App() {
-  const [data, setData] = useState(mockedData);
+  const [data, setData] = useState(null);
+
+  const handleDropZoneImport = useCallback(data => {
+    setData(data);
+  }, []);
 
   const dataList = useMemo(() => {
     if (!data) {
-      return EMPTY_PAIRS;
+      return null;
     }
 
     const list = _.filter(
@@ -43,8 +55,6 @@ function App() {
       'desc'
     );
   }, [data]);
-
-  console.log('@dataList', dataList);
 
   useEffect(() => {
     window.parent.postMessage('yt-timetag explorer ready', '*');
@@ -84,28 +94,39 @@ function App() {
   return (
     <>
       <SetupTheme config={THEME_CONFIG} />
-      <YouTubeIframePlayer
-        id="explorer-player"
-        playerClassName="h-auto aspect-video fixed"
-        defaultVideoId={defaultVideoId}
-      >
-        {({ renderPlayer }) => {
-          return (
-            <div className="container mx-auto mt-24 min-w-[1024px]">
-              <div className="flex justify-between items-start">
-                <div className="grow">
-                  <div ref={ref} className="w-full aspect-video">
-                    {renderPlayer({ style: { width: playerWidth } })}
+      <ImportDataDropZone
+        className="fixed top-0 w-full h-full"
+        onImport={handleDropZoneImport}
+      />
+      {(IN_IFRAME || dataList) && (
+        <YouTubeIframePlayer
+          id="explorer-player"
+          playerClassName="h-auto aspect-video fixed"
+          defaultVideoId={defaultVideoId}
+        >
+          {({ renderPlayer }) => {
+            return (
+              <>
+                {/* top backdrop div */}
+                <div className="fixed top-0 z-10 w-full h-24 bg-base-100/80 backdrop-blur-sm" />
+                {/* main content */}
+                <div className="container mx-auto mt-24 min-w-[1024px]">
+                  <div className="flex justify-between items-start">
+                    <div className="grow">
+                      <div ref={ref} className="w-full aspect-video">
+                        {renderPlayer({ style: { width: playerWidth } })}
+                      </div>
+                    </div>
+                    <div className="grow-0 ml-8 w-[420px]">
+                      <ExplorerVideoList dataList={dataList} />
+                    </div>
                   </div>
                 </div>
-                <div className="grow-0 ml-8 w-[480px]">
-                  <ExplorerVideoList dataList={dataList} />
-                </div>
-              </div>
-            </div>
-          );
-        }}
-      </YouTubeIframePlayer>
+              </>
+            );
+          }}
+        </YouTubeIframePlayer>
+      )}
     </>
   );
 }

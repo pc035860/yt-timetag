@@ -5,7 +5,7 @@ import { produce } from 'immer';
 
 import { local } from '../../utils/chromeStorage';
 
-const STORAGE_KEY_PREFIX = 'crState-';
+export const STORAGE_KEY_PREFIX = 'crState-';
 
 const mergeTags = (source, target, { outdated = false } = {}) => {
   const list = [...source];

@@ -59,6 +59,9 @@ const Inner = ({ id, YT, children, playerClassName, defaultVideoId }) => {
       playerDfdRef.current = pDefer();
       const buf = new YT.Player(playerIdRef.current, {
         videoId: defaultVideoId,
+        playerVars: {
+          rel: 0,
+        },
         events: {
           onReady: () => {
             const nextPlayer = enhancePlayer(buf);

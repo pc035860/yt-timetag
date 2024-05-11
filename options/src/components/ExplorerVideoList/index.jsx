@@ -1,40 +1,119 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import useYouTubeIframePlayer from '../YouTubeIframePlayer/useYouTubeIframePlayer';
+import cn from 'classnames';
+
 import ReactList from 'react-list';
-import { countAsciiCharLength } from './utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Delay from '../Delay';
+
+import { useTranslation } from 'react-i18next';
+import useYouTubeIframePlayer from '../YouTubeIframePlayer/useYouTubeIframePlayer';
+
+import { countAsciiCharLength } from './utils';
 import { toTag } from '../../utils/ytTime';
+import Highlighter from 'react-highlight-words';
 
 const getScrollParent = () => {
   return window;
 };
 
-const ExplorerVideoList = ({ dataList }) => {
+const EMPTY_SEARCH_WORDS = [];
+
+const ExplorerVideoList = ({ dataList: optDataList }) => {
   const { player } = useYouTubeIframePlayer();
+
+  const [currentVideoId, setCurrentVideoId] = useState(null);
 
   const loadTag = useCallback(
     (videoId, seconds) => {
       player.loadVideoById(videoId, seconds);
+      setCurrentVideoId(videoId);
     },
     [player]
   );
 
+  const [searchText, setSearchText] = useState('');
+  const handleSearchTextChange = useCallback(evt => {
+    setSearchText(evt.target.value);
+  }, []);
+  const [showHighlightWords, setShowHighlightWords] = useState(true);
+  const handleShowHighlightWordsChange = useCallback(evt => {
+    setShowHighlightWords(evt.target.checked);
+  }, []);
+  const searchWords = useMemo(() => {
+    if (!showHighlightWords) {
+      return EMPTY_SEARCH_WORDS;
+    }
+    return searchText.split(/\s+/);
+  }, [searchText, showHighlightWords]);
+  const handleClearSearchText = useCallback(() => {
+    setSearchText('');
+  }, []);
+  const handleSearchTextKeyDown = useCallback(
+    evt => {
+      if (evt.key === 'Escape') {
+        setSearchText('');
+      }
+    },
+    [setSearchText]
+  );
+
+  const dataList = useMemo(() => {
+    if (!searchText) {
+      return optDataList;
+    }
+    // filter optDataList with searchText, inlcuding title and tag description
+    const words = searchText.split(/\s+/);
+    return optDataList.filter(d => {
+      const { info, tags } = d;
+      return (
+        words.every(word => {
+          return (
+            info.title.toLowerCase().includes(word) ||
+            tags.some(tag => tag.description.toLowerCase().includes(word))
+          );
+        }) && tags.length > 0
+      );
+    });
+  }, [optDataList, searchText]);
+
   const itemsRenderer = useCallback((items, ref) => {
-    return <div ref={ref}>{items}</div>;
+    return (
+      <div ref={ref} className="pb-8">
+        {items}
+      </div>
+    );
   }, []);
 
   const itemRenderer = useCallback(
-    (index, key) => {
+    index => {
       const d = dataList[index];
       const { info, tags } = d;
+      const key = info.videoId;
       return (
         <div
-          key={info.videoId}
-          className="card border border-accent shadow-md dark:shadow-lg mb-6"
+          key={key}
+          className={cn(
+            'card shadow-md dark:shadow-md-light mb-6 border border-neutral-200 dark:border-neutral-600',
+            {
+              '!border-secondary': currentVideoId === info.videoId,
+            }
+          )}
         >
-          <div className="card-body">
-            <h2 className="card-title">{info.title}</h2>
+          <div className="card-body p-6">
+            <h2 className="card-title text-base">
+              <a
+                href={`https://www.youtube.com/watch?v=${info.videoId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Highlighter
+                  searchWords={searchWords}
+                  autoEscape={true}
+                  textToHighlight={info.title}
+                />
+              </a>
+            </h2>
             <div className="mt-4">
               <ul>
                 {tags.map(tag => {
@@ -42,7 +121,7 @@ const ExplorerVideoList = ({ dataList }) => {
                   return (
                     <li
                       key={id}
-                      className="mb-2 flex justify-between items-start"
+                      className="mb-2 flex justify-between items-start text-sm"
                     >
                       <a
                         href=""
@@ -50,11 +129,17 @@ const ExplorerVideoList = ({ dataList }) => {
                           evt.preventDefault();
                           loadTag(info.videoId, seconds);
                         }}
-                        className="shrink-0 w-[80px] text-right font-mono text-timetag-light dark:text-timetag-dark"
+                        className="shrink-0 w-[74px] text-right font-mono text-timetag-light dark:text-timetag-dark"
                       >
                         {toTag(seconds)}
                       </a>
-                      <span className="ml-3 grow">{description}</span>
+                      <span className="ml-3 grow">
+                        <Highlighter
+                          searchWords={searchWords}
+                          autoEscape={true}
+                          textToHighlight={description}
+                        />
+                      </span>
                     </li>
                   );
                 })}
@@ -64,7 +149,7 @@ const ExplorerVideoList = ({ dataList }) => {
         </div>
       );
     },
-    [dataList, loadTag]
+    [currentVideoId, dataList, loadTag, searchWords]
   );
 
   const itemSizeEstimator = useCallback(
@@ -83,18 +168,59 @@ const ExplorerVideoList = ({ dataList }) => {
     [dataList]
   );
 
+  const { t } = useTranslation();
+
   return (
-    <Delay wait={20}>
-      <ReactList
-        type="variable"
-        length={dataList.length}
-        itemsRenderer={itemsRenderer}
-        itemRenderer={itemRenderer}
-        itemSizeEstimator={itemSizeEstimator}
-        scrollParentGetter={getScrollParent}
-        threshold={200}
-      />
-    </Delay>
+    <>
+      <div className="video-list-toolbar-wrap fixed z-10 top-24 w-[420px]">
+        <div className="video-list-toolbar w-full">
+          <label className="input input-bordered flex items-center gap-2">
+            <input
+              type="text"
+              className="grow"
+              placeholder={t('search')}
+              value={searchText}
+              onChange={handleSearchTextChange}
+              onKeyDown={handleSearchTextKeyDown}
+            />
+            {searchText && (
+              <button
+                className="btn btn-circle btn-sm bg-transparent hover:bg-transparent no-animation border-0"
+                onClick={handleClearSearchText}
+              >
+                <FontAwesomeIcon icon="fa-sharp fa-regular fa-xmark" />
+              </button>
+            )}
+          </label>
+          <div className="form-control">
+            <label className="label cursor-pointer justify-start">
+              <input
+                type="checkbox"
+                className="checkbox checkbox-xs"
+                checked={showHighlightWords}
+                onChange={handleShowHighlightWordsChange}
+              />
+              <span className="label-text ml-2">
+                {t('searchHighlightWords')}
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      {/* placeholder */}
+      <div className="h-[118px] mb-5">&nbsp;</div>
+      <Delay wait={20}>
+        <ReactList
+          type="variable"
+          length={dataList.length}
+          itemsRenderer={itemsRenderer}
+          itemRenderer={itemRenderer}
+          itemSizeEstimator={itemSizeEstimator}
+          scrollParentGetter={getScrollParent}
+          threshold={200}
+        />
+      </Delay>
+    </>
   );
 };
 
