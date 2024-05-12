@@ -8,8 +8,6 @@ import SetupTheme from './components/SetupTheme';
 import { useHashLocation } from 'wouter/use-hash-location';
 import { t } from './utils/i18n';
 
-import './fontAwesome';
-
 import './App.css';
 import { useLayoutEffect } from 'react';
 

@@ -1,12 +1,9 @@
-/* global chrome */
-
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 
-import Page from '../../components/Page';
+import IframeSkeleton from './IframeSkeleton';
 
 import useData from './useData';
-import IframeSkeleton from './IframeSkeleton';
 
 const ExplorerPage = () => {
   const { data, loading, error } = useData();
@@ -14,9 +11,7 @@ const ExplorerPage = () => {
   console.log('@data', data, loading, error);
 
   const iframeSrc = useMemo(() => {
-    // return chrome.runtime.getURL('options/explorer.html');
-    // MOCK
-    return 'http://localhost:5173/explorer';
+    return 'https://cloud.pymaster.tw/yt-timetag-explorer/';
   }, []);
 
   const [isIframeReady, setIsIframeReady] = useState(false);

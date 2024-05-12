@@ -5,16 +5,18 @@ import cn from 'classnames';
 import _ from 'lodash';
 
 import ReactList from 'react-list';
+import Highlighter from 'react-highlight-words';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Delay from '../Delay';
 
 import { useTranslation } from 'react-i18next';
 import useYouTubeIframePlayer from '../YouTubeIframePlayer/useYouTubeIframePlayer';
+import usePlaybackInfo from '../PlaybackInfo/usePlaybackInfo';
 
 import { countAsciiCharLength } from './utils';
 import { toTag } from '../../utils/ytTime';
-import Highlighter from 'react-highlight-words';
-import usePlaybackInfo from '../PlaybackInfo/usePlaybackInfo';
+
+import { faXmark } from '@awesome.me/kit-ea44dc83ec/icons/sharp/regular';
 
 const getScrollParent = () => {
   return window;
@@ -210,7 +212,7 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
                 className="btn btn-circle btn-sm bg-transparent hover:bg-transparent no-animation border-0"
                 onClick={handleClearSearchText}
               >
-                <FontAwesomeIcon icon="fa-sharp fa-regular fa-xmark" />
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             )}
           </label>

@@ -12,6 +12,12 @@ import useConfirm from './useConfirm.jsx';
 import { clear, download, upload } from './utils';
 import { t } from '../../utils/i18n';
 
+import {
+  faFileExport,
+  faFileImport,
+  faBroomWide,
+} from '@awesome.me/kit-ea44dc83ec/icons/sharp/regular';
+
 const DataPage = () => {
   const { open: openAlert, render: renderAlert } = useAlert();
 
@@ -91,7 +97,7 @@ const DataPage = () => {
               onClick={handleExport}
             >
               {t('optionsExport')}
-              <FontAwesomeIcon icon="fa-sharp fa-regular fa-file-export" />
+              <FontAwesomeIcon icon={faFileExport} />
             </button>
           }
           description={t('optionsExportDescription')}
@@ -109,7 +115,7 @@ const DataPage = () => {
                 onClick={handleImport}
               >
                 {t('optionsImport')}
-                <FontAwesomeIcon icon="fa-sharp fa-regular fa-file-import" />
+                <FontAwesomeIcon icon={faFileImport} />
               </button>
             </div>
           }
@@ -122,7 +128,7 @@ const DataPage = () => {
               onClick={handleClear}
             >
               {t('optionsClear')}
-              <FontAwesomeIcon icon="fa-sharp fa-regular fa-broom-wide" />
+              <FontAwesomeIcon icon={faBroomWide} />
             </button>
           }
           description={t('optionsClearDescription')}

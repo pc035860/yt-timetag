@@ -16,12 +16,11 @@ import ExplorerVideoList from './components/ExplorerVideoList';
 import ImportDataDropZone from './components/ImportDataDropZone';
 import PlaybackInfo from './components/PlaybackInfo';
 import Logo from './components/Logo';
+import PlaybackCurrentTime from './components/PlaybackCurrentTime';
 
 import { useMeasure } from 'react-use';
 
-import './fontAwesome';
 import { LINK } from './constants';
-import PlaybackCurrentTime from './components/PlaybackCurrentTime';
 
 const THEME_CONFIG = {
   [SetupTheme.SCHEME.DARK]: 'dim',
