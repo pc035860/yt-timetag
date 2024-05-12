@@ -15,7 +15,7 @@ import { useLayoutEffect } from 'react';
 
 const THEME_CONFIG = {
   [SetupTheme.SCHEME.DARK]: 'dim',
-  [SetupTheme.SCHEME.LIGHT]: 'cupcake',
+  [SetupTheme.SCHEME.LIGHT]: 'light',
 };
 
 function App() {

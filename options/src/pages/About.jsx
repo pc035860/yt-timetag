@@ -2,17 +2,17 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import Page from '../components/Page';
+import Logo from '../components/Logo';
 
 import { t } from '../utils/i18n';
 
-import logoSrc from '../assets/logo.svg';
 import chromeLogoSrc from '../assets/browser_logos/chrome.svg';
 import firefoxLogoSrc from '../assets/browser_logos/firefox.svg';
 import githubLogoWhiteSrc from '../assets/github-mark-white.svg';
 import githubLogoSrc from '../assets/github-mark.svg';
 
 import pkg from '../../package.json';
-import styles from './About.module.scss';
+import { LINK } from '../constants';
 
 const LINKS = [
   [
@@ -20,14 +20,14 @@ const LINKS = [
       <img src={chromeLogoSrc} alt="Chrome" className="w-4 h-4" />
       <span>Chrome Web Store</span>
     </>,
-    'https://chrome.google.com/webstore/detail/hpbmedimnlknflpbgfbllklgelbnelef',
+    LINK.CHROME_WEB_STORE,
   ],
   [
     <>
       <img src={firefoxLogoSrc} alt="Firefox" className="w-4 h-4" />
       <span>Firefox Add-ons</span>
     </>,
-    'https://addons.mozilla.org/firefox/addon/timetags-for-youtube/',
+    LINK.FIREFOX_ADDONS,
   ],
 ];
 
@@ -54,14 +54,7 @@ const AboutPage = () => {
   return (
     <Page className="text-sm text-center">
       <figure className="mb-6">
-        <img
-          src={logoSrc}
-          alt={t('extName')}
-          className={cn(
-            'mx-auto max-w-[60px] border-2 border-accent',
-            styles.logo
-          )}
-        />
+        <Logo className="mx-auto max-w-[60px]" />
       </figure>
       <h2 className="text-lg font-bold mb-2">{t('extName')}</h2>
       <p>{t('optionsAboutVersion', [version])}</p>
@@ -73,16 +66,13 @@ const AboutPage = () => {
         ))}
         <div className="mt-6">
           {/* link for light scheme */}
-          <OutboundLink
-            href="https://github.com/pc035860/yt-timetag"
-            className="dark:hidden"
-          >
+          <OutboundLink href={LINK.GITHUB_REPOSITORY} className="dark:hidden">
             <img src={githubLogoSrc} alt="GitHub" className="w-4 h-4" />
             <span>GitHub</span>
           </OutboundLink>
           {/* link for dark scheme */}
           <OutboundLink
-            href="https://github.com/pc035860/yt-timetag"
+            href={LINK.GITHUB_REPOSITORY}
             className="hidden dark:inline-flex"
           >
             <img src={githubLogoWhiteSrc} alt="GitHub" className="w-4 h-4" />
@@ -92,7 +82,7 @@ const AboutPage = () => {
       </div>
       <div className="mt-12">
         © 2016-{new Date().getFullYear()}{' '}
-        <a href="https://github.com/pc035860" target="_blank">
+        <a href={LINK.GITHUB_USER} target="_blank">
           Chih-Hsuan Fan
         </a>
       </div>

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
+import _ from 'lodash';
+
 import ReactList from 'react-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Delay from '../Delay';
@@ -12,6 +14,7 @@ import useYouTubeIframePlayer from '../YouTubeIframePlayer/useYouTubeIframePlaye
 import { countAsciiCharLength } from './utils';
 import { toTag } from '../../utils/ytTime';
 import Highlighter from 'react-highlight-words';
+import usePlaybackInfo from '../PlaybackInfo/usePlaybackInfo';
 
 const getScrollParent = () => {
   return window;
@@ -63,7 +66,7 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
       return optDataList;
     }
     // filter optDataList with searchText, inlcuding title and tag description
-    const words = searchText.split(/\s+/);
+    const words = searchText.split(/\s+/).map(w => w.toLowerCase());
     return optDataList.filter(d => {
       const { info, tags } = d;
       return (
@@ -85,18 +88,25 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
     );
   }, []);
 
+  const info = usePlaybackInfo();
+  const currentTime = _.get(info, 'currentTime', null);
+
   const itemRenderer = useCallback(
     index => {
       const d = dataList[index];
       const { info, tags } = d;
+
+      const isVideoActive = currentVideoId === info.videoId;
+
       const key = info.videoId;
+
       return (
         <div
           key={key}
           className={cn(
             'card shadow-md dark:shadow-md-light mb-6 border border-neutral-200 dark:border-neutral-600',
             {
-              '!border-secondary': currentVideoId === info.videoId,
+              '!border-secondary': isVideoActive,
             }
           )}
         >
@@ -116,8 +126,17 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
             </h2>
             <div className="mt-4">
               <ul>
-                {tags.map(tag => {
+                {tags.map((tag, i) => {
                   const { id, seconds, description } = tag;
+
+                  const nextTag = tags[i + 1];
+                  const nextSeconds = _.get(nextTag, 'seconds', Infinity);
+
+                  const isActive =
+                    isVideoActive &&
+                    currentTime > seconds &&
+                    currentTime < nextSeconds;
+
                   return (
                     <li
                       key={id}
@@ -131,13 +150,16 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
                         }}
                         className="shrink-0 w-[74px] text-right font-mono text-timetag-light dark:text-timetag-dark"
                       >
-                        {toTag(seconds)}
+                        <div>{toTag(seconds)}</div>
                       </a>
                       <span className="ml-3 grow">
                         <Highlighter
                           searchWords={searchWords}
                           autoEscape={true}
                           textToHighlight={description}
+                          className={cn({
+                            'font-bold dark:text-neutral-200': isActive,
+                          })}
                         />
                       </span>
                     </li>
@@ -149,7 +171,7 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
         </div>
       );
     },
-    [currentVideoId, dataList, loadTag, searchWords]
+    [currentTime, currentVideoId, dataList, loadTag, searchWords]
   );
 
   const itemSizeEstimator = useCallback(
