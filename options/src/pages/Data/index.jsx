@@ -12,6 +12,8 @@ import useConfirm from './useConfirm.jsx';
 import { clear, download, upload } from './utils';
 import { t } from '../../utils/i18n';
 
+import { LINK } from '../../constants';
+
 import {
   faFileExport,
   faFileImport,
@@ -100,7 +102,19 @@ const DataPage = () => {
               <FontAwesomeIcon icon={faFileExport} />
             </button>
           }
-          description={t('optionsExportDescription')}
+          description={
+            <div>
+              {t('optionsExportDescription')} <br />
+              <a
+                href={LINK.EXPLORER}
+                target="_blank"
+                rel="noreferrer"
+                className="underline text-info"
+              >
+                {t('optionsExportExplorer')}
+              </a>
+            </div>
+          }
         />
         <Row
           className={'mb-8'}
