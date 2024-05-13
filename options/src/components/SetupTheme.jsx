@@ -1,23 +1,9 @@
 import { useCallback, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 
-const SCHEME = {
-  DARK: 'dark',
-  LIGHT: 'light',
-};
+import { SCHEME, getScheme } from '../utils/scheme';
 
-const getScheme = () => {
-  if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    return SCHEME.DARK;
-  } else {
-    return SCHEME.LIGHT;
-  }
-};
-
-const SetupTheme = ({ config: themeConfig }) => {
+const SetupTheme = ({ config: themeConfig = {} }) => {
   const updateTheme = useCallback(
     scheme => {
       const theme = themeConfig[scheme];
@@ -44,9 +30,6 @@ const SetupTheme = ({ config: themeConfig }) => {
 
 SetupTheme.propTypes = {
   config: PropTypes.object,
-};
-SetupTheme.defaultProps = {
-  config: {},
 };
 
 SetupTheme.SCHEME = SCHEME;

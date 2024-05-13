@@ -29,6 +29,15 @@
   "optionsExportDescription": {
     "message": "將所有時間標記匯出成 YAML 檔案"
   },
+  "optionsExportExplorer_prefix": {
+    "message": "可以使用"
+  },
+  "optionsExportExplorer": {
+    "message": "線上瀏覽器"
+  },
+  "optionsExportExplorer_suffix": {
+    "message": "載入觀看"
+  },
   "optionsClearDescription": {
     "message": "刪除所有時間標記"
   },

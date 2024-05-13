@@ -5,13 +5,13 @@ import pDefer from 'p-defer';
 
 import ConfirmModal from './ConfirmModal';
 
-import { t } from '../../utils/i18n';
+import { ct } from '../../utils/i18n';
 
 const defaultConfig = {
   title: '',
   message: '',
-  confirmText: t('optionsConfirm'),
-  cancelText: t('optionsCancel'),
+  confirmText: ct('optionsConfirm'),
+  cancelText: ct('optionsCancel'),
   passphrase: '',
 };
 

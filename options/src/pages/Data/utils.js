@@ -5,7 +5,7 @@ import { produce } from 'immer';
 
 import { local } from '../../utils/chromeStorage';
 
-const STORAGE_KEY_PREFIX = 'crState-';
+export const STORAGE_KEY_PREFIX = 'crState-';
 
 const mergeTags = (source, target, { outdated = false } = {}) => {
   const list = [...source];
@@ -106,9 +106,7 @@ export const download = async () => {
     console.debug('@current data', data);
 
     // to list
-    const list = _.map(_.keys(data), key => {
-      return _.omit(data[key], ['activeTag']);
-    });
+    const list = toList(data);
 
     const yamlContent = stringify(list);
     const hash = md5(yamlContent).substring(0, 8);
@@ -125,3 +123,15 @@ export const download = async () => {
 export const clear = async () => {
   return local.clear();
 };
+
+function toList(data) {
+  return _.compact(
+    _.map(_.keys(data), key => {
+      if (key.indexOf(STORAGE_KEY_PREFIX) !== 0) {
+        // skip non-data key
+        return null;
+      }
+      return _.omit(data[key], ['activeTag']);
+    })
+  );
+}
