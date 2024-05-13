@@ -5,8 +5,8 @@ const Row = ({ buttonSlot, description, className }) => {
   return (
     <div className={cn('flex justify-start items-center', className)}>
       <div>{buttonSlot}</div>
-      <div className="ml-4 flex-grow">
-        <div className="alert text-sm">{description}</div>
+      <div className="ml-8 flex-grow">
+        <div className="text-sm">{description}</div>
       </div>
     </div>
   );

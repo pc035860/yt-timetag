@@ -88,7 +88,7 @@ const DataPage = () => {
 
   return (
     <>
-      <Page className="max-w-[400px]">
+      <Page className="max-w-[480px]">
         <Row
           className="mb-8"
           buttonSlot={

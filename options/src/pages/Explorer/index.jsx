@@ -1,3 +1,5 @@
+/* global chrome */
+
 import { useEffect, useMemo, useRef, useState } from 'react';
 import cn from 'classnames';
 
@@ -11,7 +13,8 @@ const ExplorerPage = () => {
   const { data } = useData();
 
   const iframeSrc = useMemo(() => {
-    return LINK.EXPLORER;
+    const uiLanguage = chrome.i18n.getUILanguage();
+    return `${LINK.EXPLORER}?lng=${uiLanguage}`;
   }, []);
 
   const [isIframeReady, setIsIframeReady] = useState(false);

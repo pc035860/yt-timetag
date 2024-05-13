@@ -28,9 +28,10 @@ const genCopyAssets = function (_env) {
       .pipe(cache(`${_env}-images`))
       .pipe(gulp.dest(path.join(myPath[_env], 'images')));
 
+    // do not cache locales, for i18n testing convenience
+    // e.g. manually delete locale file
     const locales = gulp
       .src('app/_locales/**/*')
-      .pipe(cache(`${_env}-locales`))
       .pipe(gulp.dest(path.join(myPath[_env], '_locales')));
 
     const manifest = gulp
