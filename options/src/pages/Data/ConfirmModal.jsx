@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -27,18 +27,31 @@ const ConfirmModal = ({
 
   const handleConfirmBtnClick = useCallback(() => {
     onConfirm();
-    setTimeout(() => {
-      setValue('');
-    }, 200);
   }, [onConfirm]);
   const handleCancelBtnClick = useCallback(() => {
     onCancel();
-    setTimeout(() => {
-      setValue('');
-    }, 200);
   }, [onCancel]);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    // use observer to detect modal open/close
+    const observer = new MutationObserver(() => {
+      setIsOpen(dialogRef.current.open);
+    });
+    observer.observe(dialogRef.current, { attributes: true });
+  }, []);
+  useEffect(() => {
+    if (!isOpen) {
+      // clear value after modal closed
+      setTimeout(() => {
+        setValue('');
+      }, 200);
+    }
+  }, [isOpen]);
+
   return (
-    <dialog id={id} className="modal">
+    <dialog id={id} className="modal" ref={dialogRef}>
       <div className="modal-box">
         {title && <h3 className="font-bold text-lg">{title}</h3>}
         <p className="py-4 text-sm">{message}</p>
@@ -58,6 +71,7 @@ const ConfirmModal = ({
                 placeholder="請輸入確認詞"
                 value={value}
                 onChange={handleInputChange}
+                tabIndex={0}
               />
             </div>
           </div>
