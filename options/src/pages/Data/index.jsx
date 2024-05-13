@@ -10,26 +10,32 @@ import useAlert from './useAlert.jsx';
 import useConfirm from './useConfirm.jsx';
 
 import { clear, download, upload } from './utils';
-import { t } from '../../utils/i18n';
+import { ct } from '../../utils/i18n';
+
+import { LINK } from '../../constants';
+
+import {
+  faFileExport,
+  faFileImport,
+  faBroomWide,
+} from '@awesome.me/kit-ea44dc83ec/icons/sharp/regular';
 
 const DataPage = () => {
   const { open: openAlert, render: renderAlert } = useAlert();
 
   const handleFileDrop = useCallback(
     acceptedFiles => {
-      console.log('@acceptedFiles', acceptedFiles);
-
       const file = acceptedFiles[0];
       upload(file)
         .then(() => {
           openAlert({
-            title: t('optionsImportSuccessTitle'),
-            message: t('optionsImportSuccessMessage'),
+            title: ct('optionsImportSuccessTitle'),
+            message: ct('optionsImportSuccessMessage'),
           });
         })
         .catch(err => {
           openAlert({
-            title: t('optionsImportErrorTitle'),
+            title: ct('optionsImportErrorTitle'),
             message: err.message,
           });
         });
@@ -59,21 +65,21 @@ const DataPage = () => {
   const { open: openConfirm, render: renderConfirm } = useConfirm();
   const handleClear = useCallback(() => {
     openConfirm({
-      title: t('optionsClearConfirmTitle'),
-      message: t('optionsClearConfirmMessage'),
+      title: ct('optionsClearConfirmTitle'),
+      message: ct('optionsClearConfirmMessage'),
       passphrase: 'clear',
     }).then(isConfirmed => {
       if (!isConfirmed) return;
       clear()
         .then(() => {
           openAlert({
-            title: t('optionsClearSuccessTitle'),
-            message: t('optionsClearSuccessMessage'),
+            title: ct('optionsClearSuccessTitle'),
+            message: ct('optionsClearSuccessMessage'),
           });
         })
         .catch(err => {
           openAlert({
-            title: t('optionsClearErrorTitle'),
+            title: ct('optionsClearErrorTitle'),
             message: err.message,
           });
         });
@@ -90,11 +96,23 @@ const DataPage = () => {
               className="btn btn-primary min-w-[120px]"
               onClick={handleExport}
             >
-              {t('optionsExport')}
-              <FontAwesomeIcon icon="fa-sharp fa-regular fa-file-export" />
+              {ct('optionsExport')}
+              <FontAwesomeIcon icon={faFileExport} />
             </button>
           }
-          description={t('optionsExportDescription')}
+          description={
+            <div>
+              {ct('optionsExportDescription')} <br />
+              <a
+                href={LINK.EXPLORER}
+                target="_blank"
+                rel="noreferrer"
+                className="underline text-info"
+              >
+                {ct('optionsExportExplorer')}
+              </a>
+            </div>
+          }
         />
         <Row
           className={'mb-8'}
@@ -108,12 +126,12 @@ const DataPage = () => {
                 })}
                 onClick={handleImport}
               >
-                {t('optionsImport')}
-                <FontAwesomeIcon icon="fa-sharp fa-regular fa-file-import" />
+                {ct('optionsImport')}
+                <FontAwesomeIcon icon={faFileImport} />
               </button>
             </div>
           }
-          description={t('optionsImportDescription')}
+          description={ct('optionsImportDescription')}
         />
         <Row
           buttonSlot={
@@ -121,11 +139,11 @@ const DataPage = () => {
               className="btn btn-error min-w-[120px]"
               onClick={handleClear}
             >
-              {t('optionsClear')}
-              <FontAwesomeIcon icon="fa-sharp fa-regular fa-broom-wide" />
+              {ct('optionsClear')}
+              <FontAwesomeIcon icon={faBroomWide} />
             </button>
           }
-          description={t('optionsClearDescription')}
+          description={ct('optionsClearDescription')}
         />
       </Page>
       {renderAlert()}

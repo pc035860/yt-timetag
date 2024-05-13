@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Link, useRoute } from 'wouter';
-import { t } from '../utils/i18n';
+import { ct } from '../utils/i18n';
 
 const Tabs = ({ className }) => {
   const [isExplorer] = useRoute('/explorer');
@@ -9,10 +9,7 @@ const Tabs = ({ className }) => {
   const [isAbout] = useRoute('/about');
 
   return (
-    <div
-      role="tablist"
-      className={cx('tabs tabs-bordered mx-auto max-w-[400px]', className)}
-    >
+    <div role="tablist" className={cx('tabs tabs-bordered', className)}>
       <Link
         role="tab"
         className={cx('tab', {
@@ -21,7 +18,7 @@ const Tabs = ({ className }) => {
         asChild
         href="/explorer"
       >
-        {t('optionsExplorerTab')}
+        {ct('optionsExplorerTab')}
       </Link>
       <Link
         role="tab"
@@ -31,7 +28,7 @@ const Tabs = ({ className }) => {
         asChild
         href="/data"
       >
-        {t('optionsDataTab')}
+        {ct('optionsDataTab')}
       </Link>
       <Link
         role="tab"
@@ -41,7 +38,7 @@ const Tabs = ({ className }) => {
         asChild
         href="/about"
       >
-        {t('optionsAboutTab')}
+        {ct('optionsAboutTab')}
       </Link>
     </div>
   );

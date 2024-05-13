@@ -2,14 +2,18 @@ import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
+const defaultProps = {
+  onConfirm: () => null,
+  onCancel: () => null,
+};
 const ConfirmModal = ({
   id,
   title,
   message,
   confirmText,
   cancelText,
-  onConfirm,
-  onCancel,
+  onConfirm = defaultProps.onConfirm,
+  onCancel = defaultProps.onCancel,
   passphrase,
 }) => {
   const [value, setValue] = useState('');
@@ -87,10 +91,6 @@ ConfirmModal.propTypes = {
   onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
   passphrase: PropTypes.string,
-};
-ConfirmModal.defaultProps = {
-  onConfirm: () => {},
-  onCancel: () => {},
 };
 
 export default ConfirmModal;

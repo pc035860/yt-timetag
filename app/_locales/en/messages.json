@@ -29,6 +29,9 @@
   "optionsExportDescription": {
     "message": "Exports the current data to a YAML file."
   },
+  "optionsExportExplorer": {
+    "message": "Online Explorer"
+  },
   "optionsClearDescription": {
     "message": "Clears all data."
   },
