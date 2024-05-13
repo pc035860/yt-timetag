@@ -8,6 +8,9 @@
   "optionsExplorerTab": {
     "message": "Explorer"
   },
+  "optionsShortcutsTab": {
+    "message": "Shortcuts"
+  },
   "optionsDataTab": {
     "message": "Data"
   },
@@ -36,7 +39,7 @@
     "message": "Online Explorer"
   },
   "optionsExportExplorer_suffix": {
-    "message": ""
+    "message": "."
   },
   "optionsClearDescription": {
     "message": "Clears all data."
@@ -79,5 +82,62 @@
   },
   "optionsAboutVersion": {
     "message": "Version $1"
+  },
+  "optionsShortcutsDividerGeneral": {
+    "message": "General"
+  },
+  "optionsShortcutsDividerTag": {
+    "message": "Active Tag"
+  },
+  "optionsShortcutsNote1": {
+    "message": "Only alphabet keys are allowed for custom shortcuts. Modifier keys are not supported."
+  },
+  "optionsShortcutsNote2": {
+    "message": "Only part of shortcut settings are opened for customization."
+  },
+  "optionsShortcutsErrorInvalid": {
+    "message": "Invalid key"
+  },
+  "optionsShortcutsErrorDuplicated": {
+    "message": "Duplicate key"
+  },
+  "optionsShortcutsFieldAction": {
+    "message": "Action"
+  },
+  "optionsShortcutsFieldShortcut": {
+    "message": "Shortcut"
+  },
+  "optionsShortcutsKeyAddTag": {
+    "message": "Add tag"
+  },
+  "optionsShortcutsKeyFocusDescription": {
+    "message": "Edit tag description"
+  },
+  "optionsShortcutsKeyRemoveTag": {
+    "message": "Remove active tag"
+  },
+  "optionsShortcutsKeyBackward": {
+    "message": "Backward 5 seconds"
+  },
+  "optionsShortcutsKeyForward": {
+    "message": "Forward 5 seconds"
+  },
+  "optionsShortcutsKeyBackwardMinor": {
+    "message": "Backward 1 second"
+  },
+  "optionsShortcutsKeyForwardMinor": {
+    "message": "Forward 1 second"
+  },
+  "optionsShortcutsKeyPlayPause": {
+    "message": "Play/Pause"
+  },
+  "optionsShortcutsKeyClearActive": {
+    "message": "Unselect active tag"
+  },
+  "optionsShortcutsReset": {
+    "message": "Reset to default"
+  },
+  "optionsShortcutsEnable": {
+    "message": "Enable Shortcuts"
   }
 }

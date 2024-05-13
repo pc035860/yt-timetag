@@ -5,6 +5,7 @@ import { ct } from '../utils/i18n';
 
 const Tabs = ({ className }) => {
   const [isExplorer] = useRoute('/explorer');
+  const [isShortcuts] = useRoute('/shortcuts');
   const [isData] = useRoute('/data');
   const [isAbout] = useRoute('/about');
 
@@ -19,6 +20,16 @@ const Tabs = ({ className }) => {
         href="/explorer"
       >
         {ct('optionsExplorerTab')}
+      </Link>
+      <Link
+        role="tab"
+        className={cx('tab', {
+          'tab-active': isShortcuts,
+        })}
+        asChild
+        href="/shortcuts"
+      >
+        {ct('optionsShortcutsTab')}
       </Link>
       <Link
         role="tab"

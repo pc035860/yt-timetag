@@ -5,3 +5,12 @@
 body {
   -webkit-font-smoothing: antialiased;
 }
+
+@layer components {
+  .shortcuts-table :is(th, td) {
+    @apply align-top;
+  }
+  .shortcuts-table td:first-child {
+    line-height: 32px;
+  }
+}

@@ -8,6 +8,9 @@
   "optionsExplorerTab": {
     "message": "瀏覽器"
   },
+  "optionsShortcutsTab": {
+    "message": "快速鍵"
+  },
   "optionsDataTab": {
     "message": "資料管理"
   },
@@ -79,5 +82,62 @@
   },
   "optionsAboutVersion": {
     "message": "版本 $1"
+  },
+  "optionsShortcutsDividerGeneral": {
+    "message": "主要"
+  },
+  "optionsShortcutsDividerTag": {
+    "message": "選中的時間標記"
+  },
+  "optionsShortcutsNote1": {
+    "message": "快速鍵僅能設定字母，不支援修飾鍵。"
+  },
+  "optionsShortcutsNote2": {
+    "message": "僅開放自訂部分快速鍵。"
+  },
+  "optionsShortcutsErrorInvalid": {
+    "message": "無效的快速鍵"
+  },
+  "optionsShortcutsErrorDuplicated": {
+    "message": "重複的快速鍵"
+  },
+  "optionsShortcutsFieldAction": {
+    "message": "動作"
+  },
+  "optionsShortcutsFieldShortcut": {
+    "message": "快速鍵"
+  },
+  "optionsShortcutsKeyAddTag": {
+    "message": "新增時間標記"
+  },
+  "optionsShortcutsKeyFocusDescription": {
+    "message": "修改標記敘述"
+  },
+  "optionsShortcutsKeyRemoveTag": {
+    "message": "移除標記"
+  },
+  "optionsShortcutsKeyBackward": {
+    "message": "往回 5 秒"
+  },
+  "optionsShortcutsKeyForward": {
+    "message": "往前 5 秒"
+  },
+  "optionsShortcutsKeyBackwardMinor": {
+    "message": "往回 1 秒"
+  },
+  "optionsShortcutsKeyForwardMinor": {
+    "message": "往前 1 秒"
+  },
+  "optionsShortcutsKeyPlayPause": {
+    "message": "播放 / 暫停"
+  },
+  "optionsShortcutsKeyClearActive": {
+    "message": "取消選擇時間標記"
+  },
+  "optionsShortcutsReset": {
+    "message": "重設為預設值"
+  },
+  "optionsShortcutsEnable": {
+    "message": "啟用快速鍵"
   }
 }

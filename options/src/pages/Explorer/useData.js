@@ -5,6 +5,8 @@ import _ from 'lodash';
 
 import { local } from '../../utils/chromeStorage';
 
+import { KEY_STORAGE_SHORTCUTS_SETTINGS } from '../../constants';
+
 const getData = () => {
   return local.getAll();
 };
@@ -19,9 +21,14 @@ export default function useData() {
     setError(null);
     getData()
       .then(_data => {
-        const list = _.map(_.keys(_data), key => {
-          return _.omit(_data[key], ['activeTag']);
-        });
+        const list = _.compact(
+          _.map(_.keys(_data), key => {
+            if (key === KEY_STORAGE_SHORTCUTS_SETTINGS) {
+              return null;
+            }
+            return _.omit(_data[key], ['activeTag']);
+          })
+        );
         setData(list);
       })
       .catch(err => {

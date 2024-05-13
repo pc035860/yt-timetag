@@ -5,6 +5,8 @@ import { produce } from 'immer';
 
 import { local } from '../../utils/chromeStorage';
 
+import { KEY_STORAGE_SHORTCUTS_SETTINGS } from '../../constants';
+
 export const STORAGE_KEY_PREFIX = 'crState-';
 
 const mergeTags = (source, target, { outdated = false } = {}) => {
@@ -80,12 +82,8 @@ export const upload = async file => {
         {}
       );
 
-      console.debug('@imported data', data);
-
       local.getAll().then(currentData => {
         const mergedData = merge(currentData, data);
-
-        console.debug('@merged data', mergedData);
 
         local.setAll(mergedData).then(
           () => {
@@ -103,8 +101,6 @@ export const upload = async file => {
 
 export const download = async () => {
   return local.getAll().then(data => {
-    console.debug('@current data', data);
-
     // to list
     const list = toList(data);
 
@@ -121,7 +117,15 @@ export const download = async () => {
 };
 
 export const clear = async () => {
-  return local.clear();
+  return local.getAll().then(data => {
+    // only keep shortcuts settings
+    const shortcutsSettingsOnly = _.pick(data, [
+      KEY_STORAGE_SHORTCUTS_SETTINGS,
+    ]);
+    return local.clear().then(() => {
+      return local.setAll(shortcutsSettingsOnly);
+    });
+  });
 };
 
 function toList(data) {

@@ -4,6 +4,7 @@ import DataPage from './pages/Data';
 import ExplorerPage from './pages/Explorer';
 import AboutPage from './pages/About';
 import Tabs from './components/Tabs';
+import ShortcutsPage from './pages/Shortcuts';
 import SetupTheme from './components/SetupTheme';
 
 import { useHashLocation } from 'wouter/use-hash-location';
@@ -39,9 +40,10 @@ function App() {
 
         <Switch>
           <Route path="/explorer" component={ExplorerPage} />
+          <Route path="/shortcuts" component={ShortcutsPage} />
           <Route path="/data" component={DataPage} />
           <Route path="/about" component={AboutPage} />
-          <Redirect to="/explorer" />
+          <Redirect to="/data" />
         </Switch>
         {/* <div>
           <a href="https://vitejs.dev" target="_blank">
