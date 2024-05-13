@@ -102,15 +102,19 @@ const DataPage = () => {
           }
           description={
             <div>
-              {ct('optionsExportDescription')} <br />
-              <a
-                href={LINK.EXPLORER}
-                target="_blank"
-                rel="noreferrer"
-                className="underline text-info"
-              >
-                {ct('optionsExportExplorer')}
-              </a>
+              <div className="mb-1">{ct('optionsExportDescription')}</div>
+              <div>
+                {ct('optionsExportExplorer_prefix')}{' '}
+                <a
+                  href={LINK.EXPLORER}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-xs btn-info btn-outline"
+                >
+                  {ct('optionsExportExplorer')}
+                </a>{' '}
+                {ct('optionsExportExplorer_suffix')}
+              </div>
             </div>
           }
         />
