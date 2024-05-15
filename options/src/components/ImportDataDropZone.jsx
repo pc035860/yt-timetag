@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 
 import _ from 'lodash';
-import { parse } from 'yaml';
+import yaml from 'js-yaml';
 
 import Logo from './Logo';
 
@@ -28,7 +28,7 @@ const ImportDataDropZone = ({
       const reader = new FileReader();
       reader.onload = e => {
         const yamlContent = e.target.result;
-        const list = parse(yamlContent);
+        const list = yaml.load(yamlContent);
 
         const data = _.reduce(
           list,

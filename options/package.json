@@ -14,11 +14,12 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "classnames": "^2.5.1",
-    "deepmerge": "^4.3.1",
     "i18next": "^23.11.4",
     "i18next-browser-languagedetector": "^7.2.1",
     "immer": "^10.1.1",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
+    "lzutf8": "^0.6.3",
     "md5": "^2.3.0",
     "p-defer": "^4.0.1",
     "raf": "^3.4.1",
@@ -31,8 +32,7 @@
     "react-list": "github:kialo/react-list#0.8.18",
     "react-use": "^17.5.0",
     "request-interval": "^2.0.0",
-    "wouter": "^3.1.2",
-    "yaml": "^2.4.2"
+    "wouter": "^3.1.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

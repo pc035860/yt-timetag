@@ -139,5 +139,14 @@
   },
   "optionsShortcutsEnable": {
     "message": "啟用快速鍵"
+  },
+  "optionsExportSync": {
+    "message": "匯出(sync)"
+  },
+  "optionsExportSyncDescription1": {
+    "message": "匯出「同步」儲存空間內的時間標記"
+  },
+  "optionsExportSyncDescription2": {
+    "message": "未來本擴充功能將不再使用「同步」儲存空間，建議匯出備份"
   }
 }

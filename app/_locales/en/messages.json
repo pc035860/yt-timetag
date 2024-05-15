@@ -139,5 +139,14 @@
   },
   "optionsShortcutsEnable": {
     "message": "Enable Shortcuts"
+  },
+  "optionsExportSync": {
+    "message": "Export(sync)"
+  },
+  "optionsExportSyncDescription1": {
+    "message": "Export the content of the 'sync' storage."
+  },
+  "optionsExportSyncDescription2": {
+    "message": "This extension will no longer use the 'sync' data in the future. It is recommended to export a backup."
   }
 }

@@ -4,8 +4,8 @@ import cn from 'classnames';
 const Row = ({ buttonSlot, description, className }) => {
   return (
     <div className={cn('flex justify-start items-center', className)}>
-      <div>{buttonSlot}</div>
-      <div className="ml-8 flex-grow">
+      <div className="min-w-[150px]">{buttonSlot}</div>
+      <div className="ml-6 flex-grow">
         <div className="text-sm">{description}</div>
       </div>
     </div>

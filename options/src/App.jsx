@@ -27,16 +27,7 @@ function App() {
       <>
         <SetupTheme config={THEME_CONFIG} />
 
-        <Switch>
-          <Route path="/explorer">
-            <div className="container mx-auto">
-              <Tabs className="max-w-[400px] mt-8 relative z-10" />
-            </div>
-          </Route>
-          <Route>
-            <Tabs className="mx-auto max-w-[400px] mt-8 relative z-10" />
-          </Route>
-        </Switch>
+        <Tabs className="mx-auto max-w-[400px] mt-8 relative z-10" />
 
         <Switch>
           <Route path="/explorer" component={ExplorerPage} />
