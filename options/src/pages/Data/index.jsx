@@ -9,7 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import useAlert from './useAlert.jsx';
 import useConfirm from './useConfirm.jsx';
 
-import { clear, download, upload } from './utils';
+import { clear, download, downloadSync, upload } from './utils';
 import { ct } from '../../utils/i18n';
 
 import { LINK } from '../../constants';
@@ -62,6 +62,10 @@ const DataPage = () => {
     download();
   }, []);
 
+  const handleExportSync = useCallback(() => {
+    downloadSync();
+  }, []);
+
   const { open: openConfirm, render: renderConfirm } = useConfirm();
   const handleClear = useCallback(() => {
     openConfirm({
@@ -88,7 +92,7 @@ const DataPage = () => {
 
   return (
     <>
-      <Page className="max-w-[480px]">
+      <Page className="max-w-[500px]">
         <Row
           className="mb-8"
           buttonSlot={
@@ -148,6 +152,23 @@ const DataPage = () => {
             </button>
           }
           description={ct('optionsClearDescription')}
+        />
+        <div className="divider my-8" />
+        <Row
+          buttonSlot={
+            <button className="btn  min-w-[120px]" onClick={handleExportSync}>
+              {ct('optionsExportSync')}
+              <FontAwesomeIcon icon={faFileExport} />
+            </button>
+          }
+          description={
+            <>
+              <div className="mb-1">{ct('optionsExportSyncDescription1')}</div>
+              <div className="text-warning text-xs">
+                {ct('optionsExportSyncDescription2')}
+              </div>
+            </>
+          }
         />
       </Page>
       {renderAlert()}

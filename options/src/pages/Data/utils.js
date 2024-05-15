@@ -1,9 +1,11 @@
-import { parse, stringify } from 'yaml';
+import yaml from 'js-yaml';
+
 import _ from 'lodash';
 import md5 from 'md5';
 import { produce } from 'immer';
+import LZUTF8 from 'lzutf8';
 
-import { local } from '../../utils/chromeStorage';
+import { local, sync } from '../../utils/chromeStorage';
 
 import { KEY_STORAGE_SHORTCUTS_SETTINGS } from '../../constants';
 
@@ -67,7 +69,7 @@ export const upload = async file => {
     const reader = new FileReader();
     reader.onload = async e => {
       const yamlContent = e.target.result;
-      const list = parse(yamlContent);
+      const list = yaml.load(yamlContent);
 
       const data = _.reduce(
         list,
@@ -99,20 +101,53 @@ export const upload = async file => {
   });
 };
 
+const _downloadData = data => {
+  // to list
+  const list = toList(data);
+
+  const yamlContent = yaml.dump(list);
+  const hash = md5(yamlContent).substring(0, 8);
+  const blob = new Blob([yamlContent], { type: 'application/yaml' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.setAttribute('href', url);
+  const filename = `yt-timetag_${hash}.yaml`;
+  a.setAttribute('download', filename);
+  a.click();
+};
+
 export const download = async () => {
   return local.getAll().then(data => {
-    // to list
-    const list = toList(data);
+    return _downloadData(data);
+  });
+};
 
-    const yamlContent = stringify(list);
-    const hash = md5(yamlContent).substring(0, 8);
-    const blob = new Blob([yamlContent], { type: 'application/yaml' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    const filename = `yt-timetag_${hash}.yaml`;
-    a.setAttribute('download', filename);
-    a.click();
+// download from sync storage
+export const downloadSync = async () => {
+  return sync.getAll().then(_data => {
+    const promises = _.compact(
+      _.map(_.keys(_data), key => {
+        if (key.indexOf(STORAGE_KEY_PREFIX) !== 0) {
+          // skip non-data key
+          return null;
+        }
+        return new Promise(resolve => {
+          LZUTF8.decompressAsync(
+            _data[key],
+            {
+              inputEncoding: 'Base64',
+            },
+            result => {
+              resolve(JSON.parse(result));
+            }
+          );
+        }).then(d => [key, d]);
+      })
+    );
+    return Promise.all(promises).then(pairs => {
+      const data = _.fromPairs(pairs);
+      return _downloadData(data);
+    });
   });
 };
 
