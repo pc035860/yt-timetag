@@ -10,7 +10,7 @@ chrome.action.onClicked.addListener((tab) => {
     chrome.tabs.sendMessage(tab.id, MSG_CHECK_LOADED_REQUEST, (res) => {
       // check lastError
       if (chrome.runtime.lastError) {
-        console.debug('chrome.runtime.lastError', chrome.runtime.lastError);
+        console.debug('last error', chrome.runtime.lastError);
       }
 
       if (res === MSG_CHECK_LOADED_RESPONSE) {

@@ -1,14 +1,23 @@
 {
-  "name": "TimeTags for YouTube",
+  "name": "__MSG_extName__",
   "version": "1.5.0",
   "manifest_version": 3,
-  "description": "Create YouTube time tags with simple keyboard shortcuts",
+  "description": "__MSG_extDescription__",
   "icons": {
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true
+  },
+  "sandbox": {
+    "pages": [
+      "options/explorer.html"
+    ]
   },
   "content_scripts": [
     {
@@ -51,5 +60,10 @@
         "*://youtu.be/*"
       ]
     }
-  ]
+  ],
+  "default_locale": "en",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-inline' https://www.youtube.com"
+  }
 }

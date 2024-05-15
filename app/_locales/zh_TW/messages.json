@@ -1,0 +1,143 @@
+{
+  "extName": {
+    "message": "YouTube 時間標記幫手"
+  },
+  "extDescription": {
+    "message": "用鍵盤就能輕鬆為 YouTube 影片加上時間標記"
+  },
+  "optionsExplorerTab": {
+    "message": "瀏覽器"
+  },
+  "optionsShortcutsTab": {
+    "message": "快速鍵"
+  },
+  "optionsDataTab": {
+    "message": "資料管理"
+  },
+  "optionsAboutTab": {
+    "message": "關於"
+  },
+  "optionsImport": {
+    "message": "匯入"
+  },
+  "optionsExport": {
+    "message": "匯出"
+  },
+  "optionsClear": {
+    "message": "清除"
+  },
+  "optionsImportDescription": {
+    "message": "匯入並自動與現有的時間標記合併"
+  },
+  "optionsExportDescription": {
+    "message": "將所有時間標記匯出成 YAML 檔案"
+  },
+  "optionsExportExplorer_prefix": {
+    "message": "可以使用"
+  },
+  "optionsExportExplorer": {
+    "message": "線上瀏覽器"
+  },
+  "optionsExportExplorer_suffix": {
+    "message": "載入觀看"
+  },
+  "optionsClearDescription": {
+    "message": "刪除所有時間標記"
+  },
+  "optionsImportSuccessTitle": {
+    "message": "匯入成功"
+  },
+  "optionsImportSuccessMessage": {
+    "message": "時間標記已成功匯入。"
+  },
+  "optionsImportErrorTitle": {
+    "message": "匯入失敗"
+  },
+  "optionsExportSuccessTitle": {
+    "message": "匯出成功"
+  },
+  "optionsExportSuccessMessage": {
+    "message": "時間標記已成功匯出。"
+  },
+  "optionsClearConfirmTitle": {
+    "message": "確認清除"
+  },
+  "optionsClearConfirmMessage": {
+    "message": "確定要清除所有時間標記嗎？這個動作無法復原。"
+  },
+  "optionsClearSuccessTitle": {
+    "message": "清除成功"
+  },
+  "optionsClearSuccessMessage": {
+    "message": "時間標記已成功清除。"
+  },
+  "optionsClearErrorTitle": {
+    "message": "清除失敗"
+  },
+  "optionsConfirm": {
+    "message": "確定"
+  },
+  "optionsCancel": {
+    "message": "取消"
+  },
+  "optionsAboutVersion": {
+    "message": "版本 $1"
+  },
+  "optionsShortcutsDividerGeneral": {
+    "message": "主要"
+  },
+  "optionsShortcutsDividerTag": {
+    "message": "選中的時間標記"
+  },
+  "optionsShortcutsNote1": {
+    "message": "快速鍵僅能設定字母，不支援修飾鍵。"
+  },
+  "optionsShortcutsNote2": {
+    "message": "僅開放自訂部分快速鍵。"
+  },
+  "optionsShortcutsErrorInvalid": {
+    "message": "無效的快速鍵"
+  },
+  "optionsShortcutsErrorDuplicated": {
+    "message": "重複的快速鍵"
+  },
+  "optionsShortcutsFieldAction": {
+    "message": "動作"
+  },
+  "optionsShortcutsFieldShortcut": {
+    "message": "快速鍵"
+  },
+  "optionsShortcutsKeyAddTag": {
+    "message": "新增時間標記"
+  },
+  "optionsShortcutsKeyFocusDescription": {
+    "message": "修改標記敘述"
+  },
+  "optionsShortcutsKeyRemoveTag": {
+    "message": "移除標記"
+  },
+  "optionsShortcutsKeyBackward": {
+    "message": "往回 5 秒"
+  },
+  "optionsShortcutsKeyForward": {
+    "message": "往前 5 秒"
+  },
+  "optionsShortcutsKeyBackwardMinor": {
+    "message": "往回 1 秒"
+  },
+  "optionsShortcutsKeyForwardMinor": {
+    "message": "往前 1 秒"
+  },
+  "optionsShortcutsKeyPlayPause": {
+    "message": "播放 / 暫停"
+  },
+  "optionsShortcutsKeyClearActive": {
+    "message": "取消選擇時間標記"
+  },
+  "optionsShortcutsReset": {
+    "message": "重設為預設值"
+  },
+  "optionsShortcutsEnable": {
+    "message": "啟用快速鍵"
+  }
+}
