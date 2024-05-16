@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -123,6 +123,11 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
 
       const key = info.videoId;
 
+      const videoHrefBase = `https://www.youtube.com/watch?v=${info.videoId}`;
+      const videoHref = isVideoActive
+        ? `${videoHrefBase}&t=${Math.ceil(currentTime)}`
+        : videoHrefBase;
+
       return (
         <div
           key={key}
@@ -135,11 +140,7 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
         >
           <div className="card-body p-6">
             <h2 className="card-title text-base">
-              <a
-                href={`https://www.youtube.com/watch?v=${info.videoId}`}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={videoHref} target="_blank" rel="noreferrer">
                 <Highlighter
                   searchWords={searchWords}
                   autoEscape={true}
