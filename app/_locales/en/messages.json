@@ -148,5 +148,62 @@
   },
   "optionsExportSyncDescription2": {
     "message": "This extension will no longer use the 'sync' data in the future. It is recommended to export a backup."
+  },
+  "appTabMine": {
+    "message": "MINE"
+  },
+  "appTabComments": {
+    "message": "COMMENTS"
+  },
+  "appTabChapters": {
+    "message": "CHAPTERS"
+  },
+  "appActionAddTag": {
+    "message": "Add tag"
+  },
+  "appActionRemoveTag": {
+    "message": "Remove tag"
+  },
+  "appActionInputFromText": {
+    "message": "Add tags from text"
+  },
+  "appActionTextOutput": {
+    "message": "Export as text"
+  },
+  "appTextPlaceholderTagDescription": {
+    "message": "Enter tag description"
+  },
+  "appTextPlaceholderImport": {
+    "message": "Example:\n\n0:01 This is an apple\n13:03 There is a tree\n11:25 My name is John"
+  },
+  "appActionSortByTimestamp": {
+    "message": "Sort by timestamp"
+  },
+  "appActionAdd": {
+    "message": "Add"
+  },
+  "appActionCancel": {
+    "message": "Cancel"
+  },
+  "appActionAddToMine": {
+    "message": "Add to MINE list"
+  },
+  "appActionRemoveFromMine": {
+    "message": "Remove from MINE list"
+  },
+  "appActionClose": {
+    "message": "Close"
+  },
+  "appActionMarkdownOutputToggle": {
+    "message": "Markdown fromat (with timestamp link)"
+  },
+  "appActionRemove": {
+    "message": "Remove"
+  },
+  "appActionCopyToClipboard": {
+    "message": "Copy to clipboard"
+  },
+  "appTextCopiedToClipboard": {
+    "message": "Copied to clipboard"
   }
 }

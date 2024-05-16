@@ -15,6 +15,7 @@ import MdContentCopy from 'react-icons/lib/md/content-copy';
 
 import is2017NewDesign from '_util/is2017NewDesign';
 import exportFromTags, { asMarkdown } from '_util/exportFromTags';
+import { ct } from '_util/i18n';
 
 import styles from './dialog.scss';
 
@@ -48,19 +49,21 @@ const Export = ({
     })}
   >
     <div styleName="heading">
-      <LogoIcon /> Export
+      <LogoIcon /> {ct('appActionTextOutput')}
     </div>
     <div>
       <div styleName="textarea-wrap">
         <YTButton
           styleName="textarea-copy-btn"
           type="button"
-          title="Copy"
+          title={ct('appActionCopyToClipboard')}
           onClick={handleCopy}
         >
           <CSSTransitionGroup {...transitionConfig.justCopied}>
             {justCopied && (
-              <span styleName="textarea-copy-btn__hint">Copied</span>
+              <span styleName="textarea-copy-btn__hint">
+                {ct('appTextCopiedToClipboard')}
+              </span>
             )}
           </CSSTransitionGroup>
           <MdContentCopy size={20} />
@@ -75,7 +78,7 @@ const Export = ({
     <div className={classNames(styles.toolbar, styles['toolbar--export'])}>
       <tp-yt-paper-toggle-button
         noink=""
-        className="style-scope ytd-settings-switch-renderer"
+        class="style-scope ytd-settings-switch-renderer"
         role="button"
         tabindex="0"
         toggles
@@ -83,16 +86,16 @@ const Export = ({
         onClick={handleMarkdownModeToggleClick}
       >
         <span styleName="markdown-toggle-btn-text">
-          Markdown fromat (with timestamp link)
+          {ct('appActionMarkdownOutputToggle')}
         </span>
       </tp-yt-paper-toggle-button>
       <button
         styleName="toolbar-btn"
         type="button"
-        title="Cancel"
+        title={ct('appActionClose')}
         onClick={onClose}
       >
-        Close
+        {ct('appActionClose')}
       </button>
     </div>
   </div>

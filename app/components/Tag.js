@@ -12,6 +12,7 @@ import YTButton from './YTButton';
 
 import ytPlayer from '_util/ytPlayer';
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 import styles from './Tag.scss';
 
@@ -274,7 +275,7 @@ class Tag extends Component {
         type="text"
         styleName="description-input"
         value={tag.description}
-        placeholder="tag description"
+        placeholder={ct('appTextPlaceholderTagDescription')}
         onChange={this.handleDescriptionChange}
         onClick={this.handleDescriptionClick}
         onKeyUp={this.handleDescriptionKeyUp}
@@ -322,7 +323,7 @@ class Tag extends Component {
             </YTButton>
             <YTButton
               type="button"
-              title="Remove"
+              title={ct('appActionRemove')}
               styleName="actions-btn-last"
               onClick={this.handleRemoveClick}
             >

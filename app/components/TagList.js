@@ -37,6 +37,7 @@ import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 import ytPlayer from '_util/ytPlayer';
 import parseTags from '_util/parseTags';
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 const TagList = ({
   videoId,
@@ -94,7 +95,7 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="New Tag"
+          title={ct('appActionAddTag')}
           onClick={handleTagAdd}
         >
           <MdAdd size={20} />
@@ -102,7 +103,7 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="Import"
+          title={ct('appActionAddFromText')}
           onClick={handleTagImport}
         >
           <MdPlayListAdd size={20} />
@@ -112,7 +113,7 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="Export"
+          title={ct('appActionTextOutput')}
           onClick={handleExport}
         >
           <MdPrint size={20} />

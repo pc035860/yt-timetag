@@ -16,6 +16,7 @@ import CommentList from '_components/CommentList';
 import ChapterList from '_components/ChapterList';
 
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 import * as actInfo_ from '_actions/info';
 
@@ -54,7 +55,7 @@ const App = ({
       <span styleName="logo-wrap">
         <LogoIcon />
       </span>
-      TimeTags for YouTube &nbsp;
+      {ct('extName')} &nbsp;
       <small styleName="title-videoId">({videoId})</small>
     </h4>
 
@@ -70,7 +71,8 @@ const App = ({
           data-tab={TAB.MINE}
           onClick={handleTabBtnClick}
         >
-          MINE<small>&nbsp;({tags.length})</small>
+          {ct('appTabMine')}
+          <small>&nbsp;({tags.length})</small>
         </tp-yt-paper-button>
         <tp-yt-paper-button
           class={classNames('style-scope', styles.btn, {
@@ -82,7 +84,8 @@ const App = ({
           data-tab={TAB.COMMENTS}
           onClick={handleTabBtnClick}
         >
-          COMMENTS<small>&nbsp;({commentsTagCount})</small>
+          {ct('appTabComments')}
+          <small>&nbsp;({commentsTagCount})</small>
           <div
             styleName="progress-line-wrap"
             className={classNames({
@@ -108,7 +111,8 @@ const App = ({
             data-tab={TAB.CHAPTERS}
             onClick={handleTabBtnClick}
           >
-            CHAPTERS<small>&nbsp;({chaptersTagCount})</small>
+            {ct('appTabChapters')}
+            <small>&nbsp;({chaptersTagCount})</small>
           </tp-yt-paper-button>
         )}
       </div>

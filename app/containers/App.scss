@@ -10,9 +10,6 @@
 }
 
 .logo-wrap {
-	position: relative;
-	top: -1px;
-
 	display: inline-block;
 	margin-right: 5px;
 }
@@ -63,7 +60,7 @@
 	.btn {
 		margin: 0;
 		border-radius: 0;
-		font-size: var(--ytd-tab-system_-_font-size);
+		font-size: var(--ytd-caption-font-size);
 		color: var(--yt-spec-text-secondary);
 		font-weight: normal !important;
 
@@ -104,7 +101,7 @@
 		}
 
 		small {
-			font-size: 10px;
+			font-size: 90%;
 		}
 	}
 }

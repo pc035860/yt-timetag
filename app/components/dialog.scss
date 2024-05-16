@@ -100,6 +100,10 @@ $copy-hint-text-opactiy: .9;
 	&--export {
 		justify-content: space-between;
 	}
+
+	:global(.ytd-settings-switch-renderer) {
+		cursor: pointer;
+	}
 }
 .toolbar-btn {
 	$hover: #f7f7f7;
@@ -179,7 +183,7 @@ $copy-hint-text-opactiy: .9;
 }
 
 .markdown-toggle-btn-text {
-	font-size: var(--paper-font-body1_-_font-size);
+	font-size: var(--ytd-caption-font-size);
 }
 
 @keyframes fadeIn {

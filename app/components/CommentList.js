@@ -16,6 +16,7 @@ import TagContainer from './TagContainer';
 import { fetchYTCommentThreads } from '_util/ytDataApi';
 import is2017NewDesign from '_util/is2017NewDesign';
 import parseTags from '_util/parseTags';
+import { ct } from '_util/i18n';
 
 import * as actTag_ from '_actions/tag';
 import * as actInfo_ from '_actions/info';
@@ -159,7 +160,7 @@ class CommentList extends Component {
         <div styleName="toolbar" className={styles.comment}>
           <tp-yt-paper-checkbox
             id="checkbox"
-            className="style-scope ytd-playlist-add-to-option-renderer"
+            class="style-scope ytd-playlist-add-to-option-renderer"
             role="checkbox"
             tabindex="0"
             toggles=""
@@ -173,7 +174,9 @@ class CommentList extends Component {
             }}
             onClick={this.handleToggleSortByTimestamp}
           >
-            Sort by timestamp
+            <span styleName="checkbox-label">
+              {ct('appActionSortByTimestamp')}
+            </span>
           </tp-yt-paper-checkbox>
         </div>
       </div>

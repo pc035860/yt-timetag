@@ -39,7 +39,7 @@
       "19": "images/icon-19.png",
       "38": "images/icon-38.png"
     },
-    "default_title": "TimeTags for YouTube"
+    "default_title": "__MSG_extName__"
   },
   "permissions": [
     "storage", "scripting", "unlimitedStorage"

@@ -16,6 +16,7 @@ import YTButton from './YTButton';
 import is2017NewDesign from '_util/is2017NewDesign';
 import ytPlayer from '_util/ytPlayer';
 import { toTag } from '_util/ytTime';
+import { ct } from '_util/i18n';
 
 import styles from './Tag.scss';
 
@@ -100,7 +101,7 @@ class CommentTag extends Component {
             <div styleName="comment-status">
               <YTButton
                 type="button"
-                title="Remove from MINE"
+                title={ct('appActionRemoveFromMine')}
                 styleName="comment-status-btn"
                 onClick={handleRevertImportBtnClick}
               >
@@ -111,7 +112,7 @@ class CommentTag extends Component {
             <div styleName="comment-actions">
               <YTButton
                 type="button"
-                title="Add to MINE"
+                title={ct('appActionAddToMine')}
                 styleName="comment-actions-btn"
                 onClick={handleImportBtnClick}
               >

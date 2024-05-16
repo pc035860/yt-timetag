@@ -4,18 +4,19 @@ import CSSModules from 'react-css-modules';
 import styles from './LogoIcon.scss';
 
 import chromeURL from '_util/chromeURL';
+import { ct } from '_util/i18n';
 
-const logoSrc = chromeURL(require('_images/icon-16.png'));
-const defaultAlt = 'TimeTags for YouTube';
+const logoSrc = chromeURL(require('_images/icon_small_no_bg.svg'));
+const defaultAlt = ct('extName');
 
 const LogoIcon = ({ alt }) => (
   <img styleName="component" src={logoSrc} alt={alt || defaultAlt} />
 );
 LogoIcon.propTypes = {
-  alt: PropTypes.string
+  alt: PropTypes.string,
 };
 LogoIcon.defaultProps = {
-  alt: ''
+  alt: '',
 };
 
 export default CSSModules(LogoIcon, styles);
