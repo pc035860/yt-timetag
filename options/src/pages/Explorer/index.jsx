@@ -14,7 +14,11 @@ const ExplorerPage = () => {
 
   const iframeSrc = useMemo(() => {
     const uiLanguage = chrome.i18n.getUILanguage();
-    return `${LINK.EXPLORER}?lng=${uiLanguage}`;
+    const utmParams = new URLSearchParams({
+      utm_source: 'yt-timetag',
+      utm_medium: 'extension',
+    });
+    return `${LINK.EXPLORER}?lng=${uiLanguage}&${utmParams.toString()}`;
   }, []);
 
   const [isIframeReady, setIsIframeReady] = useState(false);
