@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
@@ -10,6 +10,7 @@ import withState from 'recompose/withState';
 
 import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 import MdPlayListAddCheck from 'react-icons/lib/md/playlist-add-check';
+import MdCached from 'react-icons/lib/md/cached';
 import TagLink from './TagLink';
 import YTButton from './YTButton';
 
@@ -66,17 +67,62 @@ class CommentTag extends Component {
     }
   };
 
-  render() {
+  renderCommentStatus = () => {
     const {
-      videoId,
-      tag,
       addedTagId,
-      expand,
-      handleTagClick,
-      handleLinkClick,
+      trashMode,
       handleImportBtnClick,
       handleRevertImportBtnClick,
+      handlePutBackBtnClick,
     } = this.props;
+
+    if (trashMode) {
+      return (
+        <div styleName="comment-actions">
+          <YTButton
+            type="button"
+            title={ct('appActionPutBack')}
+            styleName="comment-actions-btn"
+            onClick={handlePutBackBtnClick}
+          >
+            <MdCached size={16} />
+          </YTButton>
+        </div>
+      );
+    }
+
+    if (addedTagId) {
+      return (
+        <div styleName="comment-status">
+          <YTButton
+            type="button"
+            title={ct('appActionRemoveFromMine')}
+            styleName="comment-status-btn"
+            onClick={handleRevertImportBtnClick}
+          >
+            <MdPlayListAddCheck size={16} />
+          </YTButton>
+        </div>
+      );
+    }
+
+    return (
+      <div styleName="comment-actions">
+        <YTButton
+          type="button"
+          title={ct('appActionAddToMine')}
+          styleName="comment-actions-btn"
+          onClick={handleImportBtnClick}
+        >
+          <MdPlayListAdd size={16} />
+        </YTButton>
+      </div>
+    );
+  };
+
+  render() {
+    const { videoId, tag, expand, handleTagClick, handleLinkClick } =
+      this.props;
 
     return (
       <div styleName="comment-wrap">
@@ -97,29 +143,7 @@ class CommentTag extends Component {
             />
           </div>
           <div styleName="description">{tag.description}</div>
-          {addedTagId ? (
-            <div styleName="comment-status">
-              <YTButton
-                type="button"
-                title={ct('appActionRemoveFromMine')}
-                styleName="comment-status-btn"
-                onClick={handleRevertImportBtnClick}
-              >
-                <MdPlayListAddCheck size={16} />
-              </YTButton>
-            </div>
-          ) : (
-            <div styleName="comment-actions">
-              <YTButton
-                type="button"
-                title={ct('appActionAddToMine')}
-                styleName="comment-actions-btn"
-                onClick={handleImportBtnClick}
-              >
-                <MdPlayListAdd size={16} />
-              </YTButton>
-            </div>
-          )}
+          {this.renderCommentStatus()}
         </div>
         {expand && (
           <div styleName="comment-text">
@@ -141,6 +165,7 @@ CommentTag.propTypes = {
     sourceCommentId: PropTypes.string,
   }),
   addedTagId: PropTypes.string,
+  trashMode: PropTypes.bool,
 };
 
 export default compose(
@@ -169,6 +194,12 @@ export default compose(
       ({ addedTagId, onRevertImport }) =>
       (evt) => {
         onRevertImport(addedTagId);
+        evt.stopPropagation();
+      },
+    handlePutBackBtnClick:
+      ({ tag, onPutBack }) =>
+      (evt) => {
+        onPutBack(tag);
         evt.stopPropagation();
       },
   })

@@ -231,7 +231,7 @@ const addHandlers = withHandlers({
       const prevTag = tags[index - 1];
       const nextTag = tags[index + 1];
 
-      actTag.remove(tagId);
+      actTag.moveToTrash(tagId);
 
       // delay setting next active tag with a frame
       // preventing onRemove from triggering on next active tag

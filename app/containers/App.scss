@@ -55,7 +55,17 @@
 }
 
 .tab-btns {
-	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.tab-btns-left {
+		position: static;
+	}
+
+	.tab-btns-right {
+		position: static;
+	}
 
 	.btn {
 		margin: 0;

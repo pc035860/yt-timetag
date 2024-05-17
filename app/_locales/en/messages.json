@@ -158,6 +158,9 @@
   "appTabChapters": {
     "message": "CHAPTERS"
   },
+  "appTabTrash": {
+    "message": "TRASH"
+  },
   "appActionAddTag": {
     "message": "Add tag"
   },
@@ -205,5 +208,8 @@
   },
   "appTextCopiedToClipboard": {
     "message": "Copied to clipboard"
+  },
+  "appActionPutBack": {
+    "message": "Put back"
   }
 }

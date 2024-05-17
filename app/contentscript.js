@@ -11,12 +11,15 @@ import { Provider } from 'react-redux';
 import App from '_containers/App';
 import {
   MSG_CHECK_LOADED_REQUEST,
-  MSG_CHECK_LOADED_RESPONSE
+  MSG_CHECK_LOADED_RESPONSE,
 } from './constants/Messages';
 
 import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
-import { bind as bindKeyOps, getEmitter as getKeyOpsEmitter } from '_util/keyOps';
+import {
+  bind as bindKeyOps,
+  getEmitter as getKeyOpsEmitter,
+} from '_util/keyOps';
 import getYTVideoId from '_util/getYTVideoId';
 import is2017NewDesign from '_util/is2017NewDesign';
 
@@ -37,7 +40,7 @@ function renderApp(videoId) {
     appElm = document.createElement('div');
     assign(appElm, {
       id: appRootId,
-      className: appRootId
+      className: appRootId,
     });
     sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
   }
@@ -48,25 +51,21 @@ function renderApp(videoId) {
 
   appElm.dataset.videoId = videoId;
 
-  loadCrState().then(state => {
+  loadCrState(videoId).then((state) => {
     let initialState;
     if (state) {
       initialState = {
         ...state,
         // ignore activeTag state
-        activeTag: ''
+        activeTag: '',
       };
     }
 
-    const store = initialState ?
-      configureStore(initialState) :
-      configureStore();
+    const store = configureStore(videoId, initialState);
 
     ReactDOM.render(
       <Provider store={store}>
-        <App
-          videoId={videoId}
-          keyOpsEmitter={getKeyOpsEmitter(videoId)} />
+        <App videoId={videoId} keyOpsEmitter={getKeyOpsEmitter(videoId)} />
       </Provider>,
       appElm
     );
@@ -80,7 +79,6 @@ function unmountApp() {
     delete appElm.dataset.videoId;
   }
 }
-
 
 // 回應 injection check
 chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {
