@@ -15,6 +15,7 @@ import TagList from '_components/TagList';
 import CommentList from '_components/CommentList';
 import ChapterList from '_components/ChapterList';
 import Trash from '_components/Trash';
+import MdSettings from 'react-icons/lib/md/settings';
 
 import is2017NewDesign from '_util/is2017NewDesign';
 import { ct } from '_util/i18n';
@@ -43,6 +44,7 @@ const App = ({
   commentsDone,
   handleCommentListProgress,
   handleCommentListDone,
+  handleOpenOptionsPage,
 
   chaptersTagCount,
   chaptersAvailable,
@@ -60,6 +62,15 @@ const App = ({
       </span>
       {ct('extName')} &nbsp;
       <small styleName="title-videoId">({videoId})</small>
+      <a
+        href=""
+        styleName="title-settings"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleOpenOptionsPage}
+      >
+        <MdSettings size={16} />
+      </a>
     </h4>
 
     <div>
@@ -235,6 +246,15 @@ const addChaptersAvailable = compose(
   })
 );
 
+const addOpenOptionsPage = withHandlers({
+  handleOpenOptionsPage: () => (evt) => {
+    evt.preventDefault();
+    chrome.runtime.sendMessage({
+      action: 'openOptionsPage',
+    });
+  },
+});
+
 const mapStateToProps = (state) => ({
   tags: state.tags,
   trash: state.trash,
@@ -247,5 +267,6 @@ export default compose(
   addInitInfo,
   addTabSwitch,
   addCommentsProgress,
-  addChaptersAvailable
+  addChaptersAvailable,
+  addOpenOptionsPage
 )(CSSModules(App, styles));

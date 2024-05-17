@@ -19,17 +19,23 @@
 	font-size: 13px;
 	color: $title-color;
 	line-height: 1.3em;
-	width: 290px;
+	min-width: 290px;
 	overflow: hidden;
 	white-space: nowrap;
 	word-wrap: normal;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
+	width: 100%;
 
 	&-videoId {
 		font-size: 12px;
 		color: #a7a7a7;
 		font-weight: normal;
+	}
+
+	&-settings {
+		float: right;
+		color: #a7a7a7 !important;
 	}
 }
 :global([dark]) {
