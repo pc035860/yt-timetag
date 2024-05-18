@@ -257,7 +257,7 @@ const ExplorerVideoList = ({ dataList: optDataList }) => {
         </div>
       </div>
       {/* placeholder */}
-      <div className="h-[118px] mb-5">&nbsp;</div>
+      <div className="h-[80px] mb-5">&nbsp;</div>
       <Delay wait={20}>
         <ReactList
           type="variable"

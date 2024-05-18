@@ -11,7 +11,7 @@ body {
     @apply bg-base-100/80 backdrop-blur-sm;
   }
   .video-list-toolbar {
-    @apply p-4;
+    @apply px-4;
     border-radius: var(--rounded-box, 1rem);
   }
 }
