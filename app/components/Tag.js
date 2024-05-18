@@ -88,10 +88,6 @@ class Tag extends Component {
     if (nextProps.isActive !== this.props.isActive && nextProps.isActive) {
       this.scrollIntoView();
     }
-
-    if (nextProps.tag !== this.props.tag) {
-      this.scrollIntoView();
-    }
   }
 
   componentWillUnmount() {
@@ -296,6 +292,7 @@ class Tag extends Component {
         className={classNames({
           [styles['component-is-active']]: isActive,
           [styles['new-design']]: is2017NewDesign(),
+          [styles.sticky]: isActive,
         })}
         onClick={this.handleToggleComponent}
         ref={this.handleMount}
