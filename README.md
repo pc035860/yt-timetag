@@ -33,7 +33,7 @@ Browse to any YouTube video, click the icon of the extension in browser bar to a
 | `alt+left`            | Backward 1 second         | ✓                   |
 | `right`               | Forward 5 seconds         | ✓                   |
 | `alt+right`           | Forward 1 second          | ✓                   |
-| `/`, `d`              | Edit description          | ✓                   |
+| `d`                   | Edit description          | ✓                   |
 
 
 ## Storage
@@ -60,6 +60,16 @@ To import, click on the button next to "add" button.
 
 
 # Changelog
+
+## 1.6.0
+
+- Fix: mouse wheel behavior in tag/comment list
+- Add "Trash" tab for temporarily holding removed tags
+- Add options page
+  - Explorer
+  - Custom shortcuts
+  - Data import/export
+- Standalone Explorer is also available [here](https://cloud.pymaster.tw/yt-timetag-explorer/)
 
 ## 1.5.0
 
