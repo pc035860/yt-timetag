@@ -22,6 +22,8 @@ import { ct } from '_util/i18n';
 
 import * as actInfo_ from '_actions/info';
 
+import { MSG_OPEN_OPTIONS_PAGE } from '_constants/Messages';
+
 import styles from './App.scss';
 
 const TAB = {
@@ -252,7 +254,7 @@ const addOpenOptionsPage = withHandlers({
   handleOpenOptionsPage: () => (evt) => {
     evt.preventDefault();
     chrome.runtime.sendMessage({
-      action: 'openOptionsPage',
+      action: MSG_OPEN_OPTIONS_PAGE,
     });
   },
 });

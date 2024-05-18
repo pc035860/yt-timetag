@@ -2,6 +2,7 @@ import urlParser from 'js-video-url-parser';
 import {
   MSG_CHECK_LOADED_REQUEST,
   MSG_CHECK_LOADED_RESPONSE,
+  MSG_OPEN_OPTIONS_PAGE,
 } from '_constants/Messages';
 
 chrome.action.onClicked.addListener((tab) => {
@@ -31,7 +32,7 @@ chrome.action.onClicked.addListener((tab) => {
 
 chrome.runtime.onMessage.addListener((message) => {
   switch (message.action) {
-    case 'openOptionsPage':
+    case MSG_OPEN_OPTIONS_PAGE:
       chrome.runtime.openOptionsPage();
       break;
     default:
