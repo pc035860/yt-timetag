@@ -28,8 +28,6 @@ const THEME_CONFIG = {
   [SetupTheme.SCHEME.LIGHT]: 'light',
 };
 
-const EXTENSION_ID = 'dnglncgcgihledggdehmcbnkppanjohg';
-
 const IN_IFRAME = window !== window.parent;
 const STANDALONE_MODE = !IN_IFRAME;
 
@@ -66,9 +64,6 @@ function App() {
     window.parent.postMessage('yt-timetag explorer ready', '*');
 
     const handleMesage = evt => {
-      if (evt.origin.indexOf(EXTENSION_ID) === -1) {
-        return;
-      }
       let json;
       try {
         json = JSON.parse(evt.data);
