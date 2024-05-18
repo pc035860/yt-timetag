@@ -57,14 +57,16 @@ const App = ({
     })}
   >
     <h4 styleName="title">
-      <span styleName="logo-wrap">
-        <LogoIcon />
-      </span>
-      {ct('extName')} &nbsp;
-      <small styleName="title-videoId">({videoId})</small>
+      <div styleName="title-ellipsis">
+        <span styleName="logo-wrap">
+          <LogoIcon />
+        </span>
+        {ct('extName')} &nbsp;
+        <small styleName="title-videoId">({videoId})</small>
+      </div>
       <a
         href=""
-        styleName="title-settings"
+        styleName="btn-settings"
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleOpenOptionsPage}

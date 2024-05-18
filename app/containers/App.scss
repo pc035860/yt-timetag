@@ -1,4 +1,5 @@
 @import "~_sass/_variables.scss";
+@import "~_sass/_mixins.scss";
 
 .component {
 	padding-left: 10px;
@@ -15,17 +16,21 @@
 }
 
 .title {
+	position: relative;
+
 	margin: 0 0 5px;
 	font-size: 13px;
 	color: $title-color;
 	line-height: 1.3em;
-	min-width: 290px;
-	overflow: hidden;
-	white-space: nowrap;
-	word-wrap: normal;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	width: 100%;
+
+	&-ellipsis {
+		width: 290px;
+		overflow: hidden;
+		white-space: nowrap;
+		word-wrap: normal;
+		-o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+	}
 
 	&-videoId {
 		font-size: 12px;
@@ -33,8 +38,13 @@
 		font-weight: normal;
 	}
 
-	&-settings {
-		float: right;
+	.btn-settings {
+		@include bigger-hotzone(after, 30px);
+
+		position:absolute;
+		right: 5px;
+		top: 0;
+
 		color: #a7a7a7 !important;
 	}
 }
