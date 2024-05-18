@@ -19,6 +19,7 @@ import Logo from './components/Logo';
 import PlaybackCurrentTime from './components/PlaybackCurrentTime';
 
 import { useMeasure } from 'react-use';
+import { useTranslation } from 'react-i18next';
 
 import { LINK } from './constants';
 
@@ -145,6 +146,11 @@ function App() {
     },
     [dataList, defaultVideoId, playerWidth, ref]
   );
+
+  const { t } = useTranslation();
+  useEffect(() => {
+    document.title = t('appName');
+  }, [t]);
 
   return (
     <>

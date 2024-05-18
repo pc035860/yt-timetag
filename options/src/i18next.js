@@ -10,6 +10,7 @@ i18n
     resources: {
       en: {
         translation: {
+          appName: 'Tag Explorer | TimeTags for YouTube',
           search: 'Search',
           searchHighlightWords: 'Highlight matching words',
           currentPlaying: 'Current Playing',
@@ -19,6 +20,7 @@ i18n
       },
       'zh-TW': {
         translation: {
+          appName: '時間標記瀏覽器 | YouTube 時間標記幫手',
           search: '搜尋',
           searchHighlightWords: '強調顯示符合的字詞',
           currentPlaying: '目前播放影片',
