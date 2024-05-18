@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:main": "vite build -c vite.config.main.js",
+    "build:watch": "cross-env SOURCEMAP=1 vite build -c vite.config.main.js --watch",
+    "build:explorer": "vite build -c vite.config.explorer.js"
   },
   "dependencies": {
     "@awesome.me/kit-ea44dc83ec": "^1.0.16",
@@ -39,6 +42,7 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
+    "cross-env": "^7.0.3",
     "daisyui": "^4.10.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
