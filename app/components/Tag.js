@@ -12,6 +12,7 @@ import YTButton from './YTButton';
 
 import ytPlayer from '_util/ytPlayer';
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 import styles from './Tag.scss';
 
@@ -19,6 +20,8 @@ class Tag extends Component {
   static propTypes = {
     videoId: PropTypes.string.isRequired,
     keyOpsEmitter: PropTypes.object.isRequired,
+
+    highlight: PropTypes.bool,
 
     tag: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -83,10 +86,6 @@ class Tag extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isActive !== this.props.isActive && nextProps.isActive) {
-      this.scrollIntoView();
-    }
-
-    if (nextProps.tag !== this.props.tag) {
       this.scrollIntoView();
     }
   }
@@ -274,7 +273,7 @@ class Tag extends Component {
         type="text"
         styleName="description-input"
         value={tag.description}
-        placeholder="tag description"
+        placeholder={ct('appTextPlaceholderTagDescription')}
         onChange={this.handleDescriptionChange}
         onClick={this.handleDescriptionClick}
         onKeyUp={this.handleDescriptionKeyUp}
@@ -283,13 +282,17 @@ class Tag extends Component {
   }
 
   render() {
-    const { tag, isActive, videoId } = this.props;
+    const { tag, isActive, videoId, highlight } = this.props;
+
+    const lowProfileDescription = typeof highlight !== 'undefined';
+
     return (
       <div
         styleName="component"
         className={classNames({
           [styles['component-is-active']]: isActive,
           [styles['new-design']]: is2017NewDesign(),
+          [styles.sticky]: isActive,
         })}
         onClick={this.handleToggleComponent}
         ref={this.handleMount}
@@ -301,7 +304,16 @@ class Tag extends Component {
             onClick={this.handleLinkClick}
           />
         </div>
-        <div styleName="description">{this.renderDescription()}</div>
+        <div
+          styleName="description"
+          className={classNames({
+            [styles['description-low-profile']]: lowProfileDescription,
+            [styles.highlight]:
+              lowProfileDescription && (highlight || isActive),
+          })}
+        >
+          {this.renderDescription()}
+        </div>
         {isActive && (
           <div styleName="actions">
             <YTButton
@@ -322,7 +334,7 @@ class Tag extends Component {
             </YTButton>
             <YTButton
               type="button"
-              title="Remove"
+              title={ct('appActionRemove')}
               styleName="actions-btn-last"
               onClick={this.handleRemoveClick}
             >

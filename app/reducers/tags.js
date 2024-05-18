@@ -40,7 +40,7 @@ export default handleActions(
   {
     [add]: (state, action) => {
       const tag = action.payload;
-      const id = createTagId();
+      const id = tag.id ? tag.id : createTagId();
       return [...state, { ...baseTag, ...tag, id }];
     },
     [addMulti]: (state, action) => {

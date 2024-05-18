@@ -14,24 +14,24 @@ class TagContainer extends Component {
     children: PropTypes.any,
     stopPropagation: PropTypes.bool,
     shadow: PropTypes.bool,
-    onMount: PropTypes.func
+    onMount: PropTypes.func,
   };
 
   static defaultProps = {
     stopPropagation: false,
     shadow: false,
-    onMount: noop
+    onMount: noop,
   };
 
   componentDidMount() {
     if (this.elm) {
-      this.elm.addEventListener('wheel', this.onWheel);
+      this.elm.addEventListener('wheel', this.onWheel, false);
     }
   }
 
   componentWillUnmount() {
     if (this.elm) {
-      this.elm.removeEventListener('wheel', this.onWheel);
+      this.elm.removeEventListener('wheel', this.onWheel, false);
       this.elm = null;
     }
   }
@@ -47,12 +47,16 @@ class TagContainer extends Component {
 
       if (pixelY < 0 && t.scrollTop === 0) {
         evt.preventDefault();
-      }
-      else if (pixelY > 0 && t.scrollHeight === t.scrollTop + t.clientHeight) {
+        evt.stopPropagation();
+      } else if (
+        pixelY > 0 &&
+        Math.abs(t.scrollHeight - (t.scrollTop + t.clientHeight)) < 1
+      ) {
         evt.preventDefault();
+        evt.stopPropagation();
       }
     }
-  }
+  };
 
   elm;
 
@@ -66,12 +70,15 @@ class TagContainer extends Component {
   render() {
     const { children, shadow } = this.props;
     return (
-      <div styleName="component"
+      <div
+        styleName="component"
         className={classNames({
-          [styles.withShadow]: shadow
+          [styles.withShadow]: shadow,
         })}
         ref={this.handleMount}
-      >{children}</div>
+      >
+        {children}
+      </div>
     );
   }
 }

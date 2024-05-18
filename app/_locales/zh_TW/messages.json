@@ -148,5 +148,68 @@
   },
   "optionsExportSyncDescription2": {
     "message": "未來本擴充功能將不再使用「同步」儲存空間，建議匯出備份"
+  },
+  "appTabMine": {
+    "message": "我的"
+  },
+  "appTabComments": {
+    "message": "留言"
+  },
+  "appTabChapters": {
+    "message": "章節"
+  },
+  "appTabTrash": {
+    "message": "垃圾桶"
+  },
+  "appActionAddTag": {
+    "message": "新增時間標記"
+  },
+  "appActionRemoveTag": {
+    "message": "移除時間標記"
+  },
+  "appActionAddFromText": {
+    "message": "從文字新增時間標記"
+  },
+  "appActionTextOutput": {
+    "message": "輸出為文字"
+  },
+  "appTextPlaceholderTagDescription": {
+    "message": "輸入時間標記敘述"
+  },
+  "appTextPlaceholderImport": {
+    "message": "範例:\n\n0:01 這是一顆蘋果\n13:03 蘋果原本長在樹上\n11:25 牛頓被蘋果砸到了"
+  },
+  "appActionSortByTimestamp": {
+    "message": "依時間排序"
+  },
+  "appActionAdd": {
+    "message": "新增"
+  },
+  "appActionCancel": {
+    "message": "取消"
+  },
+  "appActionAddToMine": {
+    "message": "加入「我的」清單"
+  },
+  "appActionRemoveFromMine": {
+    "message": "移出「我的」清單"
+  },
+  "appActionClose": {
+    "message": "關閉"
+  },
+  "appActionMarkdownOutputToggle": {
+    "message": "Markdown 格式 (包含標記時間的連結)"
+  },
+  "appActionRemove": {
+    "message": "移除"
+  },
+  "appActionCopyToClipboard": {
+    "message": "複製到剪貼簿"
+  },
+  "appTextCopiedToClipboard": {
+    "message": "已複製到剪貼簿"
+  },
+  "appActionPutBack": {
+    "message": "還原"
   }
 }

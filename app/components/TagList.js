@@ -37,10 +37,12 @@ import MdPlayListAdd from 'react-icons/lib/md/playlist-add';
 import ytPlayer from '_util/ytPlayer';
 import parseTags from '_util/parseTags';
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 const TagList = ({
   videoId,
   keyOpsEmitter,
+  currentTime,
 
   tags,
   activeTag,
@@ -73,28 +75,37 @@ const TagList = ({
     })}
   >
     <TagContainer shadow stopPropagation onMount={handleTagContainerMount}>
-      {tags.map((tag) => (
-        <Tag
-          key={tag.id}
-          videoId={videoId}
-          keyOpsEmitter={keyOpsEmitter}
-          tag={tag}
-          isActive={tag.id === activeTag}
-          onEdit={handleTagEdit}
-          onRemove={handleTagRemove}
-          onSetActive={handleTagActiveSet}
-          onClearActive={handleTagActiveClear}
-          containerRef={tagContainerRef}
-          onContainerScrollRequest={handleTagContainerScrollRequest}
-        />
-      ))}
+      {tags.map((tag, i) => {
+        const nextTag = tags[i + 1];
+
+        // highlight tag if it's the current time
+        const highlight =
+          tag.seconds <= currentTime &&
+          (!nextTag || nextTag.seconds > currentTime);
+        return (
+          <Tag
+            key={tag.id}
+            videoId={videoId}
+            keyOpsEmitter={keyOpsEmitter}
+            tag={tag}
+            isActive={tag.id === activeTag}
+            highlight={highlight}
+            onEdit={handleTagEdit}
+            onRemove={handleTagRemove}
+            onSetActive={handleTagActiveSet}
+            onClearActive={handleTagActiveClear}
+            containerRef={tagContainerRef}
+            onContainerScrollRequest={handleTagContainerScrollRequest}
+          />
+        );
+      })}
     </TagContainer>
     <div styleName="toolbar">
       <div styleName="toolbar-left">
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="New Tag"
+          title={ct('appActionAddTag')}
           onClick={handleTagAdd}
         >
           <MdAdd size={20} />
@@ -102,7 +113,7 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="Import"
+          title={ct('appActionAddFromText')}
           onClick={handleTagImport}
         >
           <MdPlayListAdd size={20} />
@@ -112,7 +123,7 @@ const TagList = ({
         <YTButton
           styleName="toolbar-btn"
           type="button"
-          title="Export"
+          title={ct('appActionTextOutput')}
           onClick={handleExport}
         >
           <MdPrint size={20} />
@@ -230,7 +241,7 @@ const addHandlers = withHandlers({
       const prevTag = tags[index - 1];
       const nextTag = tags[index + 1];
 
-      actTag.remove(tagId);
+      actTag.moveToTrash(tagId);
 
       // delay setting next active tag with a frame
       // preventing onRemove from triggering on next active tag
@@ -333,6 +344,7 @@ const addTagContainerRef = compose(
 const mapStateToProps = (state) => ({
   tags: sortBy(state.tags, ['seconds']),
   activeTag: state.activeTag,
+  currentTime: state.playerInfo.currentTime,
 });
 const mapDispatchToProps = (dispatch) => ({
   actTag: bindActionCreators(actTag_, dispatch),

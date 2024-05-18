@@ -20,10 +20,6 @@ const ExplorerPage = () => {
   const [isIframeReady, setIsIframeReady] = useState(false);
   const iframeRef = useRef(null);
   useEffect(() => {
-    if (iframeRef.current) {
-      iframeRef.current.contentWindow.postMessage('hello', '*');
-    }
-
     const handleMessage = evt => {
       if (evt.data === 'yt-timetag explorer ready') {
         evt.source.postMessage(

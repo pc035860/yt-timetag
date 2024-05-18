@@ -9,20 +9,19 @@ import { storeEnhancer as crState } from '_util/crState';
 import reducers from '../reducers';
 import logger from '../logger';
 
-export default function configureStore(initialState) {
+export default function configureStore(videoId, initialState) {
   const rootReducer = combineReducers({ ...reducers });
 
   const devMiddlewares = [thunk, logger];
   const prodMiddlewares = [thunk];
 
-  const middleware = process.env.NODE_ENV !== 'production' ?
-    devMiddlewares :
-    prodMiddlewares;
+  const middleware =
+    process.env.NODE_ENV !== 'production' ? devMiddlewares : prodMiddlewares;
 
   const createStoreWithMiddleware = compose(
     applyMiddleware(...middleware),
-    crState(),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
+    crState(videoId),
+    window.devToolsExtension ? window.devToolsExtension() : (f) => f
   )(createStore);
   const store = createStoreWithMiddleware(rootReducer, initialState);
 

@@ -14,8 +14,11 @@ import LogoIcon from '_components/LogoIcon';
 import TagList from '_components/TagList';
 import CommentList from '_components/CommentList';
 import ChapterList from '_components/ChapterList';
+import Trash from '_components/Trash';
+import MdSettings from 'react-icons/lib/md/settings';
 
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 import * as actInfo_ from '_actions/info';
 
@@ -25,12 +28,14 @@ const TAB = {
   MINE: 'MINE',
   COMMENTS: 'COMMENTS',
   CHAPTERS: 'CHAPTERS',
+  TRASH: 'TRASH',
 };
 
 const App = ({
   videoId,
   keyOpsEmitter,
   tags,
+  trash,
   activeTab,
   handleTabBtnClick,
 
@@ -39,6 +44,7 @@ const App = ({
   commentsDone,
   handleCommentListProgress,
   handleCommentListDone,
+  handleOpenOptionsPage,
 
   chaptersTagCount,
   chaptersAvailable,
@@ -51,66 +57,104 @@ const App = ({
     })}
   >
     <h4 styleName="title">
-      <span styleName="logo-wrap">
-        <LogoIcon />
-      </span>
-      TimeTags for YouTube &nbsp;
-      <small styleName="title-videoId">({videoId})</small>
+      <div styleName="title-ellipsis">
+        <span styleName="logo-wrap">
+          <LogoIcon />
+        </span>
+        {ct('extName')} &nbsp;
+        <small styleName="title-videoId">({videoId})</small>
+      </div>
+      <a
+        href=""
+        styleName="btn-settings"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleOpenOptionsPage}
+      >
+        <MdSettings size={16} />
+      </a>
     </h4>
 
     <div>
       <div styleName="tab-btns">
-        <tp-yt-paper-button
-          class={classNames('style-scope', styles.btn, {
-            [styles.active]: activeTab === TAB.MINE,
-          })}
-          role="option"
-          tabindex="0"
-          aria-disabled="false"
-          data-tab={TAB.MINE}
-          onClick={handleTabBtnClick}
-        >
-          MINE<small>&nbsp;({tags.length})</small>
-        </tp-yt-paper-button>
-        <tp-yt-paper-button
-          class={classNames('style-scope', styles.btn, {
-            [styles.active]: activeTab === TAB.COMMENTS,
-          })}
-          role="option"
-          tabindex="0"
-          aria-disabled="false"
-          data-tab={TAB.COMMENTS}
-          onClick={handleTabBtnClick}
-        >
-          COMMENTS<small>&nbsp;({commentsTagCount})</small>
-          <div
-            styleName="progress-line-wrap"
-            className={classNames({
-              [styles.done]: commentsDone,
-            })}
-          >
-            <div
-              styleName="line"
-              style={{
-                transform: `translateX(${commentsProgress * 100 - 100}%)`,
-              }}
-            />
-          </div>
-        </tp-yt-paper-button>
-        {chaptersAvailable && (
+        <div styleName="tab-btns-left">
           <tp-yt-paper-button
             class={classNames('style-scope', styles.btn, {
-              [styles.active]: activeTab === TAB.CHAPTERS,
+              [styles.active]: activeTab === TAB.MINE,
             })}
             role="option"
             tabindex="0"
             aria-disabled="false"
-            data-tab={TAB.CHAPTERS}
+            data-tab={TAB.MINE}
             onClick={handleTabBtnClick}
           >
-            CHAPTERS<small>&nbsp;({chaptersTagCount})</small>
+            {ct('appTabMine')}
+            <small>&nbsp;({tags.length})</small>
           </tp-yt-paper-button>
-        )}
+          <tp-yt-paper-button
+            class={classNames('style-scope', styles.btn, {
+              [styles.active]: activeTab === TAB.COMMENTS,
+            })}
+            role="option"
+            tabindex="0"
+            aria-disabled="false"
+            data-tab={TAB.COMMENTS}
+            onClick={handleTabBtnClick}
+          >
+            {ct('appTabComments')}
+            <small>&nbsp;({commentsTagCount})</small>
+            <div
+              styleName="progress-line-wrap"
+              className={classNames({
+                [styles.done]: commentsDone,
+              })}
+            >
+              <div
+                styleName="line"
+                style={{
+                  transform: `translateX(${commentsProgress * 100 - 100}%)`,
+                }}
+              />
+            </div>
+          </tp-yt-paper-button>
+          {chaptersAvailable && (
+            <tp-yt-paper-button
+              class={classNames('style-scope', styles.btn, {
+                [styles.active]: activeTab === TAB.CHAPTERS,
+              })}
+              role="option"
+              tabindex="0"
+              aria-disabled="false"
+              data-tab={TAB.CHAPTERS}
+              onClick={handleTabBtnClick}
+            >
+              {ct('appTabChapters')}
+              <small>&nbsp;({chaptersTagCount})</small>
+            </tp-yt-paper-button>
+          )}
+        </div>
+        <div styleName="tab-btns-right">
+          {trash.length > 0 && (
+            <tp-yt-paper-button
+              class={classNames(
+                'style-scope',
+                styles.btn,
+                styles['justify-end'],
+                {
+                  [styles.active]: activeTab === TAB.TRASH,
+                }
+              )}
+              role="option"
+              tabindex="0"
+              aria-disabled="false"
+              data-tab={TAB.TRASH}
+              onClick={handleTabBtnClick}
+            >
+              {ct('appTabTrash')}
+              <small>&nbsp;({trash.length})</small>
+            </tp-yt-paper-button>
+          )}
+        </div>
       </div>
       <div styleName="tabs">
         <div
@@ -137,6 +181,13 @@ const App = ({
           })}
         >
           <ChapterList videoId={videoId} onDone={handleChapterListDone} />
+        </div>
+        <div
+          className={classNames({
+            [styles.hide]: activeTab !== TAB.TRASH,
+          })}
+        >
+          <Trash videoId={videoId} />
         </div>
       </div>
     </div>
@@ -197,8 +248,18 @@ const addChaptersAvailable = compose(
   })
 );
 
+const addOpenOptionsPage = withHandlers({
+  handleOpenOptionsPage: () => (evt) => {
+    evt.preventDefault();
+    chrome.runtime.sendMessage({
+      action: 'openOptionsPage',
+    });
+  },
+});
+
 const mapStateToProps = (state) => ({
   tags: state.tags,
+  trash: state.trash,
 });
 const mapDispatchToProps = (dispatch) => ({
   actInfo: bindActionCreators(actInfo_, dispatch),
@@ -208,5 +269,6 @@ export default compose(
   addInitInfo,
   addTabSwitch,
   addCommentsProgress,
-  addChaptersAvailable
+  addChaptersAvailable,
+  addOpenOptionsPage
 )(CSSModules(App, styles));

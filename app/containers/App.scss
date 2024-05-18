@@ -1,4 +1,5 @@
 @import "~_sass/_variables.scss";
+@import "~_sass/_mixins.scss";
 
 .component {
 	padding-left: 10px;
@@ -10,29 +11,41 @@
 }
 
 .logo-wrap {
-	position: relative;
-	top: -1px;
-
 	display: inline-block;
 	margin-right: 5px;
 }
 
 .title {
+	position: relative;
+
 	margin: 0 0 5px;
 	font-size: 13px;
 	color: $title-color;
 	line-height: 1.3em;
-	width: 290px;
-	overflow: hidden;
-	white-space: nowrap;
-	word-wrap: normal;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
+
+	&-ellipsis {
+		width: 290px;
+		overflow: hidden;
+		white-space: nowrap;
+		word-wrap: normal;
+		-o-text-overflow: ellipsis;
+		text-overflow: ellipsis;
+	}
 
 	&-videoId {
 		font-size: 12px;
 		color: #a7a7a7;
 		font-weight: normal;
+	}
+
+	.btn-settings {
+		@include bigger-hotzone(after, 30px);
+
+		position:absolute;
+		right: 5px;
+		top: 0;
+
+		color: #a7a7a7 !important;
 	}
 }
 :global([dark]) {
@@ -58,12 +71,22 @@
 }
 
 .tab-btns {
-	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.tab-btns-left {
+		position: static;
+	}
+
+	.tab-btns-right {
+		position: static;
+	}
 
 	.btn {
 		margin: 0;
 		border-radius: 0;
-		font-size: var(--ytd-tab-system_-_font-size);
+		font-size: var(--ytd-caption-font-size);
 		color: var(--yt-spec-text-secondary);
 		font-weight: normal !important;
 
@@ -104,7 +127,7 @@
 		}
 
 		small {
-			font-size: 10px;
+			font-size: 90%;
 		}
 	}
 }

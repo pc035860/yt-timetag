@@ -11,17 +11,49 @@ import { Provider } from 'react-redux';
 import App from '_containers/App';
 import {
   MSG_CHECK_LOADED_REQUEST,
-  MSG_CHECK_LOADED_RESPONSE
+  MSG_CHECK_LOADED_RESPONSE,
 } from './constants/Messages';
 
 import ytPlayer from '_util/ytPlayer';
 import { load as loadCrState } from '_util/crState';
-import { bind as bindKeyOps, getEmitter as getKeyOpsEmitter } from '_util/keyOps';
+import {
+  bind as bindKeyOps,
+  getEmitter as getKeyOpsEmitter,
+} from '_util/keyOps';
 import getYTVideoId from '_util/getYTVideoId';
 import is2017NewDesign from '_util/is2017NewDesign';
 
+import * as actPlayerInfo from '_actions/playerInfo';
+
 const appRootId = 'yttt-app';
 const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
+
+let playerInfoInterval = null;
+
+function createIntervalFn(store) {
+  return () => {
+    return Promise.all([
+      ytPlayer(true, 'getCurrentTime'),
+      ytPlayer(true, 'getPlayerState'),
+    ]).then(([currentTime, playerState]) => {
+      const info = {
+        currentTime,
+        state: playerState,
+      };
+
+      // 沒有變化就不更新
+      const lastInfo = store.getState().playerInfo;
+      if (
+        lastInfo.currentTime === info.currentTime &&
+        lastInfo.state === info.state
+      ) {
+        return;
+      }
+
+      store.dispatch(actPlayerInfo.update(info));
+    });
+  };
+}
 
 function renderApp(videoId) {
   const sidebarElm = document.getElementById(sidebarId);
@@ -37,7 +69,7 @@ function renderApp(videoId) {
     appElm = document.createElement('div');
     assign(appElm, {
       id: appRootId,
-      className: appRootId
+      className: appRootId,
     });
     sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
   }
@@ -48,25 +80,26 @@ function renderApp(videoId) {
 
   appElm.dataset.videoId = videoId;
 
-  loadCrState().then(state => {
+  loadCrState(videoId).then((state) => {
     let initialState;
     if (state) {
       initialState = {
         ...state,
         // ignore activeTag state
-        activeTag: ''
+        activeTag: '',
       };
     }
 
-    const store = initialState ?
-      configureStore(initialState) :
-      configureStore();
+    const store = configureStore(videoId, initialState);
+
+    if (playerInfoInterval) {
+      requestInterval.clear(playerInfoInterval);
+    }
+    playerInfoInterval = requestInterval(100, createIntervalFn(store));
 
     ReactDOM.render(
       <Provider store={store}>
-        <App
-          videoId={videoId}
-          keyOpsEmitter={getKeyOpsEmitter(videoId)} />
+        <App videoId={videoId} keyOpsEmitter={getKeyOpsEmitter(videoId)} />
       </Provider>,
       appElm
     );
@@ -79,8 +112,12 @@ function unmountApp() {
     ReactDOM.unmountComponentAtNode(appElm);
     delete appElm.dataset.videoId;
   }
-}
 
+  if (playerInfoInterval) {
+    requestInterval.clear(playerInfoInterval);
+    playerInfoInterval = null;
+  }
+}
 
 // 回應 injection check
 chrome.runtime.onMessage.addListener((res, sender, sendResponse) => {

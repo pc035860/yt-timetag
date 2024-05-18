@@ -39,7 +39,7 @@
         argsIgnorePattern: ^__
         varsIgnorePattern: ^__
     key-spacing: 0
-    no-console: 1
+    no-console: 0
     no-else-return: 0
     arrow-body-style: 0
     react/prop-types: 0
@@ -52,3 +52,4 @@
       - 1
       - ignoreStateless: true
     react/jsx-first-prop-new-line: 0
+

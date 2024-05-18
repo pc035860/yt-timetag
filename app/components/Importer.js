@@ -10,15 +10,11 @@ import CSSModules from 'react-css-modules';
 import LogoIcon from '_components/LogoIcon';
 
 import is2017NewDesign from '_util/is2017NewDesign';
+import { ct } from '_util/i18n';
 
 import styles from './dialog.scss';
 
-const placeholder = `Example:
-
-00:01 This is an apple
-13:03 There is a tree
-11:25 My name is Jhon
-`;
+const placeholder = ct('appTextPlaceholderImport');
 
 const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
   <div
@@ -28,7 +24,7 @@ const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
     })}
   >
     <div styleName="heading">
-      <LogoIcon /> Import from text
+      <LogoIcon /> {ct('appActionAddFromText')}
     </div>
     <div>
       <textarea
@@ -41,18 +37,18 @@ const Importer = ({ handleImportBtnClick, handleTextareaRef, onClose }) => (
       <button
         styleName="toolbar-btn"
         type="button"
-        title="Cancel"
+        title={ct('appActionCancel')}
         onClick={onClose}
       >
-        Cancel
+        {ct('appActionCancel')}
       </button>
       <button
         styleName="toolbar-btn-primary"
         type="button"
-        title="Import"
+        title={ct('appActionAdd')}
         onClick={handleImportBtnClick}
       >
-        Import
+        {ct('appActionAdd')}
       </button>
     </div>
   </div>

@@ -1,5 +1,6 @@
 @import '~_sass/_variables.scss';
 @import '~_sass/_placeholders.scss';
+@import '~_sass/_mixins.scss';
 
 .component {
 	position: relative;
@@ -34,6 +35,23 @@
 	&.comment {
 		height: 38px;
 	}
+
+	&.sticky {
+		position: sticky;
+		top: 0;
+		bottom: -9px;
+		z-index: 1;
+
+		backdrop-filter: blur(8px);
+
+		// fade out var(--yttt-tag-active-background-color)
+		background-color: rgba(231, 236, 240, .6);
+
+		@include dark {
+			// fade out var(--yttt-tag-active-background-color)
+			background-color: rgba(52, 52, 52, .6);
+		}
+	}
 }
 
 .tag {
@@ -47,10 +65,9 @@
 }
 
 .description {
-	flex: 1 0 auto;
+	flex: 1 1 auto;
 
 	min-width: 50px;
-	max-width: calc(#{'100% - 100px'});
 
 	overflow: hidden;
 	white-space: nowrap;
@@ -60,12 +77,22 @@
 		@extend %tag-input;
 		width: 90%;
 	}
-}
-.component-is-active .description {
-	max-width: calc(#{'100% - 190px'});
+
+	&-low-profile {
+		color: lighten(rgb(96, 96, 96), 25%);
+
+		&.highlight {
+			color: black;
+
+			@include dark {
+				color: var(--yt-spec-text-primary);
+			}
+		}
+	}
+
 }
 .comment .description {
-	max-width: calc(#{'100% - 130px'});
+	max-width: calc(#{'100% - 110px'});
 }
 :global([dark]) {
 	.description-input {
