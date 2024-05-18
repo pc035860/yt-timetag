@@ -135,7 +135,7 @@ class CommentList extends Component {
       >
         <TagContainer
           shadow
-          stopProgation
+          stopPropagation
           onMount={this.handleTagContainerMount}
         >
           {tags.map((tag, i) => {
