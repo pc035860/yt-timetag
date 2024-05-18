@@ -21,6 +21,8 @@ class Tag extends Component {
     videoId: PropTypes.string.isRequired,
     keyOpsEmitter: PropTypes.object.isRequired,
 
+    highlight: PropTypes.bool,
+
     tag: PropTypes.shape({
       id: PropTypes.string.isRequired,
       seconds: PropTypes.number.isRequired,
@@ -284,7 +286,10 @@ class Tag extends Component {
   }
 
   render() {
-    const { tag, isActive, videoId } = this.props;
+    const { tag, isActive, videoId, highlight } = this.props;
+
+    const lowProfileDescription = typeof highlight !== 'undefined';
+
     return (
       <div
         styleName="component"
@@ -302,7 +307,16 @@ class Tag extends Component {
             onClick={this.handleLinkClick}
           />
         </div>
-        <div styleName="description">{this.renderDescription()}</div>
+        <div
+          styleName="description"
+          className={classNames({
+            [styles['description-low-profile']]: lowProfileDescription,
+            [styles.highlight]:
+              lowProfileDescription && (highlight || isActive),
+          })}
+        >
+          {this.renderDescription()}
+        </div>
         {isActive && (
           <div styleName="actions">
             <YTButton

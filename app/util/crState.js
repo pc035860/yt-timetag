@@ -140,8 +140,8 @@ export const save = (videoId, state) => {
 export const storeEnhancer = (videoId) => (next) => (reducer, initialState) => {
   const store = next(reducer, initialState);
   store.subscribe(() => {
-    // omit trash state
-    const state = omit(store.getState(), ['trash']);
+    // omit trash & playerInfo state
+    const state = omit(store.getState(), ['trash', 'playerInfo']);
     save(videoId, state);
   });
   return store;

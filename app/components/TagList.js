@@ -42,6 +42,7 @@ import { ct } from '_util/i18n';
 const TagList = ({
   videoId,
   keyOpsEmitter,
+  currentTime,
 
   tags,
   activeTag,
@@ -74,21 +75,30 @@ const TagList = ({
     })}
   >
     <TagContainer shadow stopPropagation onMount={handleTagContainerMount}>
-      {tags.map((tag) => (
-        <Tag
-          key={tag.id}
-          videoId={videoId}
-          keyOpsEmitter={keyOpsEmitter}
-          tag={tag}
-          isActive={tag.id === activeTag}
-          onEdit={handleTagEdit}
-          onRemove={handleTagRemove}
-          onSetActive={handleTagActiveSet}
-          onClearActive={handleTagActiveClear}
-          containerRef={tagContainerRef}
-          onContainerScrollRequest={handleTagContainerScrollRequest}
-        />
-      ))}
+      {tags.map((tag, i) => {
+        const nextTag = tags[i + 1];
+
+        // highlight tag if it's the current time
+        const highlight =
+          tag.seconds <= currentTime &&
+          (!nextTag || nextTag.seconds > currentTime);
+        return (
+          <Tag
+            key={tag.id}
+            videoId={videoId}
+            keyOpsEmitter={keyOpsEmitter}
+            tag={tag}
+            isActive={tag.id === activeTag}
+            highlight={highlight}
+            onEdit={handleTagEdit}
+            onRemove={handleTagRemove}
+            onSetActive={handleTagActiveSet}
+            onClearActive={handleTagActiveClear}
+            containerRef={tagContainerRef}
+            onContainerScrollRequest={handleTagContainerScrollRequest}
+          />
+        );
+      })}
     </TagContainer>
     <div styleName="toolbar">
       <div styleName="toolbar-left">
@@ -334,6 +344,7 @@ const addTagContainerRef = compose(
 const mapStateToProps = (state) => ({
   tags: sortBy(state.tags, ['seconds']),
   activeTag: state.activeTag,
+  currentTime: state.playerInfo.currentTime,
 });
 const mapDispatchToProps = (dispatch) => ({
   actTag: bindActionCreators(actTag_, dispatch),

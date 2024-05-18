@@ -23,8 +23,37 @@ import {
 import getYTVideoId from '_util/getYTVideoId';
 import is2017NewDesign from '_util/is2017NewDesign';
 
+import * as actPlayerInfo from '_actions/playerInfo';
+
 const appRootId = 'yttt-app';
 const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
+
+let playerInfoInterval = null;
+
+function createIntervalFn(store) {
+  return () => {
+    return Promise.all([
+      ytPlayer(true, 'getCurrentTime'),
+      ytPlayer(true, 'getPlayerState'),
+    ]).then(([currentTime, playerState]) => {
+      const info = {
+        currentTime,
+        state: playerState,
+      };
+
+      // 沒有變化就不更新
+      const lastInfo = store.getState().playerInfo;
+      if (
+        lastInfo.currentTime === info.currentTime &&
+        lastInfo.state === info.state
+      ) {
+        return;
+      }
+
+      store.dispatch(actPlayerInfo.update(info));
+    });
+  };
+}
 
 function renderApp(videoId) {
   const sidebarElm = document.getElementById(sidebarId);
@@ -63,6 +92,11 @@ function renderApp(videoId) {
 
     const store = configureStore(videoId, initialState);
 
+    if (playerInfoInterval) {
+      requestInterval.clear(playerInfoInterval);
+    }
+    playerInfoInterval = requestInterval(100, createIntervalFn(store));
+
     ReactDOM.render(
       <Provider store={store}>
         <App videoId={videoId} keyOpsEmitter={getKeyOpsEmitter(videoId)} />
@@ -77,6 +111,11 @@ function unmountApp() {
   if (appElm) {
     ReactDOM.unmountComponentAtNode(appElm);
     delete appElm.dataset.videoId;
+  }
+
+  if (playerInfoInterval) {
+    requestInterval.clear(playerInfoInterval);
+    playerInfoInterval = null;
   }
 }
 

@@ -11,3 +11,5 @@ export const INFO_UPDATE_TICK = 'INFO_UPDATE_TICK';
 
 export const TRASH_ADD = 'TRASH_ADD';
 export const TRASH_REMOVE = 'TRASH_REMOVE';
+
+export const PLAYER_INFO_UPDATE = 'PLAYER_INFO_UPDATE';

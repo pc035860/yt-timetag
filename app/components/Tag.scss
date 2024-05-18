@@ -1,5 +1,6 @@
 @import '~_sass/_variables.scss';
 @import '~_sass/_placeholders.scss';
+@import '~_sass/_mixins.scss';
 
 .component {
 	position: relative;
@@ -60,6 +61,19 @@
 		@extend %tag-input;
 		width: 90%;
 	}
+
+	&-low-profile {
+		color: lighten(rgb(96, 96, 96), 25%);
+
+		&.highlight {
+			color: black;
+
+			@include dark {
+				color: var(--yt-spec-text-primary);
+			}
+		}
+	}
+
 }
 .component-is-active .description {
 	max-width: calc(#{'100% - 190px'});
