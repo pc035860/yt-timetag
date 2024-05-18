@@ -114,7 +114,7 @@ function App() {
             return (
               <PlaybackInfo>
                 {/* main content */}
-                <div className="container mx-auto mt-24 min-w-[1024px]">
+                <div className="px-20 mx-auto mt-24 min-w-[1024px]">
                   <div className="flex justify-between items-start">
                     <div className="grow">
                       <div ref={ref} className="w-full aspect-video">

@@ -7,13 +7,13 @@ const TAG_WIDTHS = ['w-56', 'w-64', 'w-80', 'w-96'];
 
 const IframeSkeleton = ({ className }) => {
   return (
-    <div className={cn('container mx-auto mt-24', className)}>
+    <div className={cn('px-20 mx-auto mt-24 min-w-[1024px]', className)}>
       <div className="flex justify-between items-start">
         <div className="grow">
           <div className="skeleton w-full aspect-video" />
         </div>
         <div className="grow-0 ml-12 w-[420px]">
-          <div className="p-4 mb-5">
+          <div className="px-2 mb-7">
             <div className="skeleton w-full h-[48px] mb-2" />
             <div className="skeleton w-48 h-4 mb-4" />
           </div>
