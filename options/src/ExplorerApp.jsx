@@ -68,7 +68,7 @@ function App() {
       try {
         json = JSON.parse(evt.data);
       } catch (e) {
-        console.error(e);
+        return;
       }
       if (!json || json.source !== 'yt-timetag') {
         return;
