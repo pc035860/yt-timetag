@@ -70,7 +70,7 @@ function App() {
       } catch (e) {
         console.error(e);
       }
-      if (json.source !== 'yt-timetag') {
+      if (!json || json.source !== 'yt-timetag') {
         return;
       }
       setData(json.data);
