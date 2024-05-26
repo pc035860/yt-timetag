@@ -8,16 +8,13 @@
     "128": "images/icon-128.png"
   },
   "background": {
-    "service_worker": "background.js"
+    "scripts": [
+      "background.js"
+    ]
   },
   "options_ui": {
     "page": "options/index.html",
     "open_in_tab": true
-  },
-  "sandbox": {
-    "pages": [
-      "options/explorer.html"
-    ]
   },
   "content_scripts": [
     {
@@ -30,8 +27,7 @@
         "ytapi.js"
       ],
       "run_at": "document_end",
-      "all_frames": false,
-      "world": "MAIN"
+      "all_frames": false
     }
   ],
   "action": {
@@ -66,7 +62,11 @@
   ],
   "default_locale": "en",
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'",
-    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-inline' https://www.youtube.com"
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "i-hear-you-twitch-pc035860@gmail.com"
+    }
   }
 }
