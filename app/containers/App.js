@@ -58,7 +58,7 @@ const App = ({
       [styles['new-design']]: is2017NewDesign(),
     })}
   >
-    <h4 styleName="title">
+    <h4 styleName="title" className="yttt-draggable">
       <div styleName="title-ellipsis">
         <span styleName="logo-wrap">
           <LogoIcon />

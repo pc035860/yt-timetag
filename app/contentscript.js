@@ -24,9 +24,13 @@ import getYTVideoId from '_util/getYTVideoId';
 import is2017NewDesign from '_util/is2017NewDesign';
 
 import * as actPlayerInfo from '_actions/playerInfo';
+import dragElement from './util/dragElement';
 
 const appRootId = 'yttt-app';
+const draggableClass = 'yttt-draggable';
 const sidebarId = is2017NewDesign() ? 'related' : 'watch7-sidebar-contents';
+
+let isMounted = false;
 
 let playerInfoInterval = null;
 
@@ -56,7 +60,8 @@ function createIntervalFn(store) {
 }
 
 function renderApp(videoId) {
-  const sidebarElm = document.getElementById(sidebarId);
+  // const sidebarElm = document.getElementById(sidebarId);
+  const sidebarElm = document.body;
 
   if (!sidebarElm) {
     throw new Error('sidebar element not found');
@@ -71,7 +76,12 @@ function renderApp(videoId) {
       id: appRootId,
       className: appRootId,
     });
-    sidebarElm.insertBefore(appElm, sidebarElm.firstChild);
+    appElm.style.position = 'fixed';
+    appElm.style.zIndex = 10;
+    appElm.style.top = '100px';
+    appElm.style.left = '100px';
+    sidebarElm.appendChild(appElm);
+    dragElement(appElm, { draggableClass });
   }
 
   if (appElm.dataset.videoId === videoId) {
@@ -103,6 +113,8 @@ function renderApp(videoId) {
       </Provider>,
       appElm
     );
+
+    isMounted = true;
   });
 }
 
@@ -144,11 +156,13 @@ if (is2017NewDesign()) {
     const videoId = getYTVideoId();
     if (lastVideoId && lastVideoId !== videoId) {
       unmountApp();
-
-      // auto update with videoId ?
-      // renderApp(videoId);
+      isMounted = false;
     }
     lastVideoId = videoId;
+
+    if (!isMounted && videoId) {
+      renderApp(videoId);
+    }
   });
 }
 
