@@ -61,6 +61,10 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.6.1
+
+- Fix: export as markdown doesn't work as expected
+
 ## 1.6.0
 
 - Fix: mouse wheel behavior in tag/comment list
