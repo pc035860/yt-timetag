@@ -70,8 +70,9 @@ const Export = ({
         </YTButton>
         <textarea
           styleName="textarea"
-          defaultValue={exportText}
+          value={exportText}
           aria-readonly="true"
+          readOnly
         />
       </div>
     </div>
