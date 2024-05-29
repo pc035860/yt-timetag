@@ -61,6 +61,10 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.6.2
+
+- Fix: "Reset to default" button in shortcuts settings not working
+
 ## 1.6.1
 
 - Fix: export as markdown doesn't work as expected
