@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
@@ -83,6 +83,16 @@ const ShortcutInput = ({
     },
     [getIsDuplicated, onChange, shortcutKey]
   );
+
+  /**
+   * sync updated value from props
+   */
+  const v0 = value[0];
+  useEffect(() => {
+    if (v0 !== draftValue) {
+      setDraftValue(v0);
+    }
+  }, [draftValue, v0]);
 
   return (
     <>
