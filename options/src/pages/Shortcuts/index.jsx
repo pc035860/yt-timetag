@@ -70,8 +70,13 @@ const CONFIG = [
 ];
 
 const ShortcutsPage = () => {
-  const { shortcuts, updateShortcut, isEnabled, toggleEnabled } =
-    useShortcutsSettings();
+  const {
+    shortcuts,
+    updateShortcut,
+    resetShortcuts,
+    isEnabled,
+    toggleEnabled,
+  } = useShortcutsSettings();
 
   const handleShortcutInputChange = useCallback(
     (shortcutKey, key) => {
@@ -83,6 +88,10 @@ const ShortcutsPage = () => {
   const handleEnabledChange = useCallback(() => {
     toggleEnabled();
   }, [toggleEnabled]);
+
+  const handleReset = useCallback(() => {
+    resetShortcuts();
+  }, [resetShortcuts]);
 
   if (!shortcuts) {
     return null;
@@ -157,7 +166,9 @@ const ShortcutsPage = () => {
           })}
         </div>
         <div className="text-center">
-          <button className="btn">{ct('optionsShortcutsReset')}</button>
+          <button type="button" className="btn" onClick={handleReset}>
+            {ct('optionsShortcutsReset')}
+          </button>
         </div>
       </div>
     </Page>
