@@ -61,6 +61,10 @@ To import, click on the button next to "add" button.
 
 # Changelog
 
+## 1.6.3
+
+- Fix: Icons color for YouTube dark mode
+
 ## 1.6.2
 
 - Fix: "Reset to default" button in shortcuts settings not working
