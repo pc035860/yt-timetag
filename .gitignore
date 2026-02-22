@@ -16,3 +16,5 @@ ui-debug.log
 
 .firebase/*
 npm-debug.log*
+
+specs/handover/*
