@@ -1,7 +1,15 @@
+@import "~_sass/_variables.scss";
+
 .component {
 	padding-top: 6px;
 	padding-bottom: 6px;
 	background-color: transparent;
 	border: none;
 	color: var(--yt-spec-icon-inactive);
+}
+
+:global([dark]) {
+	.component {
+		color: $dark-secondary-text-color;
+	}
 }

@@ -81,6 +81,11 @@ $copy-hint-text-opactiy: .9;
 
 	opacity: .7;
 }
+:global([dark]) {
+	.textarea-copy-btn {
+		color: $dark-secondary-text-color;
+	}
+}
 .textarea-copy-btn__hint {
 	margin-right: 5px;
 	opacity: $copy-hint-text-opactiy;
